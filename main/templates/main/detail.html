@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+
+{% block title %}View Car detail{% endblock %}
+
+{% block content %}
+		<ul class="list-group">
+		{% for lmao in lists %}
+			<li class="list-group-item"><a href="/{{lmao.id}}"><h3>{{lmao.carName}}</h3></a></li>
+		{% endfor %}
+		</ul>
+	{% else %}
+
+	{% endif %}
+{% endblock %}
