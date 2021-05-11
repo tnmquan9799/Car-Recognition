@@ -11,28 +11,6 @@ from django.views.generic.detail import DetailView
 def index(request, id):
     lmao = Car.objects.get(id=id)
 
-    # if request.method == "POST":
-    #     if request.POST.get("save"):
-    #         for item in ls.item_set.all():
-    #             p = request.POST
-
-    #             if "clicked" == p.get("c"+str(item.id)):
-    #                 item.complete = True
-    #             else:
-    #                 item.complete = False
-
-    #             if "text" + str(item.id) in p:
-    #                 item.text = p.get("text" + str(item.id))
-
-    #             item.save()
-
-    #     elif request.POST.get("add"):
-    #         newItem = request.POST.get("new")
-    #         if newItem != "":
-    #             ls.item_set.create(text=newItem, complete=False)
-    #         else:
-    #             print("invalid")
-
     return render(request, "main/index.html", {"lmao": lmao})
 
 
@@ -42,11 +20,14 @@ def view(request):
 
 
 def home(request):
+    if request.method == 'POST' and 'run_script' in request.POST:
+        from path_to_script import function_to_run
+        function_to_run()
     return render(request, "main/home.html", {})
 
 
 def detail(request):
-    lmao = Car.objects.get(id=id)
+    lmao=Car.objects.get(id=id)
     return render(request, "main/detail.html", {"lmao": lmao})
 
 
