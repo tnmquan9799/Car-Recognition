@@ -33,7 +33,15 @@ if __name__ == '__main__':
     prob = np.max(preds)
     class_id = np.argmax(preds)
     text = ('Predict: {}, prob: {}'.format(class_names[class_id][0][0], prob))
-    results.append({'label': class_names[class_id][0][0], 'prob': '{:.4}'.format(prob)})
+    results.append({'label': class_names[class_id][0][0], 'prob': '{:.4}'.format(prob),
+                    'brand': '',
+                    'segment': '',
+                    'origin': '',
+                    'engine': '',
+                    'fuel type': '',
+                    'tire size': '',
+                    'drive type': '',
+                    'highlight': ''})
 
     print('CAR NAME: ' + results[0]['label'])
     print('POSSIBILITY: ' + results[0]['prob'])
