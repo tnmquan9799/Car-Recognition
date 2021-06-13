@@ -3,5 +3,8 @@
     "sass": "^1.32.13",
     "sass-loader": "^11.1.1",
     "webpack": "^5.37.0"
+  },
+  "dependencies": {
+    "django": "^1.0.0"
   }
 }
