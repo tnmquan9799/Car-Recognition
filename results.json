@@ -1,14 +1,6 @@
 [
     {
         "label": "Eagle Talon Hatchback 1998",
-        "prob": "0.9999",
-        "brand": "",
-        "segment": "",
-        "origin": "",
-        "engine": "",
-        "fuel type": "",
-        "tire size": "",
-        "drive type": "",
-        "highlight": ""
+        "prob": "0.9999"
     }
 ]
