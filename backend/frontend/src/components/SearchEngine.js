@@ -1,57 +1,40 @@
-import axios from "axios";
 import React, { Component } from "react";
-
+import axios from "axios";
+import Grid from '@material-ui/core/Grid';
+// axios.defaults.xsrfCookieName = 'csrftoken'
+// axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 class SearchEngine extends Component {
-  state = {
-    selectedFile: null,
-  };
-  onFileChange = (event) => {
-    this.setState({ selectedFile: event.target.files[0] });
-  };
-  onFileUpload = () => {
-    const formData = new FormData();
-    formData.append(
-      "./",
-      this.state.selectedFile,
-      this.state.selectedFile.name
-    );
-    console.log(this.state.selectedFile);
-    axios.post("http://localhost:8000/upload", formData);
-  };
-  fileData = () => {
-    if (this.state.selectedFile) {
-      return (
-        <div>
-          <h2>File Details:</h2>
-          <p>File Name: {this.state.selectedFile.name}</p>
-          <p>File Type: {this.state.selectedFile.type}</p>
-          <p>
-            Last Modified:{" "}
-            {this.state.selectedFile.lastModifiedDate.toDateString()}
-          </p>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <br />
-          <h4>Choose before Pressing the Upload button</h4>
-        </div>
-      );
+  constructor(props) {
+    super(props)
+    this.state = {
+      file: null
     }
-  };
-
+    this.handleChange = this.handleChange.bind(this)
+  }
+  handleChange(event) {
+    this.setState({
+      file: URL.createObjectURL(event.target.files[0])
+    })
+  }
   render() {
     return (
-      <div>
-        <h1>GeeksforGeeks</h1>
-        <h3>File Upload using React!</h3>
-        <div>
-          <input type="file" onChange={this.onFileChange} />
-          <button onClick={this.onFileUpload}>Upload!</button>
-        </div>
-        {this.fileData()}
-      </div>
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: '100vh' }}
+      >
+
+        <input type="file" onChange={this.handleChange} />
+        <hr/>
+        <img src={this.state.file}
+          style={{
+            width: "100%",
+          }} />
+
+      </Grid >
     );
   }
 }

@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 
 # Create your views here.
+from django.template import RequestContext
 
 
 class CarView(generics.ListAPIView):
