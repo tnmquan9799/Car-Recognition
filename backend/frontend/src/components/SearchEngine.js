@@ -28,10 +28,10 @@ class SearchEngine extends Component {
       >
 
         <input type="file" onChange={this.handleChange} />
+        <hr/>
         <img src={this.state.file}
           style={{
             width: "100%",
-            height: "500px"
           }} />
 
       </Grid >
