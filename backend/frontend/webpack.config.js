@@ -6,6 +6,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "./static/frontend"),
     filename: "[name].js",
+    assetModuleFilename: 'images/'
   },
   module: {
     rules: [
@@ -30,6 +31,10 @@ module.exports = {
           // Compiles Sass to CSS
           "sass-loader",
         ],
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'images/',
       },
     ],
   },
