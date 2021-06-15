@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "django": "^1.0.0"
+    "django": "^1.0.0",
+    "react-download-link": "^2.3.0"
   }
 }
