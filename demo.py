@@ -22,8 +22,6 @@ if __name__ == '__main__':
 
     test_path = sys.argv[-1]
 
-    results = []
-
     print('Start processing image: {}'.format(test_path))
     bgr_img = cv.imread(test_path)
     bgr_img = cv.resize(bgr_img, (img_width, img_height), cv.INTER_CUBIC)
@@ -32,20 +30,10 @@ if __name__ == '__main__':
     preds = model.predict(rgb_img)
     prob = np.max(preds)
     class_id = np.argmax(preds)
-    text = ('Predict: {}, prob: {}'.format(class_names[class_id][0][0], prob))
-    results.append({'label': class_names[class_id][0][0], 'prob': '{:.4}'.format(prob),
-                    'brand': '',
-                    'segment': '',
-                    'origin': '',
-                    'engine': '',
-                    'fuel type': '',
-                    'tire size': '',
-                    'drive type': '',
-                    'highlight': ''})
 
-    print('CAR NAME: ' + results[0]['label'])
-    print('POSSIBILITY: ' + results[0]['prob'])
-    with open('results.json', 'w') as file:
-        json.dump(results, file, indent=4)
+    label = class_names[class_id][0][0]
+
+    print('CAR NAME: ' + label)
+    print('POSSIBILITY: ' + str(prob))
 
     K.clear_session()
