@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Grid from '@material-ui/core/Grid';
-// axios.defaults.xsrfCookieName = 'csrftoken'
-// axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 class SearchEngine extends Component {
   constructor(props) {
     super(props)
@@ -15,6 +15,22 @@ class SearchEngine extends Component {
     this.setState({
       file: URL.createObjectURL(event.target.files[0])
     })
+    const fileURL = URL.createObjectURL(event.target.files[0])
+    let formData = new FormData();
+    formData.append('file', this.fileURL);
+    axios.post('http://localhost:8000',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    ).then(function () {
+      console.log('SUCCESS!!');
+    })
+      .catch(function () {
+        console.log('FAILURE!!');
+      });
   }
   render() {
     return (
@@ -28,7 +44,7 @@ class SearchEngine extends Component {
       >
 
         <input type="file" onChange={this.handleChange} />
-        <hr/>
+        <hr />
         <img src={this.state.file}
           style={{
             width: "100%",
