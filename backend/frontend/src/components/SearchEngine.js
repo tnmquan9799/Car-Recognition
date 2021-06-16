@@ -3,7 +3,7 @@ import axios from "axios";
 import Grid from '@material-ui/core/Grid';
 // axios.defaults.xsrfCookieName = 'csrftoken'
 // axios.defaults.xsrfHeaderName = 'X-CSRFToken'
-const download = require('image-downloader')
+// const download = require('image-downloader')
 
 class SearchEngine extends Component {
   constructor(props) {
@@ -14,20 +14,30 @@ class SearchEngine extends Component {
     this.handleChange = this.handleChange.bind(this)
   }
   handleChange(event) {
-    this.setState({
-      file: URL.createObjectURL(event.target.files[0])
-    })
-    options = {
-      url: file,
-      dest: '../../../save-image'
-    }
-    download.image(options).then(function () {
-      console.log('SUCCESS!!');
-    })
-      .catch(function () {
-        console.log('FAILURE!!');
-      });
-    }
+    // this.setState({
+    //   file: URL.createObjectURL(event.target.files[0])
+    // })
+    // console.log(URL.createObjectURL(event.target.files[0]))
+    
+    document.getElementById("avatar-img").onload = function () {
+        var data = new FormData();
+        data.append('file', document.getElementById('imageData').files[0]);
+        $.ajax({
+            url : "upload.py",
+            type: 'POST',
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                alert(data);
+
+            }, error: function() {
+                alert("Something went wrong, try again!");
+            }
+        });
+    };
+  }
+  
     //   options = {
     //     url: file,
     //     dest: '../../../save-image'
@@ -51,7 +61,7 @@ class SearchEngine extends Component {
 
           <input type="file" onChange={this.handleChange} />
           <hr />
-          <img src={this.state.file}
+          <img src={this.state.file} id="avatar-img"
             style={{
               width: "100%",
             }} />
