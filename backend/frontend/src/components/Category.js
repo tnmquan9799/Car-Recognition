@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 
-export default function Category() {
+export default class Category extends React.Component {
 
-  return (
-    <Grid container
-      spacing={0}
-      direction="column"
-      alignItems="center"
-      justify="center"
-      style={{ minHeight: '100vh' }}>
-      TuanNguyencorei7
-    </Grid>
-  );
+  render() {
+    return (
+      <Grid container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: '100vh' }}>
+        Tuan Nguyen
+      </Grid>
+    )
+  }
 }
