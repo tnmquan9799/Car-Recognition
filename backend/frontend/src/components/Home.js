@@ -36,8 +36,8 @@ import {
 	Link
 } from "react-router-dom";
 
-axios.defaults.xsrfCookieName = 'csrftoken'
-axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+// axios.defaults.xsrfCookieName = 'csrftoken'
+// axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -112,11 +112,10 @@ export default function Home(props) {
 	const handleDrawerClose = () => { setOpen(false); };
 	// List Drawer
 	const [listOpen, setListOpen] = React.useState(false);
-
 	const handleClick = () => {
 		setListOpen(!listOpen);
 	};
-
+	// Fetching Segment
 	const [dataSegment, setDataSegment] = React.useState(null);
 	async function fetchSegment() {
 		const response = await fetch("api/segment");
@@ -137,7 +136,9 @@ export default function Home(props) {
 			</Grid>
 		);
 	}
-	console.log(dataSegment)
+
+	const labels = [{ name: 'A' }, { name: 'B', }, { name: 'C' }, { name: 'D', }, { name: 'E' }, { name: 'F', }, { name: 'S' }, { name: 'SUV', }, { name: 'NA' }, { name: 'EU', },];
+
 	return (
 		<Router>
 			<div className={classes.root}>
@@ -200,14 +201,16 @@ export default function Home(props) {
 						</ListItem>
 						<Collapse in={listOpen} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
-								<ListItem button className={classes.nested}>
-									<ListItemIcon>
-										<StarBorder />
-									</ListItemIcon>
-									<ListItemText primary={dataSegment.map(person => (
-										<p>{person.name}</p>
-									))} />
-								</ListItem>
+								{dataSegment.map(person => (
+									
+									<ListItem button className={classes.nested}>
+										<ListItemIcon>
+											{person.name.substring(0,1)}
+										</ListItemIcon>
+										<ListItemText primary={person.name.substring(0,9)} />
+
+									</ListItem>
+								))}
 							</List>
 						</Collapse>
 						<ListItem button>
