@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Car,Brand, Engine, VTypeEngine
+from .models import Car,Brand, Engine, VTypeEngine, Segment
 
 
 class CarSerializer(serializers.ModelSerializer):
@@ -23,6 +23,12 @@ class VTypeEngineSerializer(serializers.ModelSerializer):
     class Meta:
         model = VTypeEngine
         fields = ('id', 'name', 'VType','detail')
+
+
+class SegmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Segment
+        fields = ('id', 'name','detail')
 
 # class CreateRoomSerializer(serializers.ModelSerializer):
 #     class Meta:

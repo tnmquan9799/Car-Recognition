@@ -65,7 +65,6 @@ class SearchEngine extends Component {
             style={{
               width: "100%",
             }} />
-
         </Grid >
       );
     }

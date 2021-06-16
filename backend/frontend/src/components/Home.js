@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -22,12 +22,22 @@ import ListIcon from '@material-ui/icons/List';
 import InfoIcon from '@material-ui/icons/Info';
 import SearchEngine from './SearchEngine';
 import Category from './Category'
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import StarBorder from '@material-ui/icons/StarBorder';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
+import axios from 'axios';
 import {
 	BrowserRouter as Router,
 	Switch,
 	Route,
 	Link
 } from "react-router-dom";
+
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -92,19 +102,42 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function Home() {
+export default function Home(props) {
 	const classes = useStyles();
 	const theme = useTheme();
+
+	// Nav Drawer
 	const [open, setOpen] = React.useState(false);
+	const handleDrawerOpen = () => { setOpen(true); };
+	const handleDrawerClose = () => { setOpen(false); };
+	// List Drawer
+	const [listOpen, setListOpen] = React.useState(false);
 
-	const handleDrawerOpen = () => {
-		setOpen(true);
+	const handleClick = () => {
+		setListOpen(!listOpen);
 	};
 
-	const handleDrawerClose = () => {
-		setOpen(false);
-	};
-
+	const [dataSegment, setDataSegment] = React.useState(null);
+	async function fetchSegment() {
+		const response = await fetch("api/segment");
+		setDataSegment(await response.json());
+	}
+	useEffect(() => {
+		fetchSegment(props.id);
+	}, [props.id]);
+	if (!dataSegment) {
+		return (
+			<Grid container
+				spacing={0}
+				direction="column"
+				alignItems="center"
+				justify="center"
+				style={{ minHeight: '100vh' }}>
+				<CircularProgress />
+			</Grid>
+		);
+	}
+	console.log(dataSegment)
 	return (
 		<Router>
 			<div className={classes.root}>
@@ -129,7 +162,7 @@ export default function Home() {
 						</IconButton>
 						<Typography variant="h6" noWrap>
 							Car Recognition System
-          </Typography>
+						</Typography>
 					</Toolbar>
 				</AppBar>
 				<Drawer
@@ -158,12 +191,25 @@ export default function Home() {
 							</ListItemIcon>
 							<ListItemText primary="Home" />
 						</ListItem>
-						<ListItem button component={Link} to="/Category">
+						<ListItem button onClick={handleClick}>
 							<ListItemIcon>
-								<ListIcon />
+								<InboxIcon />
 							</ListItemIcon>
 							<ListItemText primary="Category" />
+							{listOpen ? <ExpandLess /> : <ExpandMore />}
 						</ListItem>
+						<Collapse in={listOpen} timeout="auto" unmountOnExit>
+							<List component="div" disablePadding>
+								<ListItem button className={classes.nested}>
+									<ListItemIcon>
+										<StarBorder />
+									</ListItemIcon>
+									<ListItemText primary={dataSegment.map(person => (
+										<p>{person.name}</p>
+									))} />
+								</ListItem>
+							</List>
+						</Collapse>
 						<ListItem button>
 							<ListItemIcon>
 								<InfoIcon to="/Info" />
