@@ -1,73 +1,62 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
 // axios.defaults.xsrfCookieName = 'csrftoken'
 // axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 // const download = require('image-downloader')
 
 class SearchEngine extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      file: null
-    }
-    this.handleChange = this.handleChange.bind(this)
-  }
-  handleChange(event) {
-    // this.setState({
-    //   file: URL.createObjectURL(event.target.files[0])
-    // })
-    // console.log(URL.createObjectURL(event.target.files[0]))
-    
-    document.getElementById("avatar-img").onload = function () {
-        var data = new FormData();
-        data.append('file', document.getElementById('imageData').files[0]);
-        $.ajax({
-            url : "upload.py",
-            type: 'POST',
-            data: data,
-            contentType: false,
-            processData: false,
-            success: function(data) {
-                alert(data);
-
-            }, error: function() {
-                alert("Something went wrong, try again!");
-            }
-        });
+      selectedFile: null,
     };
   }
-  
-    //   options = {
-    //     url: file,
-    //     dest: '../../../save-image'
-    //   }
-    //   download.image(options)
-    //       .then(({dest})) => {
-    //         console.log('Saved to', dest)
-    //   })
-    //       .catch((err) => console.log(err))
-    // }
-    render() {
-      return (
-        <Grid
-          container
-          spacing={0}
-          direction="column"
-          alignItems="center"
-          justify="center"
-          style={{ minHeight: '100vh' }}
-        >
 
-          <input type="file" onChange={this.handleChange} />
-          <hr />
-          <img src={this.state.file} id="avatar-img"
-            style={{
-              width: "100%",
-            }} />
-        </Grid >
-      );
-    }
+  onChangeHandler = (event) => {
+    this.setState({
+      selectedFile: event.target.files[0],
+      loaded: 0,
+    });
+    console.log(event.target.files[0]);
+  };
+
+  onClickHandler = () => {
+    const data = new FormData();
+    data.append("file", this.state.selectedFile);
+    axios.post("http://localhost:8000/upload", data, {
+        // receive two parameter endpoint url ,form data
+      })
+      .then((res) => {
+        // then print response status
+        console.log(res.statusText);
+      });
+  };
+
+  render() {
+    return (
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: "100vh" }}
+      >
+        <input type="file" name="file" onChange={this.onChangeHandler} />
+        <button type="button" onClick={this.onClickHandler}>
+          Upload
+        </button>
+        <hr />
+        <img
+          src={this.state.file}
+          style={{
+            width: "100%",
+          }}
+        />
+      </Grid>
+    );
   }
+}
 
-  export default SearchEngine;
+export default SearchEngine;
