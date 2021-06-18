@@ -1,6 +1,8 @@
 numpy
+tensorflow
 tensorflow-gpu
 keras
 pillow
 sklearn
 console-progressbar
+Django
