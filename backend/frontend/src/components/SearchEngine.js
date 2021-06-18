@@ -1,37 +1,31 @@
-import React, { Component } from "react";
+import React, { Component,useEffect } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 // axios.defaults.xsrfCookieName = 'csrftoken'
 // axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 // const download = require('image-downloader')
+import FormData from "form-data";
 
 class SearchEngine extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedFile: null,
+      file: null,
     };
+    this.handleChange = this.handleChange.bind(this);
+
   }
-
-  onChangeHandler = (event) => {
-    this.setState({
-      selectedFile: event.target.files[0],
-      loaded: 0,
+  handleChange(event) {
+    const file = event.target.files[0];
+    getBase64(file).then((base64) => {
+      localStorage["RecogImage"] = base64;
+      console.debug("file stored", base64);
     });
-    console.log(event.target.files[0]);
-  };
-
-  onClickHandler = () => {
-    const data = new FormData();
-    data.append("file", this.state.selectedFile);
-    axios.post("http://localhost:8000/upload", data, {
-        // receive two parameter endpoint url ,form data
-      })
-      .then((res) => {
-        // then print response status
-        console.log(res.statusText);
-      });
-  };
+    var dataImage = localStorage.getItem("RecogImage");
+    var bannerImg = document.getElementById("tableBanner");
+    bannerImg.src = dataImage;
+    
+  }
 
   render() {
     return (
@@ -43,13 +37,15 @@ class SearchEngine extends Component {
         justify="center"
         style={{ minHeight: "100vh" }}
       >
-        <input type="file" name="file" onChange={this.onChangeHandler} />
-        <button type="button" onClick={this.onClickHandler}>
-          Upload
+        <input type="file" id="image-file" onChange={this.handleChange} />
+        <button onClick={this.getImageData}>
+        Send
         </button>
         <hr />
+        
         <img
-          src={this.state.file}
+          src=""
+          id="tableBanner"
           style={{
             width: "100%",
           }}
@@ -58,5 +54,13 @@ class SearchEngine extends Component {
     );
   }
 }
+const getBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(file);
+  });
+};
 
 export default SearchEngine;
