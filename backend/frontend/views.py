@@ -16,8 +16,6 @@ def index(request):
 
 def save_file(request):
     # fileitem = form['file']
-    message = 'The file was uploaded successfully'
-    return render(request, 'frontend/index.html',{'message':message})
     # if fileitem.filename:
     #     fn = os.path.basename(fileitem.filename)
     #     open('./images' + fn, 'wb').write(fileitem.file.read())
@@ -27,3 +25,5 @@ def save_file(request):
     # else:
     #     message = 'No file was uploaded'
     #     return render(message, 'frontend/index.html',{'message':message})
+    message = 'INTO databases'
+    return render(request, 'frontend/index.html',message)

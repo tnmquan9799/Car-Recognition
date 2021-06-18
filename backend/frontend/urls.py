@@ -5,5 +5,5 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('Category/', views.index),
-    path('save_file',views.save_file)
+    path('upload',views.save_file)
 ]

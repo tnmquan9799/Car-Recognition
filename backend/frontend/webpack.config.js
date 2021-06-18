@@ -6,7 +6,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "./static/frontend"),
     filename: "[name].js",
-    assetModuleFilename: 'images/'
+    assetModuleFilename: 'images/',
   },
   module: {
     rules: [
@@ -23,6 +23,7 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/i,
+        type: 'asset/resource',
         use: [
           // Creates `style` nodes from JS strings
           "style-loader",
@@ -33,8 +34,16 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'images/',
+        test: /\.(png|jpg|gif)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+            }
+          },
+        ],
+       type: 'javascript/auto'
       },
     ],
   },
