@@ -1,8 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpRequest, response
+from django.http import HttpResponse, HttpRequest
 from django.conf import settings
 import importlib
 from django.views.decorators.csrf import ensure_csrf_cookie
+import cgi
+import os
+import cgitb
 
 
 
@@ -12,15 +15,9 @@ def index(request):
 
 
 def save_file(request):
-    # fileitem = form['file']
-    # if fileitem.filename:
-    #     fn = os.path.basename(fileitem.filename)
-    #     open('./images' + fn, 'wb').write(fileitem.file.read())
-    #     message = 'The file "' + fn + '" was uploaded successfully'
-    #     return render(message, 'frontend/index.html',{'message':message})
-    
-    # else:
-    #     message = 'No file was uploaded'
-    #     return render(message, 'frontend/index.html',{'message':message})
-    data=request.data
-    return HttpRequest(data)
+    SAVED_PATH = "../test-folder/"
+    fileitem = request.FILES['file']
+    filename = request.FILES['file'].name
+    fn = os.path.basename(filename)
+    open(SAVED_PATH + fn, 'wb').write(fileitem.file.read())
+    return HttpResponse('The file "' + fn + '" was uploaded successfully')

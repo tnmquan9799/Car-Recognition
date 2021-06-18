@@ -3,33 +3,35 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
-// const download = require('image-downloader')
-import FormData from "form-data";
-// import imageE from "../../images/gemera.jpg";
-
+// import CSRFToken from './csrftoken';
 class SearchEngine extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
-      selectedFile: null
+      selectedFile: null,
+      tempImg:null
     }
-    this.handleChange = this.handleChange.bind(this);
-
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
-  handleChange(event) {
+
+  handleInputChange(event) {
+    
     this.setState({
       selectedFile: event.target.files[0],
-      loaded: 0,
-    });
+      tempImg: URL.createObjectURL(event.target.files[0])
+    })
   }
 
-  onClickHandler = () => {
+
+  submit() {
     const data = new FormData()
-    data.append('file', this.state.selectedFile)
-    axios.post("http://127.0.0.1:8000/upload", data, { // receive two parameter endpoint url ,form data 
+    data.append('file', this.state.selectedFile, this.state.selectedFile.name)
+    console.log(this.state.selectedFile);
+    let url = "http://127.0.0.1:8000/save_file";
+    axios.post(url, data, { // receive two parameter endpoint url ,form data 
     })
-      .then(response => { // then print response status
-        console.log(response)
+      .then(res => { // then print response status
+        console.warn(res);
       })
   }
 
@@ -43,18 +45,36 @@ class SearchEngine extends Component {
         justify="center"
         style={{ minHeight: "100vh" }}
       >
-        <input type="file" name="file" onChange={this.handleChange} />
-        <button type="button" onClick={this.onClickHandler}>Upload</button>
-        <hr />
-        <img
-          src={this.state.file}
-          style={{
-            width: "100%",
-          }}
-        />
+
+
+        <div>
+          <h3>File Upload</h3>
+          <br />
+          <div>
+            <h5>Select File :</h5>
+            <input className="" type="file" id="bannerImg" name="file" onChange={this.handleInputChange} />
+          </div>
+          <hr />
+          <img src={this.state.tempImg} style={{ width: "100%" }} />
+          <hr />
+          <div className="form-row">
+            <div className="col-md-6">
+              <button type="submit" className="btn btn-dark" onClick={() => this.submit()}>Upload</button>
+            </div>
+          </div>
+        </div>
       </Grid>
     );
   }
 }
+
+const getBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(file);
+  });
+};
 
 export default SearchEngine;
