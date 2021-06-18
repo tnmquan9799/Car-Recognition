@@ -5,7 +5,7 @@ axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 // const download = require('image-downloader')
 import FormData from "form-data";
-import imageE from "../../images/gemera.jpg";
+// import imageE from "../../images/gemera.jpg";
 
 class SearchEngine extends Component {
   constructor(props) {
@@ -28,8 +28,8 @@ class SearchEngine extends Component {
     data.append('file', this.state.selectedFile)
     axios.post("http://127.0.0.1:8000/upload", data, { // receive two parameter endpoint url ,form data 
     })
-      .then(res => { // then print response status
-        console.log(res)
+      .then(response => { // then print response status
+        console.log(response)
       })
   }
 
