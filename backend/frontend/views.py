@@ -1,12 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, response
 from django.conf import settings
 import importlib
 from django.views.decorators.csrf import ensure_csrf_cookie
-import cgi
-import os
-import cgitb; cgitb.enable()
-form = cgi.FieldStorage()
+
 
 
 @ensure_csrf_cookie
@@ -25,5 +22,5 @@ def save_file(request):
     # else:
     #     message = 'No file was uploaded'
     #     return render(message, 'frontend/index.html',{'message':message})
-    message = 'INTO databases'
-    return render(request, 'frontend/index.html',message)
+    data=request.data
+    return HttpRequest(data)
