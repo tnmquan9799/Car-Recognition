@@ -116,28 +116,26 @@ export default function Home(props) {
 		setListOpen(!listOpen);
 	};
 	// Fetching Segment
-	const [dataSegment, setDataSegment] = React.useState(null);
-	async function fetchSegment() {
-		const response = await fetch("api/segment");
-		setDataSegment(await response.json());
-	}
-	useEffect(() => {
-		fetchSegment(props.id);
-	}, [props.id]);
-	if (!dataSegment) {
-		return (
-			<Grid container
-				spacing={0}
-				direction="column"
-				alignItems="center"
-				justify="center"
-				style={{ minHeight: '100vh' }}>
-				<CircularProgress />
-			</Grid>
-		);
-	}
-
-	const labels = [{ name: 'A' }, { name: 'B', }, { name: 'C' }, { name: 'D', }, { name: 'E' }, { name: 'F', }, { name: 'S' }, { name: 'SUV', }, { name: 'NA' }, { name: 'EU', },];
+	// const [dataSegment, setDataSegment] = React.useState(null);
+	// async function fetchSegment() {
+	// 	const response = await fetch("api/segment");
+	// 	setDataSegment(await response.json());
+	// }
+	// useEffect(() => {
+	// 	fetchSegment(props.id);
+	// }, [props.id]);
+	// if (!dataSegment) {
+	// 	return (
+	// 		<Grid container
+	// 			spacing={0}
+	// 			direction="column"
+	// 			alignItems="center"
+	// 			justify="center"
+	// 			style={{ minHeight: '100vh' }}>
+	// 			<CircularProgress />
+	// 		</Grid>
+	// 	);
+	// }
 
 	return (
 		<Router>
@@ -192,7 +190,13 @@ export default function Home(props) {
 							</ListItemIcon>
 							<ListItemText primary="Home" />
 						</ListItem>
-						<ListItem button onClick={handleClick}>
+						<ListItem button component={Link} to="/Category">
+							<ListItemIcon>
+								<InboxIcon />
+							</ListItemIcon>
+							<ListItemText primary="Category" />
+						</ListItem>
+						{/* <ListItem button onClick={handleClick}>
 							<ListItemIcon>
 								<InboxIcon />
 							</ListItemIcon>
@@ -212,7 +216,7 @@ export default function Home(props) {
 									</ListItem>
 								))}
 							</List>
-						</Collapse>
+						</Collapse> */}
 						<ListItem button>
 							<ListItemIcon>
 								<InfoIcon to="/Info" />
@@ -236,10 +240,10 @@ export default function Home(props) {
 						<Route exact path="/">
 							<SearchEngine />
 						</Route>
-						<Route path="/Category">
+						<Route path="/Category" component={Category}>
 							<Category />
 						</Route>
-						<Route path="/Info">
+						<Route path="/Info" component=""> 
 							Tuan
 						</Route>
 					</Switch>
