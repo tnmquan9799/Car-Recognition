@@ -9,11 +9,9 @@ import os
 import cgitb
 
 
-
 @ensure_csrf_cookie
 def index(request):
     return render(request, 'frontend/index.html')
-
 
 def save_file(request):
     SAVED_PATH = "../test-folder/"
@@ -24,9 +22,8 @@ def save_file(request):
     folderpath = "test-folder/001." + file_extension
     fn = os.path.basename(filename)
     open(SAVED_PATH + fn, 'wb').write(fileitem.file.read())
-    # call(["python", "../../../demo.py", folderpath])
-    # call(["python", "/cut_string.py"])
-    # print("Running demo")
+    call(["python", "../demo.py", folderpath])
+    print("Running demo")
     return HttpResponse('The file "' + fn + '" was uploaded successfully')
 
 
