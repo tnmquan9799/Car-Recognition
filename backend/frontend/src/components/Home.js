@@ -235,7 +235,7 @@ export default function Home(props) {
 						))}
 					</List>
 				</Drawer>
-				<main className={classes.content}>
+				<main style={{}} className={classes.content}>
 					<div className={classes.toolbar} />
 					<Switch>
 						<Route exact path="/">
