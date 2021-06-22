@@ -28,6 +28,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
+import M8 from '../../assets/video/m8.mp4';
 import axios from 'axios';
 import {
 	BrowserRouter as Router,
@@ -42,6 +43,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
 	root: {
 		display: 'flex',
+		marginTop: '-70px!important',
 	},
 	appBar: {
 		zIndex: theme.zIndex.drawer + 1,
@@ -235,11 +237,16 @@ export default function Home(props) {
 						))}
 					</List>
 				</Drawer>
-				<main style={{}} className={classes.content}>
+				<main style={{ padding: "0", margin: "0", }} className={classes.content}>
 					<div className={classes.toolbar} />
 					<Switch>
 						<Route exact path="/">
-							<SearchEngine />
+							<Grid id="video-container" >
+								<video width={screen.width} id="video" src={M8} style={{ position: "absolute", zIndex: "-1", width: "100%", left: "50%", top: "50%", objectFit: "cover", transform: "translate(-50%, -50%)" }} >
+								</video>
+								<SearchEngine />
+							</Grid>
+						
 						</Route>
 						<Route path="/Category" component={Category}>
 							<Category />

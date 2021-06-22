@@ -1,0 +1,98 @@
+import React, { Component, useEffect } from "react";
+import axios from "axios";
+import Grid from "@material-ui/core/Grid";
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import Fade from '@material-ui/core/Fade';
+import M8 from '../../assets/video/m8.mp4';
+import { withStyles } from "@material-ui/core/styles";
+import drawerWidth from './Home'
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+// import CSRFToken from './csrftoken';
+
+const useStyles = (theme) => ({
+  mainRoot: {
+    transitionDuration: 2000,
+    opacity: 0,
+    transition: theme.transitions.create(['opacity'],
+      { duration: theme.transitions.duration.standard, }),
+    '&:hover': { opacity:1 },
+  }
+});
+
+class SearchEngine extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedFile: null,
+      tempImg: null
+    }
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(event) {
+
+    this.setState({
+      selectedFile: event.target.files[0],
+      tempImg: URL.createObjectURL(event.target.files[0])
+    })
+  }
+
+
+  submit() {
+    const data = new FormData()
+    data.append('file', this.state.selectedFile, this.state.selectedFile.name)
+    console.log(this.state.selectedFile);
+    let url = "http://127.0.0.1:8000/save_file";
+    axios.post(url, data, { // receive two parameter endpoint url ,form data 
+    })
+      .then(res => { // then print response status
+        console.warn(res);
+      })
+  }
+  componentDidMount() {
+    document.getElementById("video").play()
+  }
+  componentDidUpdate() {
+    let video = document.getElementById("video")
+    let imageUpload = document.getElementById("imageUpload")
+    imageUpload == null ? video.muted = true : video.muted == "hidden";
+  }
+
+  render() {
+    const { classes } = this.props;
+    return (
+      <Grid
+        xs={12}
+        style={{ marginTop: "150px", minHeight: "100vh", color: "#fff" }}
+      >
+        <Grid className={classes.mainRoot} container justify="center" xs={12} >
+          <Typography xs={12} variant="h3" component="h3" gutterBottom>
+            Car Search Engine
+            <image src={this.state.tempImg} width="100%" style={{zIndex:1000}} />
+          </Typography>
+          <Grid container justify="center" xs={12} style={{ marginBottom: "50px", marginTop: "50px" }}>
+            <h5 xs={4}>Select File : </h5>
+            <input style={{ width: "185px" }} xs={4} id="uploadImage" type="file" id="bannerImg" name="file" onChange={this.handleInputChange} />
+          
+            <Button xs={4} type="submit" className="" onClick={() => this.submit()} variant="contained" color="primary">
+              Upload
+            </Button>
+          </Grid>
+          <br />
+        </Grid>
+        <Grid>
+          <video id="video" src={M8} style={{ position: "absolute", zIndex: "-1", width: "100%", left: "50%", top: "50%", objectFit: "cover", transform: "translate(-50%, -50%)" }} >
+          </video>
+        </Grid>
+     
+      </Grid>
+    );
+  }
+}
+
+export default withStyles(useStyles)(SearchEngine);

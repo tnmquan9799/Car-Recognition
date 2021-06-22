@@ -37,14 +37,18 @@ module.exports = {
         test: /\.(png|jpg|gif)$/i,
         use: [
           {
-            loader: 'url-loader',
+            loader: 'file-loader',
             options: {
               limit: 8192,
             }
           },
         ],
-       type: 'javascript/auto'
+        type: 'javascript/auto'
       },
+      {
+        test: /\.(webm|mp4)$/,
+        loader: 'url-loader'
+      }
     ],
   },
   optimization: {
