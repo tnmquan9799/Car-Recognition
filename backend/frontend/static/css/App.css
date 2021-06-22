@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #32333A;
 }
 
 .App-link {
@@ -47,7 +47,7 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background: #fafafa;
+  background: #202125;
 }
 
 a,
@@ -97,7 +97,7 @@ a:focus {
 }
 .itemTag:hover, .itemTag:focus {
   color: #333;
-  background-color:#fff;
+  background-color:#333;
   border-radius: 5px;
   transition:0.5s ease-in;
 }

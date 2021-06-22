@@ -59,6 +59,7 @@ class Category extends React.Component {
         this.setState({
           dataCar: dataRes
         });
+        console.log(this.state.dataCar);
       });
   }
 
@@ -72,6 +73,7 @@ class Category extends React.Component {
         style={{ minHeight: "100vh" }}
         xs={12}
       >
+        <input type="text" placeholder="Searching..."></input>
         {this.state.dataCar && this.state.dataCar.map(dataCar => (
           <Grid item xs={3}>
             <Card >
@@ -86,7 +88,7 @@ class Category extends React.Component {
                     {dataCar.carName}
                   </Typography>
                   <Typography variant="body2" color="textSecondary" component="p">
-                  {dataCar.detail}
+                  {dataCar.brand}
                   </Typography>
                 </CardContent>
               </CardActionArea>

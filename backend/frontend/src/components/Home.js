@@ -39,7 +39,6 @@ import {
 // axios.defaults.xsrfCookieName = 'csrftoken'
 // axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
 	root: {
 		display: 'flex',
@@ -142,6 +141,7 @@ export default function Home(props) {
 			<div className={classes.root}>
 				<CssBaseline />
 				<AppBar
+					style={{ backgroundColor: "#333" }}
 					position="fixed"
 					className={clsx(classes.appBar, {
 						[classes.appBarShift]: open,
@@ -178,12 +178,13 @@ export default function Home(props) {
 					}}
 				>
 					<div className={classes.toolbar}>
+						<b>Author: Tuan & Quan</b>
 						<IconButton onClick={handleDrawerClose}>
 							{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
 						</IconButton>
 					</div>
 					<Divider />
-					<List>
+					<List >
 						<ListItem button component={Link} to="/">
 							<ListItemIcon>
 								<HomeIcon />
@@ -243,7 +244,7 @@ export default function Home(props) {
 						<Route path="/Category" component={Category}>
 							<Category />
 						</Route>
-						<Route path="/Info" component=""> 
+						<Route path="/Info" component="">
 							Tuan
 						</Route>
 					</Switch>
