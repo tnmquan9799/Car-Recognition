@@ -42,7 +42,7 @@ class VTypeEngine(models.Model):
     def choice():
         return {'name': 'V Engine'}
     VType = models.ForeignKey(
-        Engine, on_delete=models.CASCADE, null=True, blank=True,limit_choices_to = choice)
+        Engine, on_delete=models.CASCADE, null=True, blank=True)
     detail = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -73,7 +73,7 @@ class Car(models.Model):
     origin = models.ForeignKey(
         Origin, on_delete=models.CASCADE, null=True, blank=True)
     yearEdition = models.CharField(max_length=100, null=True, blank=True)
-    engines = models.ForeignKey(
+    engine = models.ForeignKey(
         Engine, on_delete=models.CASCADE, null=True, blank=True)
     hoursePower = models.CharField(max_length=100, null=True, blank=True)
     torque = models.CharField(max_length=100, null=True, blank=True)
