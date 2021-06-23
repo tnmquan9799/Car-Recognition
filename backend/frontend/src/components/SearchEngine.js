@@ -134,6 +134,8 @@ class SearchEngine extends Component {
     this.setState({
       searchDraw: true
     });
+    let box = document.getElementById("input-box");
+    box.disabled = false;
   }
 
   render() {
@@ -153,7 +155,7 @@ class SearchEngine extends Component {
             <Button style={{color: "#fff"}} onClick={this.searchDrawer}>
             Press to search
             </Button>
-            <Grid xs={12} className={clsx(classes.buttonMore, { [classes.buttonLess]: this.state.searchDraw })}>
+            <Grid id="input-box" xs={12} className={clsx(classes.buttonMore, { [classes.buttonLess]: this.state.searchDraw })} disabled>
               <Grid container justify="center" xs={12} style={{ marginBottom: "50px", marginTop: "50px" }}>
                 <h5 xs={4}>Select File : </h5>
                 <input style={{ width: "185px" }} xs={4} id="uploadImage" type="file" id="bannerImg" name="file" onChange={this.handleInputChange} />
@@ -164,7 +166,7 @@ class SearchEngine extends Component {
             </Grid>
             <Grid justify="center" container xs={12} style={{ position: "absolute", transform: "translate(-65%, -50%)", top: "-140%", left: "106%" }} >
               <Alert variant="filled" id="alert" style={{ display: "none", transitionDuration: 3000 }} severity="success">
-                This is a success alert — check it out!
+                Upload success, scroll down to see upload image
               </Alert>
             </Grid>
             <br />
