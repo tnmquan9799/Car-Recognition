@@ -246,9 +246,9 @@ export default function Home(props) {
 								</video>
 								<SearchEngine />
 							</Grid>
-						
+
 						</Route>
-						<Route path="/Category" component={Category}>
+						<Route path="/Category" component={Category} >
 							<Category />
 						</Route>
 						<Route path="/Info" component="">

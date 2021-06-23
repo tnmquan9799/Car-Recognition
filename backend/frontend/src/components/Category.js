@@ -105,6 +105,19 @@ class Category extends React.Component {
       });
   }
 
+  onSearch() {
+    fetch("/api/car")
+      .then((response) => {
+        return response.json();
+      })
+      .then((dataRes) => {
+        this.setState({
+          dataCar: dataRes,
+        });
+        console.log(this.state.dataCar);
+      });
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -116,12 +129,12 @@ class Category extends React.Component {
         style={{ minHeight: "100vh" }}
         xs={12}
       >
-        <Grid className="search-container" xs={12} alignItems="center" justify="center">
+        <Grid className="search-container" xs={12} alignItems="center" justify="center" >
           <div id="searchBar" className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase
+            <InputBase onChange={this.onSearch}
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
