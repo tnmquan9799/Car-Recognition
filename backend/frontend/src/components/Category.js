@@ -89,32 +89,35 @@ class Category extends React.Component {
     super(props);
     this.state = {
       dataCar: null,
+      searchRq: ""
     };
+    this.onSearch = this.onSearch.bind(this)
   }
   // Fetching Cars
   async componentDidMount() {
-    fetch("/api/car")
-      .then((response) => {
-        return response.json();
-      })
-      .then((dataRes) => {
-        this.setState({
-          dataCar: dataRes,
-        });
-        console.log(this.state.dataCar);
-      });
+    this.onSearch();
   }
 
+  async componentDidUpdate() {
+   
+  }
+
+
   onSearch() {
-    fetch("/api/car")
+    this.setState({
+      searchRq: document.getElementById("searchInput").value
+    });
+    console.log(this.state.searchRq);
+    fetch("/api/car?search=" + this.state.searchRq)
       .then((response) => {
+
         return response.json();
       })
       .then((dataRes) => {
         this.setState({
           dataCar: dataRes,
         });
-        console.log(this.state.dataCar);
+        console.log(dataRes);
       });
   }
 
@@ -129,17 +132,18 @@ class Category extends React.Component {
         style={{ minHeight: "100vh" }}
         xs={12}
       >
-        <Grid className="search-container" xs={12} alignItems="center" justify="center" >
+        <Grid container className="search-container" xs={12} justify="center" >
           <div id="searchBar" className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase onChange={this.onSearch}
+            <InputBase onChange={this.onSearch} id="searchInput"
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
+              xs={12}
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
@@ -168,7 +172,7 @@ class Category extends React.Component {
                   </CardContent>
                 </CardActionArea>
                 <CardActions>
-                  <Button variant="outlined" color="dark">
+                  <Button variant="outlined" color="#333">
                     Details
                   </Button>
                 </CardActions>

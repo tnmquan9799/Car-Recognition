@@ -1,12 +1,26 @@
 const path = require("path");
 const webpack = require("webpack");
+const CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = {
+  plugins: [
+    new CompressionPlugin({
+      // filename: "./static/frontend/main.js",
+    }),
+  ],
+  mode: 'development',
   entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "./static/frontend"),
-    filename: "[name].js",
+    filename: "main.js",
     assetModuleFilename: 'images/',
+    clean: true
+  },
+  performance: {
+    hints: flase,
+    maxEntrypointSize: 400000,
+    maxAssetSize: 250000,
+
   },
   module: {
     rules: [
@@ -47,19 +61,19 @@ module.exports = {
       },
       {
         test: /\.(webm|mp4)$/,
-        loader: 'url-loader'
+        loader: 'file-loader'
       }
     ],
   },
   optimization: {
     minimize: true,
+    moduleIds:'size',
+    chunkIds: 'size',
+    mangleWasmImports: true,
+    removeEmptyChunks: true,
+    mergeDuplicateChunks: true,
+    flagIncludedChunks: true,
+    providedExports: true,
+    emitOnErrors: true,
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      "process.env": {
-        // This has effect on the react lib size
-        NODE_ENV: JSON.stringify("production"),
-      },
-    }),
-  ],
 };
