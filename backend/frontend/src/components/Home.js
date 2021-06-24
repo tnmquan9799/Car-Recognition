@@ -242,8 +242,8 @@ export default function Home(props) {
 					<Switch>
 						<Route exact path="/">
 							<Grid id="video-container" >
-								<video width={screen.width} id="video" src={M8} style={{ position: "absolute", zIndex: "-1", width: "100%", left: "50%", top: "50%", objectFit: "cover", transform: "translate(-50%, -50%)" }} >
-								</video>
+								{/* <video autoPlay width={screen.width} id="video" src={M8} style={{ position: "absolute", zIndex: "-1", width: "100%", left: "50%", top: "50%", objectFit: "cover", transform: "translate(-50%, -50%)" }} >
+								</video> */}
 								<SearchEngine />
 							</Grid>
 
