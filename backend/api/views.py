@@ -4,6 +4,7 @@ from .serializers import CarSerializer, BrandSerializer, EngineSerializer, VType
 from .models import Car, Brand, Engine, VTypeEngine, Segment
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter, SearchFilter
 from django.http import JsonResponse
 
 # Create your views here.
@@ -13,7 +14,8 @@ from django.template import RequestContext
 class CarView(generics.ListAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
-
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('$carName','brand__name','origin__name')
 
 class BrandView(generics.ListAPIView):
     queryset = Brand.objects.all()

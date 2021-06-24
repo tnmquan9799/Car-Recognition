@@ -84,7 +84,8 @@ class SearchEngine extends Component {
       selectedFile: null,
       tempImg: null,
       animationDraw: false,
-      searchDraw: false
+      searchDraw: false,
+      overlay: null
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.searchDrawer = this.searchDrawer.bind(this);
@@ -115,6 +116,7 @@ class SearchEngine extends Component {
       })
   }
   componentDidMount() {
+
     // document.getElementById("video").play()
     setTimeout(() => {
       // this.setState({
@@ -124,10 +126,18 @@ class SearchEngine extends Component {
         animationDraw: true
       })
     }, 8000)
-  }
-  componentDidUpdate() {
-    var width = document.getElementById("overlay")
-    console.log(width.style.height);
+    setInterval(() => {
+      if (window.innerHeight == screen.height) {
+        this.setState({
+          overlay: document.getElementById("overlay").style.height = screen.height + 790
+        });
+      } else {
+        this.setState({
+          overlay: document.getElementById("overlay").style.height = screen.height + 650
+        });
+      }
+    }, 50)
+
   }
 
   searchDrawer() {
@@ -146,7 +156,7 @@ class SearchEngine extends Component {
         style={{ paddingTop: "150px", minHeight: "100vh", color: "#fff", margin: 0 }}
       >
         <Grid className={clsx(classes.animatedItem, { [classes.animatedItemExiting]: this.state.animationDraw })} style={{ position: "relative" }} >
-          <div id="overlay" style={{ backgroundColor: "#000", zIndex: "2", width: "100%", position: "absolute", height: screen.height + 655, left: "50%", top: "50%", transform: "translate(-50%, -50%)", opacity: "0.5", }}>
+          <div id="overlay" style={{ backgroundColor: "#000", zIndex: "2", width: "100%", height: this.state.overlay, position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", opacity: "0.5" }}>
           </div>
           <Grid container justify="center" xs={12} style={{ zIndex: "9999", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: "380px" }}>
             <Typography style={{ pointerEvents: "none" }} id="title-text" xs={12} variant="h3" component="h3" gutterBottom>
@@ -166,25 +176,13 @@ class SearchEngine extends Component {
             </Grid>
             <br />
           </Grid>
-          <Grid justify="center" xs={12} style={{ position: "relative" }} >
-            <Alert variant="filled" id="alert" style={{ position: "absolute",left: "50%", transform: "translate(-50%, -50%)", display: "block" }} severity="success">
+          <Grid container justify="center" xs={12} style={{ position: "relative" }} >
+            <Alert variant="filled" id="alert" style={{ zIndex: "99999", position: "absolute", left: "50%", transform: "translate(-50%, -50%)", display: "none" }} severity="success">
               Upload success, scroll down to see upload image
             </Alert>
           </Grid>
         </Grid>
-
-        {/* <Grid className={classes.subRoot} style={{ position: "relative" }}>
-          <div id="overlay" height={screen.height} style={{ backgroundColor: "#000", zIndex: "2", width: "100%", position: "absolute", height: screen.height + 680, left: "50%", top: "50%", transform: "translate(-50%, -50%)", opacity: "0.5", }}>
-          </div>
-          <Grid container justify="center" xs={12} style={{ zIndex: "9999", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: "380px" }}>
-            <Typography xs={12} variant="h1" component="h1" gutterBottom>
-              Hover Here
-            </Typography>
-          </Grid>
-        </Grid> */}
-
         <Grid containter style={{ marginTop: screen.height - 200 }} >
-          Preview
           <img src={this.state.tempImg} width="100%" id="ImgPreview" />
         </Grid>
       </Grid>
