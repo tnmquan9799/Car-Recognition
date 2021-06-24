@@ -97,7 +97,7 @@ class SearchEngine extends Component {
     })
     let video = document.getElementById("video")
     let imageUpload = document.getElementById("imageUpload")
-    imageUpload == null ? video.muted = true : video.muted = false;
+    // imageUpload == null ? video.muted = true : video.muted = false;
     let alert = document.getElementById("alert")
     alert.style.display = "block";
   }
@@ -115,7 +115,7 @@ class SearchEngine extends Component {
       })
   }
   componentDidMount() {
-    document.getElementById("video").play()
+    // document.getElementById("video").play()
     setTimeout(() => {
       // this.setState({
       //   animationDraw: false
@@ -148,12 +148,12 @@ class SearchEngine extends Component {
         <Grid className={clsx(classes.animatedItem, { [classes.animatedItemExiting]: this.state.animationDraw })} style={{ position: "relative" }} >
           <div id="overlay" style={{ backgroundColor: "#000", zIndex: "2", width: "100%", position: "absolute", height: screen.height + 655, left: "50%", top: "50%", transform: "translate(-50%, -50%)", opacity: "0.5", }}>
           </div>
-          <Grid container justify="center" xs={12} style={{zIndex: "9999", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: "380px" }}>
-            <Typography style={{pointerEvents: "none"}} id="title-text" xs={12} variant="h3" component="h3" gutterBottom>
+          <Grid container justify="center" xs={12} style={{ zIndex: "9999", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: "380px" }}>
+            <Typography style={{ pointerEvents: "none" }} id="title-text" xs={12} variant="h3" component="h3" gutterBottom>
               Car Recognition System
             </Typography>
-            <Button style={{color: "#fff"}} onClick={this.searchDrawer}>
-            Press to search
+            <Button style={{ color: "#fff" }} onClick={this.searchDrawer}>
+              Press to search
             </Button>
             <Grid id="input-box" xs={12} className={clsx(classes.buttonMore, { [classes.buttonLess]: this.state.searchDraw })} disabled>
               <Grid container justify="center" xs={12} style={{ marginBottom: "50px", marginTop: "50px" }}>
@@ -164,12 +164,12 @@ class SearchEngine extends Component {
                 </Button>
               </Grid>
             </Grid>
-            <Grid justify="center" container xs={12} style={{ position: "absolute", transform: "translate(-65%, -50%)", top: "-140%", left: "106%" }} >
-              <Alert variant="filled" id="alert" style={{ display: "none", transitionDuration: 3000 }} severity="success">
-                Upload success, scroll down to see upload image
-              </Alert>
-            </Grid>
             <br />
+          </Grid>
+          <Grid justify="center" xs={12} style={{ position: "relative" }} >
+            <Alert variant="filled" id="alert" style={{ position: "absolute",left: "50%", transform: "translate(-50%, -50%)", display: "block" }} severity="success">
+              Upload success, scroll down to see upload image
+            </Alert>
           </Grid>
         </Grid>
 
@@ -183,7 +183,7 @@ class SearchEngine extends Component {
           </Grid>
         </Grid> */}
 
-        <Grid style={{ marginTop: screen.height - 200 }} >
+        <Grid containter style={{ marginTop: screen.height - 200 }} >
           Preview
           <img src={this.state.tempImg} width="100%" id="ImgPreview" />
         </Grid>
