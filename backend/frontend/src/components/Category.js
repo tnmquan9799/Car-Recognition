@@ -94,9 +94,14 @@ class Category extends React.Component {
     this.onSearch = this.onSearch.bind(this)
   }
   // Fetching Cars
-  componentDidMount() {
+  async componentDidMount() {
     this.onSearch();
   }
+
+  async componentDidUpdate() {
+   
+  }
+
 
   onSearch() {
     this.setState({
@@ -118,65 +123,98 @@ class Category extends React.Component {
 
   render() {
     const { classes } = this.props;
-    return (
+     return (
       <Grid
-        container
-        spacing={3}
-        alignItems="center"
-        justify="center"
-        style={{ minHeight: "100vh" }}
         xs={12}
+        style={{ color: "#fff", margin: 0 }}
       >
-        <Grid container className="search-container" xs={12} justify="center" >
-          <div id="searchBar" className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase onChange={this.onSearch} id="searchInput"
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              xs={12}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
-        </Grid>
-        {this.state.dataCar &&
-          this.state.dataCar.map((dataCar) => (
-            <Grid item xs={3}>
-              <Card>
-                <CardActionArea >
-                  <CardMedia
-                    // dataCar Image not build data model yet
-                    // className={classes.media}
-                    title="Contemplative Reptile"
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2" >
-                      {dataCar.carName}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      {dataCar.brand}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-                <CardActions>
-                  <Button variant="outlined" color="#333">
-                    Details
-                  </Button>
-                </CardActions>
-              </Card>
+        <Grid id="component-container" style={{ position: "relative" }}  >
+          <Grid container justify="center" xs={12} style={{ zIndex: "5", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: screen.height - (1 / 2 * (screen.height)) }}>
+            <Typography style={{ pointerEvents: "none", userSelect: "none" }} id="title-text" xs={12} variant="h3" component="h3" gutterBottom>
+              Car Recognition System
+            </Typography>
+            <Button id="drawerBtn" style={{ color: "#fff", userSelect: "none" }}>
+              Press to search
+            </Button>
+            <Grid id="inputBox" xs={12} >
+              <Grid container justify="center" xs={12} style={{ marginBottom: "50px", marginTop: "50px" }}>
+                <h5 xs={4} style={{ userSelect: "none" }}>Select File : </h5>
+                <input  style={{ width: "185px", userSelect: "none" }} xs={4} id="uploadImage" type="file" id="bannerImg" name="file"/>
+                <Button xs={4} type="submit" id="uploadBtn" onClick={() => this.submit()} variant="contained" color="primary" style={{ userSelect: "none" }} >
+                  Upload
+                </Button>
+              </Grid>
             </Grid>
-          ))}
+            <br />
+          </Grid>
+          <Grid container justify="center" xs={12} style={{ position: "relative", }} >
+            <Alert variant="filled" id="alert" style={{ userSelect: "none", position: "absolute", zIndex: 999999, left: "50%", transform: "translate(-50%, -50%)", display: "none", marginTop: "200px" }} severity="success">
+              Upload success, scroll down to see upload image
+            </Alert>
+          </Grid>
+        </Grid>
       </Grid>
     );
   }
 }
 
 export default withStyles(useStyles)(Category);
+
+// return (
+//       <Grid
+//         container
+//         spacing={3}
+//         alignItems="center"
+//         justify="center"
+//         style={{ minHeight: "100vh" }}
+//         xs={12}
+//       >
+//         <Grid container className="search-container" xs={12} justify="center" >
+//           <div id="searchBar" className={classes.search}>
+//             <div className={classes.searchIcon}>
+//               <SearchIcon />
+//             </div>
+//             <InputBase onChange={this.onSearch} id="searchInput"
+//               placeholder="Search…"
+//               classes={{
+//                 root: classes.inputRoot,
+//                 input: classes.inputInput,
+//               }}
+//               xs={12}
+//               inputProps={{ 'aria-label': 'search' }}
+//             />
+//           </div>
+//         </Grid>
+//         {this.state.dataCar &&
+//           this.state.dataCar.map((dataCar) => (
+//             <Grid item xs={3}>
+//               <Card>
+//                 <CardActionArea>
+//                   <CardMedia
+//                     // dataCar Image not build data model yet
+//                     // className={classes.media}
+//                     title="Contemplative Reptile"
+//                   />
+//                   <CardContent>
+//                     <Typography gutterBottom variant="h5" component="h2">
+//                       {dataCar.carName}
+//                     </Typography>
+//                     <Typography
+//                       variant="body2"
+//                       color="textSecondary"
+//                       component="p"
+//                     >
+//                       {dataCar.brand}
+//                     </Typography>
+//                   </CardContent>
+//                 </CardActionArea>
+//                 <CardActions>
+//                   <Button variant="outlined" color="#333">
+//                     Details
+//                   </Button>
+//                 </CardActions>
+//               </Card>
+//             </Grid>
+//           ))}
+//       </Grid>
+//     );

@@ -76,6 +76,7 @@ const useStyles = (theme) => ({
       opacity: 0,
       transform: "translateY(-50%)"
     },
+
     "100%": {
       disabled: true,
       opacity: 1,
@@ -176,7 +177,7 @@ class SearchEngine extends Component {
             <br />
           </Grid>
           <Grid container justify="center" xs={12} style={{ position: "relative", }} >
-            <Alert variant="filled" id="alert" style={{ userSelect: "none", position: "fixed", zIndex: 999999, left: "50%", transform: "translate(-50%, -50%)", display: "none", marginTop: "200px" }} severity="success">
+            <Alert variant="filled" id="alert" style={{ userSelect: "none", position: "absolute", zIndex: 999999, left: "50%", transform: "translate(-50%, -50%)", display: "none", marginTop: "200px" }} severity="success">
               Upload success, scroll down to see upload image
             </Alert>
           </Grid>
