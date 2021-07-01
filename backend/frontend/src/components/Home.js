@@ -150,10 +150,11 @@ export default function Home(props) {
 	var height = screen.height;
 	useEffect(() => {
 		window.addEventListener('scroll', handlerScroll);
-		const getHeight = async () => {
-			setOverLayHeight(document.getElementById("video").height)
-		}
+		getHeight();
 	});
+	const getHeight = async () => {
+		setOverLayHeight(document.getElementById("video").height)
+	}
 
 	const handlerScroll = () => {
 		if (window.scrollY > 100) {

@@ -54,10 +54,10 @@ const useStyles = (theme) => ({
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    width: '100%',
+    width: '70%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
-      width: 'auto',
+      width: '70%',
     },
   },
   searchIcon: {
@@ -100,7 +100,7 @@ class Category extends React.Component {
 
   onSearch() {
     this.setState({
-      searchRq: document.getElementById("searchInput").value
+      // searchRq: document.getElementById("searchInput").value
     });
     console.log(this.state.searchRq);
     fetch("/api/car?search=" + this.state.searchRq)
@@ -120,61 +120,65 @@ class Category extends React.Component {
     const { classes } = this.props;
     return (
       <Grid
-        container
-        spacing={3}
-        alignItems="center"
-        justify="center"
-        style={{ minHeight: "100vh" }}
         xs={12}
+        style={{ color: "#fff", margin: 0, position: "relative", marginTop: screen.height - (1 / 2 * (screen.height)) }}
       >
-        <Grid container className="search-container" xs={12} justify="center" >
-          <div id="searchBar" className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+
+        <Grid
+        container
+          spacing={3}
+          alignItems="center"
+          justify="center" xs={12} style={{ zIndex: "5", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}>
+            <div id="searchBar" onClick={() => {document.getElementById("searchInput").focus()}} className={classes.search} style={{ marginBottom: screen.height - (3 / 4 * (screen.height))  }}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase onChange={this.onSearch} id="searchInput"
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                xs={12}
+                inputProps={{ 'aria-label': 'search' }}
+              />
             </div>
-            <InputBase onChange={this.onSearch} id="searchInput"
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              xs={12}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
+          <Grid container className="search-container" xs={12} spacing={3}
+            alignItems="center" justify="center" >
+            {this.state.dataCar &&
+              this.state.dataCar.map((dataCar) => (
+                <Grid item xs={3}>
+                  <Card>
+                    <CardActionArea >
+                      <CardMedia
+                        // dataCar Image not build data model yet
+                        // className={classes.media}
+                        title="Contemplative Reptile"
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2" >
+                          {dataCar.carName}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          {dataCar.brand}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                    <CardActions>
+                      <Button variant="outlined" color="#333">
+                        Details
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+          </Grid>
         </Grid>
-        {this.state.dataCar &&
-          this.state.dataCar.map((dataCar) => (
-            <Grid item xs={3}>
-              <Card>
-                <CardActionArea >
-                  <CardMedia
-                    // dataCar Image not build data model yet
-                    // className={classes.media}
-                    title="Contemplative Reptile"
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2" >
-                      {dataCar.carName}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      {dataCar.brand}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-                <CardActions>
-                  <Button variant="outlined" color="#333">
-                    Details
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-      </Grid>
+      </Grid >
     );
   }
 }
