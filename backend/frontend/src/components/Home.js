@@ -21,7 +21,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import ListIcon from '@material-ui/icons/List';
 import InfoIcon from '@material-ui/icons/Info';
 import SearchEngine from './SearchEngine';
-import Category from './Category'
+import Category from './Category';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -101,6 +101,24 @@ const useStyles = makeStyles((theme) => ({
 		flexGrow: 1,
 		padding: theme.spacing(3),
 	},
+	animatedItem: {
+		opacity: 0,
+		animationDelay: 0,
+		zIndex: 2,
+		animation: `$myEffect 3000ms ${theme.transitions.easing.easeIn}`
+	},
+	animatedItemExiting: {
+		// animation: `$myEffectExit 3000ms ${theme.transitions.easing.easeOut}`,
+		opacity: 1,
+	},
+	"@keyframes myEffect": {
+		"0%": {
+			opacity: 0,
+		},
+		"100%": {
+			opacity: 0.5,
+		}
+	},
 }));
 
 export default function Home(props) {
@@ -116,6 +134,35 @@ export default function Home(props) {
 	const handleClick = () => {
 		setListOpen(!listOpen);
 	};
+	const [overLayHeight, setOverLayHeight] = useState(0);
+	//animation drawer
+	const [aniDrawer, setAniDrawer] = React.useState(false);
+	setTimeout(
+		function () {
+			setAniDrawer(!aniDrawer);
+		}
+			.bind(this),
+		6000
+	);
+
+	const [overLayOpacity, setOverLayOpacity] = useState(0.5)
+	var scrollTop = window.scrollY;
+	var height = screen.height;
+	useEffect(() => {
+		window.addEventListener('scroll', handlerScroll);
+		const getHeight = async () => {
+			setOverLayHeight(document.getElementById("video").height)
+		}
+	});
+
+	const handlerScroll = () => {
+		if (window.scrollY > 100) {
+			setOverLayOpacity(Math.min(0.5, 1 - (window.scrollY / 1000)))
+		} else {
+			setOverLayOpacity(0.5)
+		}
+		console.log(window.scrollY)
+	}
 	// Fetching Segment
 	// const [dataSegment, setDataSegment] = React.useState(null);
 	// async function fetchSegment() {
@@ -242,8 +289,10 @@ export default function Home(props) {
 					<Switch>
 						<Route exact path="/">
 							<Grid id="video-container" >
-								<video autoPlay width={screen.width} id="video" src={M8} style={{ position: "absolute", zIndex: "-1", width: "100%", left: "50%", top: "50%", objectFit: "cover", transform: "translate(-50%, -50%)" }} >
+								<video autoPlay width="100%" height={screen.height} id="video" src={M8} style={{ position: "absolute", zIndex: "-1", left: "50%", top: "50%", objectFit: "cover", transform: "translate(-50%, -50%)" }} >
 								</video>
+								<div id="overlay" className={clsx(classes.animatedItem, { [classes.animatedItemExiting]: { aniDrawer } })} style={{ position: "fixed", minWidth: screen.width, minHeight: overLayHeight, backgroundColor: "#000", zIndex: 2, opacity: overLayOpacity, zIndex: "2", marginTop: 70 }}>
+								</div>
 								<SearchEngine />
 							</Grid>
 						</Route>

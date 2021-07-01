@@ -33,7 +33,8 @@ const useStyles = (theme) => ({
   animatedItem: {
     opacity: 0,
     animationDelay: 3000,
-    animation: `$myEffect 5000ms ${theme.transitions.easing.easeIn}`
+    zIndex: 5,
+    animation: `$myEffect 3000ms ${theme.transitions.easing.easeIn}`
   },
   animatedItemExiting: {
     // animation: `$myEffectExit 3000ms ${theme.transitions.easing.easeOut}`,
@@ -48,33 +49,39 @@ const useStyles = (theme) => ({
     }
   },
   buttonMore: {
+    disabled: true,
     opacity: 0,
-    // animation: `$btnMore 3000ms ${theme.transitions.easing.easeIn}`
+    animation: `$btnMore 500ms ${theme.transitions.easing.easeIn}`
   },
   "@keyframes btnMore": {
     "0%": {
-      opacity: 0,
-      transform: "translateY(-200%)"
-    },
-    "100%": {
+      disabled: true,
       opacity: 1,
       transform: "translateY(0)"
+    },
+    "100%": {
+      disabled: true,
+      opacity: 0,
+      transform: "translateY(-50%)"
     }
   },
   buttonLess: {
+    disabled: true,
     opacity: 1,
-    animation: `$btnLess 3000ms ${theme.transitions.easing.easeOut}`
+    animation: `$btnLess 1500ms ${theme.transitions.easing.easeOut}`
   },
   "@keyframes btnLess": {
     "0%": {
+      disabled: true,
       opacity: 0,
       transform: "translateY(-50%)"
     },
     "100%": {
+      disabled: true,
       opacity: 1,
       transform: "translateY(0)"
     }
-  }
+  },
 });
 
 class SearchEngine extends Component {
@@ -85,7 +92,10 @@ class SearchEngine extends Component {
       tempImg: null,
       animationDraw: false,
       searchDraw: false,
-      overlay: null
+      overlay: null,
+      preImg: 0,
+      uploadImage: true,
+      uploadBtn: true,
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.searchDrawer = this.searchDrawer.bind(this);
@@ -94,15 +104,19 @@ class SearchEngine extends Component {
   handleInputChange(event) {
     this.setState({
       selectedFile: event.target.files[0],
-      tempImg: URL.createObjectURL(event.target.files[0])
+      tempImg: URL.createObjectURL(event.target.files[0]),
+      preImg: screen.height,
+      alertAnimation: true,
     })
-    let video = document.getElementById("video")
-    let imageUpload = document.getElementById("imageUpload")
-    // imageUpload == null ? video.muted = true : video.muted = false;
     let alert = document.getElementById("alert")
     alert.style.display = "block";
+    alert.disabled = false;
+    setTimeout(() => {
+      this.setState({
+        alertAnimation: false
+      })
+    }, 3000)
   }
-
 
   submit() {
     const data = new FormData()
@@ -116,36 +130,23 @@ class SearchEngine extends Component {
       })
   }
   componentDidMount() {
-
-    // document.getElementById("video").play()
     setTimeout(() => {
-      // this.setState({
-      //   animationDraw: false
-      // })
       this.setState({
-        animationDraw: true
+        animationDraw: true,
       })
-    }, 8000)
-    setInterval(() => {
-      if (window.innerHeight == screen.height) {
-        this.setState({
-          overlay: document.getElementById("overlay").style.height = screen.height + 790
-        });
-      } else {
-        this.setState({
-          overlay: document.getElementById("overlay").style.height = screen.height + 650
-        });
-      }
-    }, 50)
-
+    }, 6000)
+    setTimeout(() => {
+      this.setState({
+        uploadBtn: !this.state.uploadBtn,
+      })
+    }, 4000)
   }
 
   searchDrawer() {
     this.setState({
-      searchDraw: true
+      searchDraw: !this.state.searchDraw,
+      uploadImage: !this.state.uploadImage,
     });
-    let box = document.getElementById("input-box");
-    box.disabled = false;
   }
 
   render() {
@@ -153,36 +154,34 @@ class SearchEngine extends Component {
     return (
       <Grid
         xs={12}
-        style={{ paddingTop: "150px", minHeight: "100vh", color: "#fff", margin: 0 }}
+        style={{ color: "#fff", margin: 0 }}
       >
-        <Grid className={clsx(classes.animatedItem, { [classes.animatedItemExiting]: this.state.animationDraw })} style={{ position: "relative" }} >
-          <div id="overlay" style={{ backgroundColor: "#000", zIndex: "2", width: "100%", height: this.state.overlay, position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", opacity: "0.5" }}>
-          </div>
-          <Grid container justify="center" xs={12} style={{ zIndex: "9999", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: "380px" }}>
-            <Typography style={{ pointerEvents: "none" }} id="title-text" xs={12} variant="h3" component="h3" gutterBottom>
+        <Grid id="component-container" className={clsx(classes.animatedItem, { [classes.animatedItemExiting]: this.state.animationDraw })} style={{ position: "relative" }}  >
+          <Grid container justify="center" xs={12} style={{ zIndex: "5", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: screen.height - (1 / 2 * (screen.height)) }}>
+            <Typography style={{ pointerEvents: "none", userSelect: "none" }} id="title-text" xs={12} variant="h3" component="h3" gutterBottom>
               Car Recognition System
             </Typography>
-            <Button style={{ color: "#fff" }} onClick={this.searchDrawer}>
+            <Button disabled={this.state.uploadBtn} id="drawerBtn" style={{ color: "#fff", userSelect: "none" }} onClick={this.searchDrawer}>
               Press to search
             </Button>
-            <Grid id="input-box" xs={12} className={clsx(classes.buttonMore, { [classes.buttonLess]: this.state.searchDraw })} disabled>
+            <Grid id="inputBox" xs={12} className={clsx(classes.buttonMore, { [classes.buttonLess]: this.state.searchDraw })} >
               <Grid container justify="center" xs={12} style={{ marginBottom: "50px", marginTop: "50px" }}>
-                <h5 xs={4}>Select File : </h5>
-                <input style={{ width: "185px" }} xs={4} id="uploadImage" type="file" id="bannerImg" name="file" onChange={this.handleInputChange} />
-                <Button xs={4} type="submit" className="" onClick={() => this.submit()} variant="contained" color="primary" >
+                <h5 xs={4} style={{ userSelect: "none" }}>Select File : </h5>
+                <input disabled={this.state.uploadImage} style={{ width: "185px", userSelect: "none" }} xs={4} id="uploadImage" type="file" id="bannerImg" name="file" onChange={this.handleInputChange} />
+                <Button disabled={this.state.uploadImage} xs={4} type="submit" id="uploadBtn" onClick={() => this.submit()} variant="contained" color="primary" style={{ userSelect: "none" }} >
                   Upload
                 </Button>
               </Grid>
             </Grid>
             <br />
           </Grid>
-          <Grid container justify="center" xs={12} style={{ position: "relative" }} >
-            <Alert variant="filled" id="alert" style={{ zIndex: "99999", position: "absolute", left: "50%", transform: "translate(-50%, -50%)", display: "none" }} severity="success">
+          <Grid container justify="center" xs={12} style={{ position: "relative", }} >
+            <Alert variant="filled" id="alert" style={{ userSelect: "none", position: "fixed", zIndex: 999999, left: "50%", transform: "translate(-50%, -50%)", display: "none", marginTop: "200px" }} severity="success">
               Upload success, scroll down to see upload image
             </Alert>
           </Grid>
         </Grid>
-        <Grid containter style={{ marginTop: screen.height - 200 }} >
+        <Grid containter style={{ marginTop: this.state.preImg }} >
           <img src={this.state.tempImg} width="100%" id="ImgPreview" />
         </Grid>
       </Grid>
