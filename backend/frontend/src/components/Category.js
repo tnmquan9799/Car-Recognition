@@ -94,14 +94,9 @@ class Category extends React.Component {
     this.onSearch = this.onSearch.bind(this)
   }
   // Fetching Cars
-  async componentDidMount() {
+  componentDidMount() {
     this.onSearch();
   }
-
-  async componentDidUpdate() {
-   
-  }
-
 
   onSearch() {
     this.setState({
@@ -152,14 +147,14 @@ class Category extends React.Component {
           this.state.dataCar.map((dataCar) => (
             <Grid item xs={3}>
               <Card>
-                <CardActionArea>
+                <CardActionArea >
                   <CardMedia
                     // dataCar Image not build data model yet
                     // className={classes.media}
                     title="Contemplative Reptile"
                   />
                   <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
+                    <Typography gutterBottom variant="h5" component="h2" >
                       {dataCar.carName}
                     </Typography>
                     <Typography

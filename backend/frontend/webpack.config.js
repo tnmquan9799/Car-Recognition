@@ -17,7 +17,7 @@ module.exports = {
     clean: true
   },
   performance: {
-    hints: flase,
+    hints: false,
     maxEntrypointSize: 400000,
     maxAssetSize: 250000,
 
