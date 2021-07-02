@@ -18,11 +18,10 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import SearchIcon from '@material-ui/icons/Search';
-import '../../static/css/Category.css';
-import { fade, makeStyles } from '@material-ui/core/styles';
-import InputBase from '@material-ui/core/InputBase';
-
+import SearchIcon from "@material-ui/icons/Search";
+import "../../static/css/Category.css";
+import { fade, makeStyles } from "@material-ui/core/styles";
+import InputBase from "@material-ui/core/InputBase";
 
 const useStyles = (theme) => ({
   root: {
@@ -46,40 +45,40 @@ const useStyles = (theme) => ({
     backgroundColor: red[500],
   },
   search: {
-    position: 'relative',
+    position: "relative",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
+    "&:hover": {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    width: '70%',
-    [theme.breakpoints.up('sm')]: {
+    width: "70%",
+    [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
-      width: '70%',
+      width: "70%",
     },
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   inputRoot: {
-    color: 'inherit',
+    color: "inherit",
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
     },
   },
 });
@@ -89,9 +88,9 @@ class Category extends React.Component {
     super(props);
     this.state = {
       dataCar: null,
-      searchRq: ""
+      searchRq: "",
     };
-    this.onSearch = this.onSearch.bind(this)
+    this.onSearch = this.onSearch.bind(this);
   }
   // Fetching Cars
   componentDidMount() {
@@ -100,12 +99,11 @@ class Category extends React.Component {
 
   onSearch() {
     this.setState({
-      // searchRq: document.getElementById("searchInput").value
+      searchRq: document.getElementById("searchInput").value
     });
     console.log(this.state.searchRq);
     fetch("/api/car?search=" + this.state.searchRq)
       .then((response) => {
-
         return response.json();
       })
       .then((dataRes) => {
@@ -121,42 +119,71 @@ class Category extends React.Component {
     return (
       <Grid
         xs={12}
-        style={{ color: "#fff", margin: 0, position: "relative", marginTop: screen.height - (1 / 2 * (screen.height)) }}
+        style={{
+          color: "#fff",
+          margin: 0,
+          position: "relative",
+          marginTop: screen.height - (1 / 2) * screen.height,
+        }}
       >
-
         <Grid
-        container
+          container
           spacing={3}
           alignItems="center"
-          justify="center" xs={12} style={{ zIndex: "5", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}>
-            <div id="searchBar" onClick={() => {document.getElementById("searchInput").focus()}} className={classes.search} style={{ marginBottom: screen.height - (3 / 4 * (screen.height))  }}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase onChange={this.onSearch} id="searchInput"
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                xs={12}
-                inputProps={{ 'aria-label': 'search' }}
-              />
+          justify="center"
+          xs={12}
+          style={{
+            zIndex: "5",
+            position: "absolute",
+            width: "100%",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <div
+            id="searchBar"
+            onClick={() => {
+              document.getElementById("searchInput").focus();
+            }}
+            className={classes.search}
+            style={{ marginBottom: screen.height - (3 / 4) * screen.height }}
+          >
+            <div className={classes.searchIcon}>
+              <SearchIcon />
             </div>
-          <Grid container className="search-container" xs={12} spacing={3}
-            alignItems="center" justify="center" >
+            <InputBase
+              onChange={this.onSearch}
+              id="searchInput"
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              xs={12}
+              inputProps={{ "aria-label": "search" }}
+            />
+          </div>
+          <Grid
+            container
+            className="search-container"
+            xs={12}
+            spacing={3}
+            alignItems="center"
+            justify="center"
+          >
             {this.state.dataCar &&
               this.state.dataCar.map((dataCar) => (
                 <Grid item xs={3}>
                   <Card>
-                    <CardActionArea >
+                    <CardActionArea>
                       <CardMedia
                         // dataCar Image not build data model yet
                         // className={classes.media}
                         title="Contemplative Reptile"
                       />
                       <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2" >
+                        <Typography gutterBottom variant="h5" component="h2">
                           {dataCar.carName}
                         </Typography>
                         <Typography
@@ -178,7 +205,7 @@ class Category extends React.Component {
               ))}
           </Grid>
         </Grid>
-      </Grid >
+      </Grid>
     );
   }
 }
