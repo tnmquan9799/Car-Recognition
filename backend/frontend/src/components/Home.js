@@ -116,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
 			opacity: 0,
 		},
 		"100%": {
-			opacity: 0.5,
+			opacity: 0.8,
 		}
 	},
 }));
@@ -145,21 +145,22 @@ export default function Home(props) {
 		6000
 	);
 
-	const [overLayOpacity, setOverLayOpacity] = useState(0.5)
+	const [overLayOpacity, setOverLayOpacity] = useState(0.8)
 	var scrollTop = window.scrollY;
 	var height = screen.height;
 	useEffect(() => {
 		window.addEventListener('scroll', handlerScroll);
-		const getHeight = async () => {
-			setOverLayHeight(document.getElementById("video").height)
-		}
+		getHeight();
 	});
+	const getHeight = async () => {
+		setOverLayHeight(document.getElementById("video").height)
+	}
 
 	const handlerScroll = () => {
 		if (window.scrollY > 100) {
-			setOverLayOpacity(Math.min(0.5, 1 - (window.scrollY / 1000)))
+			setOverLayOpacity(Math.min(0.8, 1 - (window.scrollY / 1000)))
 		} else {
-			setOverLayOpacity(0.5)
+			setOverLayOpacity(0.8)
 		}
 		console.log(window.scrollY)
 	}
