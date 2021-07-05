@@ -8,5 +8,4 @@ urlpatterns = [
     path('vtypeengine', VTypeEngineView.as_view()),
     path('segment',SegmentView.as_view()),
     path('result', ResultView.as_view()),
-    # path('create-room', CreateRoomView.as_view()),
 ]

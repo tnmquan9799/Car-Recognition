@@ -162,7 +162,6 @@ export default function Home(props) {
 		} else {
 			setOverLayOpacity(0.8)
 		}
-		console.log(window.scrollY)
 	}
 	// Fetching Segment
 	// const [dataSegment, setDataSegment] = React.useState(null);
