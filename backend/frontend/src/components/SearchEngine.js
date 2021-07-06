@@ -106,7 +106,7 @@ const useStyles = (theme) => ({
       disabled: true,
       display: "none",
       opacity: 0,
-      transform: "translateY(200%)"
+      transform: "translateY(50%)"
     },
     "100%": {
       pointeEvents: "pointer",
@@ -130,7 +130,7 @@ const useStyles = (theme) => ({
       disabled: true,
       display: "none",
       opacity: 0,
-      transform: "translateY(200%)"
+      transform: "translateY(50%)"
     }
   },
   viewImgOff: {
@@ -192,10 +192,13 @@ class SearchEngine extends Component {
       detailBoard: false,
       viewBtn: false,
       viewImg: false,
+      resultContainer: false
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.searchDrawer = this.searchDrawer.bind(this);
     this.viewImg = this.viewImg.bind(this);
+    this.openDetailBoard = this.openDetailBoard.bind(this)
+    this.closeDetailBoard = this.closeDetailBoard.bind(this)
   }
 
   handleInputChange(event) {
@@ -217,6 +220,9 @@ class SearchEngine extends Component {
         console.warn(res);
       });
     this.fetchResult();
+    this.setState({
+      resultContainer: true
+    })
   }
 
   fetchResult() {
@@ -260,11 +266,13 @@ class SearchEngine extends Component {
     document.getElementById("bannerImg").value = ""
     if (this.state.viewBtn == true && this.state.searchDraw == false) {
       this.setState({
-        viewBtn: false
+        viewBtn: false,
+        resultContainer: false
       });
     } else {
       this.setState({
-        viewBtn: false
+        viewBtn: false,
+        resultContainer: false
       });
     }
   }
@@ -279,6 +287,12 @@ class SearchEngine extends Component {
   openDetailBoard() {
     this.setState({
       detailBoard: true
+    });
+  }
+
+  closeDetailBoard() {
+    this.setState({
+      detailBoard: false
     });
   }
 
@@ -314,7 +328,7 @@ class SearchEngine extends Component {
             <br />
             {this.state.recogResult &&
               this.state.recogResult.map((recogResult) => (
-                <Grid containter>
+                <Grid id="resultContainer" containter className={clsx(classes.viewBtnOff, { [classes.viewBtnOn]: this.state.resultContainer })}>
                   <h3><strong>Car name:</strong> {recogResult.carName}</h3>
                   <Button xs={4} variant="outlined" color="primary" onClick={() => this.openDetailBoard()} >
                     Details of {recogResult.carName}
@@ -323,14 +337,20 @@ class SearchEngine extends Component {
               ))}
             {this.state.recogResult &&
               this.state.recogResult.map((recogResult) => (
-                <Dialog aria-labelledby="simple-dialog-title" open={this.state.detailBoard}>
+                <Dialog
+                  onClose={() => this.closeDetailBoard()}
+                  aria-labelledby="simple-dialog-title"
+                  open={this.state.detailBoard}>
                   <DialogTitle id="simple-dialog-title">{recogResult.carName}</DialogTitle>
                   <Grid container justify="center" >
                     <Divider style={{ backgroundColor: "#333" }} width="100%" height="10px" />
-                    {recogResult.brand}
-                    {recogResult.origin}
-                    {recogResult.segment}
+                    <p>{recogResult.brand}</p>
+                    <p>{recogResult.origin}</p>
+                    <p>{recogResult.segment}</p>
                   </Grid>
+                  <Button autoFocus onClick={() => this.closeDetailBoard()} color="primary">
+                    Exit
+                  </Button>
                 </Dialog>
               ))}
           </Grid>
