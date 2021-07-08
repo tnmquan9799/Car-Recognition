@@ -1,10 +1,11 @@
 numpy
-tensorflow
+tensorflow==2.1.0
 tensorflow-gpu
-keras
+keras==2.1.3
 pillow
 sklearn
 console-progressbar
 Django
 djangorestframework
 django-cors-headers
+h5py==2.10 -i https://pypi.tuna.tsinghua.edu.cn/simple/
