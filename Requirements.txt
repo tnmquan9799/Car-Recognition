@@ -6,3 +6,5 @@ pillow
 sklearn
 console-progressbar
 Django
+djangorestframework
+django-cors-headers

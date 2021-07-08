@@ -1,24 +1,5 @@
 from rest_framework import serializers
-from .models import Car, Brand, Engine, VTypeEngine, Segment
-
-
-class CarSerializer(serializers.ModelSerializer):
-    brand = serializers.ReadOnlyField(source='brand.name')
-    segment = serializers.ReadOnlyField(source='segment.name')
-    origin = serializers.ReadOnlyField(source='origin.name')
-    engine = serializers.ReadOnlyField(source='VTypeEngine.name')
-
-    class Meta:
-        modelV = VTypeEngine
-        fields = ('id', 'name')
-
-    if engine == "V Engine":
-        engine.replace(engine, serializers.ReadOnlyField(source='VTypeEngine.name'))
-
-    class Meta:
-        model = Car
-        fields = ('id', 'carName', 'brand', 'segment',
-                  'origin', 'yearEdition', 'engine', 'hoursePower', 'torque', 'fuelType', 'driveType', 'highLight', 'detail')
+from .models import Car, Brand, Engine, VTypeEngine, Segment, FuelType, DriveType, Origin
 
 
 class BrandSerializer(serializers.ModelSerializer):
@@ -44,6 +25,24 @@ class SegmentSerializer(serializers.ModelSerializer):
         model = Segment
         fields = ('id', 'name', 'detail')
 
+
+class FuelTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FuelType
+        fields = ('id', 'name', 'detail')
+
+
+class DriveTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DriveType
+        fields = ('id', 'name', 'detail')
+
+
+class OriginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Origin
+        fields = ('id', 'name', 'detail')
+
 # class CreateRoomSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Room
@@ -56,3 +55,18 @@ class SegmentSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Room
 #         fields = ('guest_can_pause', 'votes_to_skip', 'code')
+
+
+class CarSerializer(serializers.ModelSerializer):
+
+    brand = BrandSerializer()
+    segment = SegmentSerializer()
+    origin = OriginSerializer()
+    engine = serializers.ReadOnlyField(source='VTypeEngine.name')
+    fuelType = serializers.ReadOnlyField(source='fuelType.name')
+    engine = serializers.ReadOnlyField(source='engine.name')
+
+    class Meta:
+        model = Car
+        fields = ('id', 'carName', 'brand', 'segment',
+                  'origin', 'yearEdition', 'engine', 'hoursePower', 'torque', 'fuelType', 'driveType', 'highLight', 'detail')
