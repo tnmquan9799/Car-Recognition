@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { Component } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from '@material-ui/core/Button';
@@ -37,6 +37,12 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import Fab from '@material-ui/core/Fab';
+import Tooltip from '@material-ui/core/Tooltip';
+import Popover from '@material-ui/core/Popover';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Zoom from '@material-ui/core/Zoom';
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -194,11 +200,23 @@ const useStyles = (theme) => ({
   },
   ListItemText: {
     textAlign: "center",
-    lineHeight: "2"
+    lineHeight: "2",
+    width: "70%",
   },
   textArea: {
     width: "100%",
-  }
+  },
+  listItemAvatar: {
+    width: "20%",
+  },
+  Button: {
+    width: "10%",
+  },
+  absolute: {
+    position: 'absolute',
+    bottom: theme.spacing(2),
+    right: theme.spacing(3),
+  },
 });
 
 class SearchEngine extends Component {
@@ -216,7 +234,8 @@ class SearchEngine extends Component {
       detailBoard: false,
       viewBtn: false,
       viewImg: false,
-      resultContainer: false
+      resultContainer: false,
+      ToolTip: false,
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.searchDrawer = this.searchDrawer.bind(this);
@@ -317,6 +336,13 @@ class SearchEngine extends Component {
     });
   }
 
+  closeToolTip() {
+    this.setState({
+      ToolTip: false,
+    });
+  }
+
+
   render() {
     const { classes } = this.props;
     return (
@@ -329,7 +355,7 @@ class SearchEngine extends Component {
             <Typography style={{ pointerEvents: "none", userSelect: "none" }} id="title-text" xs={12} variant="h3" component="h3" gutterBottom>
               Car Recognition System
             </Typography>
-            <Button disabled={this.state.uploadBtn} id="drawerBtn" style={{ color: "#fff", userSelect: "none" }} onClick={this.searchDrawer}>
+            <Button disabled={this.state.uploadBtn} id="drawerBtn" style={{ color: "#fff", userSelect: "none" }} onClick={() =>this.searchDrawer()}>
               Press to search
             </Button>
             <Grid id="inputBox" xs={12} className={clsx(classes.buttonMore, { [classes.buttonLess]: this.state.searchDraw })} >
@@ -369,78 +395,139 @@ class SearchEngine extends Component {
                   <DialogContent>
                     <List>
                       <ListItem>
-                        <ListItemAvatar>
+                        <ListItemAvatar className={classes.listItemAvatar}>
                           <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Brand</strong></h6>
                         </ListItemAvatar>
-                        <ListItemText primary={recogResult.brand == null ? "--" : recogResult.brand} className={classes.ListItemText} />
-                        <Button variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content" }}>
-                          <ExpandMore />
+                        <ListItemText primary={recogResult.brand.name == null ? "--" : recogResult.brand.name} className={classes.ListItemText} />
+                        {recogResult.brand.detail != null ?
+                          <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content" }} href={recogResult.brand.detail} target="_blank">
+                            <ArrowRightIcon />
+                          </Button>
+                          : <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content", visibility: "hidden" }} href={recogResult.brand.detail} target="_blank">
+                            <ArrowRightIcon />
+                          </Button>}
+                      </ListItem>
+                      <hr style={{ margin: 0 }}></hr>
+                      <ListItem>
+                        <ListItemAvatar className={classes.listItemAvatar}>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Origin</strong></h6>
+                        </ListItemAvatar>
+                        <ListItemText primary={recogResult.origin.name == null ? "--" : recogResult.origin.name} className={classes.ListItemText} />
+                        {recogResult.origin.detail != null ?
+                          <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content" }} href={recogResult.origin.detail} target="_blank">
+                            <ArrowRightIcon />
+                          </Button>
+                          : <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content", visibility: "hidden" }} href={recogResult.origin.detail} target="_blank">
+                            <ArrowRightIcon />
+                          </Button>}
+                      </ListItem>
+                      <hr style={{ margin: 0 }}></hr>
+                      <ListItem>
+                        <ListItemAvatar className={classes.listItemAvatar}>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Segment</strong></h6>
+                        </ListItemAvatar>
+                        <ListItemText primary={recogResult.segment.name == null ? "--" : recogResult.segment.name} className={classes.ListItemText} />
+                        {recogResult.segment.detail != null ?
+                          <ClickAwayListener onClickAway={() => this.closeToolTip()}>
+                            <Tooltip TransitionComponent={Zoom}
+                              PopperProps={{
+                                disablePortal: true,
+                              }}
+                              onClose={() => this.closeToolTip()}
+                              open={this.state.ToolTip}
+                              disableFocusListener
+                              disableHoverListener
+                              disableTouchListener
+                              title={<h6>{recogResult.segment.detail}</h6>}
+                            >
+                              <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content" }}
+                                onClick={() => {
+                                  this.setState({
+                                    ToolTip: !this.state.ToolTip,
+                                  });
+                                }}>
+                                <ArrowRightIcon />
+                              </Button>
+                            </Tooltip>
+                          </ClickAwayListener>
+                          : <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content", visibility: "hidden" }} href={recogResult.origin.detail} target="_blank">
+                            <ArrowRightIcon />
+                          </Button>}
+                      </ListItem>
+                      <hr style={{ margin: 0 }}></hr>
+                      <ListItem>
+                        <ListItemAvatar className={classes.listItemAvatar}>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Edition</strong></h6>
+                        </ListItemAvatar>
+                        <ListItemText primary={recogResult.yearEdition == null ? "--" : recogResult.yearEdition} className={classes.ListItemText} />
+                        <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content", visibility: "hidden" }} href={recogResult.origin.detail} target="_blank">
+                          <ArrowRightIcon />
                         </Button>
                       </ListItem>
                       <hr style={{ margin: 0 }}></hr>
                       <ListItem>
-                        <ListItemAvatar>
-                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Origin</strong></h6>
-                        </ListItemAvatar>
-                        <ListItemText primary={recogResult.origin == null ? "--" : recogResult.origin} className={classes.ListItemText} />
-                      </ListItem>
-                      <hr style={{ margin: 0 }}></hr>
-                      <ListItem>
-                        <ListItemAvatar>
-                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Segment</strong></h6>
-                        </ListItemAvatar>
-                        <ListItemText primary={recogResult.segment == null ? "--" : recogResult.segment} className={classes.ListItemText} />
-                      </ListItem>
-                      <hr style={{ margin: 0 }}></hr>
-                      <ListItem>
-                        <ListItemAvatar>
-                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Edition</strong></h6>
-                        </ListItemAvatar>
-                        <ListItemText primary={recogResult.yearEdition == null ? "--" : recogResult.yearEdition} className={classes.ListItemText} />
-                      </ListItem>
-                      <hr style={{ margin: 0 }}></hr>
-                      <ListItem>
-                        <ListItemAvatar>
+                        <ListItemAvatar className={classes.listItemAvatar}>
                           <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Power</strong></h6>
                         </ListItemAvatar>
                         <ListItemText primary={recogResult.hoursePower == null ? "--" : recogResult.hoursePower} className={classes.ListItemText} />
+                        <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content", visibility: "hidden" }} href={recogResult.origin.detail} target="_blank">
+                          <ArrowRightIcon />
+                        </Button>
                       </ListItem>
                       <hr style={{ margin: 0 }}></hr>
                       <ListItem>
-                        <ListItemAvatar>
+                        <ListItemAvatar className={classes.listItemAvatar}>
                           <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Torque</strong></h6>
                         </ListItemAvatar>
                         <ListItemText primary={recogResult.torque == null ? "--" : recogResult.torque} className={classes.ListItemText} />
+                        <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content", visibility: "hidden" }} href={recogResult.origin.detail} target="_blank">
+                          <ArrowRightIcon />
+                        </Button>
                       </ListItem>
                       <hr style={{ margin: 0 }}></hr>
                       <ListItem>
-                        <ListItemAvatar>
+                        <ListItemAvatar className={classes.listItemAvatar}>
                           <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Fuel Type</strong></h6>
                         </ListItemAvatar>
-                        <ListItemText primary={recogResult.fuelType == null ? "--" : recogResult.fuelType} className={classes.ListItemText} />
+                        <ListItemText id="fuelTypeTitle" primary={recogResult.fuelType.name == null ? "--" : recogResult.fuelType.name} className={classes.ListItemText} />
+                        <div id="fuelTypeDetal" style={{ display: "none" }} className={classes.textArea} >{recogResult.fuelType.detail}</div>
+                        {recogResult.fuelType.detail != null ?
+                          <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content" }} href={recogResult.fuelType.detail} target="_blank">
+                            <ArrowRightIcon />
+                          </Button>
+                          : <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content", visibility: "hidden" }} href={recogResult.fuelType.detail} target="_blank">
+                            <ArrowRightIcon />
+                          </Button>}
                       </ListItem>
                       <hr style={{ margin: 0 }}></hr>
                       <ListItem>
-                        <ListItemAvatar>
+                        <ListItemAvatar className={classes.listItemAvatar}>
                           <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Drive Type</strong></h6>
                         </ListItemAvatar>
-                        <ListItemText primary={recogResult.driveType == null ? "--" : recogResult.driveType} className={classes.ListItemText} />
+                        <ListItemText primary={recogResult.driveType.name == null ? "--" : recogResult.driveType.name} className={classes.ListItemText} />
+                        {recogResult.driveType.detail != null ?
+                          <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content" }} href={recogResult.driveType.detail} target="_blank">
+                            <ArrowRightIcon />
+                          </Button>
+                          : <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content", visibility: "hidden" }} href={recogResult.driveType.detail} target="_blank">
+                            <ArrowRightIcon />
+                          </Button>}
                       </ListItem>
                       <hr style={{ margin: 0 }}></hr>
                       <ListItem>
-                        <ListItemAvatar>
+                        <ListItemAvatar className={classes.listItemAvatar}>
                           <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>High Light Tech</strong></h6>
                         </ListItemAvatar>
-                        <ListItemText primary={recogResult.highLight == null ? "None Special or Advanced technology found" : recogResult.brand} className={classes.ListItemText} />
+                        <ListItemText primary={recogResult.highLight == null ? "None Special or Advanced technology found" : recogResult.highLight} className={classes.ListItemText} />
                       </ListItem>
                       <hr style={{ margin: 0 }}></hr>
                       <ListItem>
-                        <ListItemAvatar>
+                        <ListItemAvatar className={classes.listItemAvatar}>
                           <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Detail Info</strong></h6>
                         </ListItemAvatar>
                       </ListItem>
                       <br></br>
-                      <div className={classes.textArea} >{recogResult.detail == null ? "Not found or Not updated yet" : recogResult.detail}</div>
+                      <div className={classes.textArea} >{recogResult.detail == null ? "Not updated yet" : recogResult.detail}</div>
                     </List>
                   </DialogContent>
                   <DialogActions>
@@ -459,7 +546,7 @@ class SearchEngine extends Component {
             <img src={this.state.tempImg} width="100%" height={this.state.imgScreenHeight} id="ImgPreview" />
           </Grid>
         </Grid>
-      </Grid>
+      </Grid >
     );
   }
 }

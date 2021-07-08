@@ -43,28 +43,14 @@ class OriginSerializer(serializers.ModelSerializer):
         model = Origin
         fields = ('id', 'name', 'detail')
 
-# class CreateRoomSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Room
-#         fields = ('guest_can_pause', 'votes_to_skip')
-
-
-# class UpdateRoomSerializer(serializers.ModelSerializer):
-#     code = serializers.CharField(validators=[])
-
-#     class Meta:
-#         model = Room
-#         fields = ('guest_can_pause', 'votes_to_skip', 'code')
-
 
 class CarSerializer(serializers.ModelSerializer):
-
     brand = BrandSerializer()
     segment = SegmentSerializer()
     origin = OriginSerializer()
-    engine = serializers.ReadOnlyField(source='VTypeEngine.name')
-    fuelType = serializers.ReadOnlyField(source='fuelType.name')
-    engine = serializers.ReadOnlyField(source='engine.name')
+    fuelType = FuelTypeSerializer()
+    driveType = DriveTypeSerializer()
+    # engine = serializers.ReadOnlyField(source='engine.name')
 
     class Meta:
         model = Car

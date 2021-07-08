@@ -191,7 +191,7 @@ class Category extends React.Component {
                           color="textSecondary"
                           component="p"
                         >
-                          {dataCar.brand}
+                          {dataCar.brand.name}
                         </Typography>
                       </CardContent>
                     </CardActionArea>
