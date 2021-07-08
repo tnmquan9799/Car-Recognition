@@ -19,7 +19,24 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import Divider from '@material-ui/core/Divider';
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardMedia from "@material-ui/core/CardMedia";
+import Box from '@material-ui/core/Box';
+import Avatar from '@material-ui/core/Avatar';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import TextField from '@material-ui/core/TextField';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -175,6 +192,13 @@ const useStyles = (theme) => ({
       // transform: "translateY(200%)"
     }
   },
+  ListItemText: {
+    textAlign: "center",
+    lineHeight: "2"
+  },
+  textArea: {
+    width: "100%",
+  }
 });
 
 class SearchEngine extends Component {
@@ -213,12 +237,12 @@ class SearchEngine extends Component {
   submit() {
     const data = new FormData()
     data.append('file', this.state.selectedFile, this.state.selectedFile.name)
-    let url = "http://127.0.0.1:8000/save_file";
-    axios.post(url, data, { // receive two parameter endpoint url ,form data 
-    })
-      .then(res => { // then print response status
-        console.warn(res);
-      });
+    // let url = "http://127.0.0.1:8000/save_file";
+    // axios.post(url, data, { // receive two parameter endpoint url ,form data 
+    // })
+    //   .then(res => { // then print response status
+    //     console.warn(res);
+    //   });
     this.fetchResult();
     this.setState({
       resultContainer: true
@@ -234,12 +258,10 @@ class SearchEngine extends Component {
         this.setState({
           recogResult: dataRes,
         });
-        console.log(this.state.recogResult)
       });
   }
 
   componentDidMount() {
-    console.log(this.state.viewBtn);
     setTimeout(() => {
       this.setState({
         animationDraw: true,
@@ -281,7 +303,6 @@ class SearchEngine extends Component {
     this.setState({
       viewImg: true
     });
-    console.log(this.state.viewImg)
   }
 
   openDetailBoard() {
@@ -338,19 +359,95 @@ class SearchEngine extends Component {
             {this.state.recogResult &&
               this.state.recogResult.map((recogResult) => (
                 <Dialog
+                  variant="outline"
+                  fullWidth={true}
                   onClose={() => this.closeDetailBoard()}
                   aria-labelledby="simple-dialog-title"
                   open={this.state.detailBoard}>
                   <DialogTitle id="simple-dialog-title">{recogResult.carName}</DialogTitle>
-                  <Grid container justify="center" >
-                    <Divider style={{ backgroundColor: "#333" }} width="100%" height="10px" />
-                    <p>{recogResult.brand}</p>
-                    <p>{recogResult.origin}</p>
-                    <p>{recogResult.segment}</p>
-                  </Grid>
-                  <Button autoFocus onClick={() => this.closeDetailBoard()} color="primary">
-                    Exit
-                  </Button>
+                  <br></br>
+                  <DialogContent>
+                    <List>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Brand</strong></h6>
+                        </ListItemAvatar>
+                        <ListItemText primary={recogResult.brand == null ? "--" : recogResult.brand} className={classes.ListItemText} />
+                        <Button variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content" }}>
+                          <ExpandMore />
+                        </Button>
+                      </ListItem>
+                      <hr style={{ margin: 0 }}></hr>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Origin</strong></h6>
+                        </ListItemAvatar>
+                        <ListItemText primary={recogResult.origin == null ? "--" : recogResult.origin} className={classes.ListItemText} />
+                      </ListItem>
+                      <hr style={{ margin: 0 }}></hr>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Segment</strong></h6>
+                        </ListItemAvatar>
+                        <ListItemText primary={recogResult.segment == null ? "--" : recogResult.segment} className={classes.ListItemText} />
+                      </ListItem>
+                      <hr style={{ margin: 0 }}></hr>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Edition</strong></h6>
+                        </ListItemAvatar>
+                        <ListItemText primary={recogResult.yearEdition == null ? "--" : recogResult.yearEdition} className={classes.ListItemText} />
+                      </ListItem>
+                      <hr style={{ margin: 0 }}></hr>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Power</strong></h6>
+                        </ListItemAvatar>
+                        <ListItemText primary={recogResult.hoursePower == null ? "--" : recogResult.hoursePower} className={classes.ListItemText} />
+                      </ListItem>
+                      <hr style={{ margin: 0 }}></hr>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Torque</strong></h6>
+                        </ListItemAvatar>
+                        <ListItemText primary={recogResult.torque == null ? "--" : recogResult.torque} className={classes.ListItemText} />
+                      </ListItem>
+                      <hr style={{ margin: 0 }}></hr>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Fuel Type</strong></h6>
+                        </ListItemAvatar>
+                        <ListItemText primary={recogResult.fuelType == null ? "--" : recogResult.fuelType} className={classes.ListItemText} />
+                      </ListItem>
+                      <hr style={{ margin: 0 }}></hr>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Drive Type</strong></h6>
+                        </ListItemAvatar>
+                        <ListItemText primary={recogResult.driveType == null ? "--" : recogResult.driveType} className={classes.ListItemText} />
+                      </ListItem>
+                      <hr style={{ margin: 0 }}></hr>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>High Light Tech</strong></h6>
+                        </ListItemAvatar>
+                        <ListItemText primary={recogResult.highLight == null ? "None Special or Advanced technology found" : recogResult.brand} className={classes.ListItemText} />
+                      </ListItem>
+                      <hr style={{ margin: 0 }}></hr>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Detail Info</strong></h6>
+                        </ListItemAvatar>
+                      </ListItem>
+                      <br></br>
+                      <div className={classes.textArea} >{recogResult.detail == null ? "Not found or Not updated yet" : recogResult.detail}</div>
+                    </List>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button autoFocus onClick={() => this.closeDetailBoard()} color="primary">
+                      Exit
+                    </Button>
+                  </DialogActions>
                 </Dialog>
               ))}
           </Grid>
