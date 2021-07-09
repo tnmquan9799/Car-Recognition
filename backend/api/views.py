@@ -73,4 +73,13 @@ class ResultView(generics.ListAPIView):
     queryset = Car.objects.filter(carName=carName)
     serializer_class = CarSerializer
 
-    
+
+class Fetcher(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        with open('../results.json') as json_file:
+            data = json.load(json_file)
+            carName = data[0]['label']
+        car = Car.objects.get(carName=carName)
+        serializer = CarSerializer(car)
+
+        return Response(serializer.data)
