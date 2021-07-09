@@ -7,11 +7,13 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 import cgi
 import os
 import cgitb
+import json
 
 
 @ensure_csrf_cookie
 def index(request):
     return render(request, 'frontend/index.html')
+
 
 def save_file(request):
     SAVED_PATH = "../test-folder/"
@@ -26,3 +28,13 @@ def save_file(request):
     return HttpResponse('The file "' + fn + '" was uploaded successfully')
 
 
+def cleanJson(data):
+    data = [
+        {
+            "label": "N/A",
+            "prob": ""
+        }
+    ]
+    with open('../results.json', 'w') as file:
+        json.dump(data, file, indent=4)
+    return HttpResponse ("endline")

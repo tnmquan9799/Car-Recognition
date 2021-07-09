@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CarView, BrandView, EngineView, SegmentView, VTypeEngineView, ResultView, DriveTypeView, FuelTypeView
+from .views import CarView, BrandView, EngineView, SegmentView, VTypeEngineView, ResultView, DriveTypeView, FuelTypeView,Fetcher
 
 urlpatterns = [
     path('car', CarView.as_view()),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('fueltype', FuelTypeView.as_view()),
     path('drivetype',DriveTypeView.as_view()),
     path('result', ResultView.as_view()),
+    path('fetcher', Fetcher.as_view()),
 ]

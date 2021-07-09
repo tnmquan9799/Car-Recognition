@@ -116,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
 			opacity: 0,
 		},
 		"100%": {
-			opacity: 0.6,
+			opacity: 0.7,
 		}
 	},
 }));
@@ -145,7 +145,7 @@ export default function Home(props) {
 		6000
 	);
 
-	const [overLayOpacity, setOverLayOpacity] = useState(0.6)
+	const [overLayOpacity, setOverLayOpacity] = useState(0.7)
 	var scrollTop = window.scrollY;
 	var height = screen.height;
 	useEffect(() => {
@@ -158,9 +158,9 @@ export default function Home(props) {
 
 	const handlerScroll = () => {
 		if (window.scrollY > 100) {
-			setOverLayOpacity(Math.min(0.6, 1 - (window.scrollY / 1000)))
+			setOverLayOpacity(Math.min(0.7, 1 - (window.scrollY / 1000)))
 		} else {
-			setOverLayOpacity(0.6)
+			setOverLayOpacity(0.7)
 		}
 	}
 	// Fetching Segment

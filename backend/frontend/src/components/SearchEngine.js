@@ -43,6 +43,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Popover from '@material-ui/core/Popover';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Zoom from '@material-ui/core/Zoom';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -236,6 +239,7 @@ class SearchEngine extends Component {
       viewImg: false,
       resultContainer: false,
       ToolTip: false,
+      progressBar: "none"
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.searchDrawer = this.searchDrawer.bind(this);
@@ -251,31 +255,69 @@ class SearchEngine extends Component {
       imgScreenHeight: screen.height,
       viewBtn: true,
     });
+    this.clearJson()
   }
 
   submit() {
     const data = new FormData()
     data.append('file', this.state.selectedFile, this.state.selectedFile.name)
-    // let url = "http://127.0.0.1:8000/save_file";
-    // axios.post(url, data, { // receive two parameter endpoint url ,form data 
-    // })
-    //   .then(res => { // then print response status
-    //     console.warn(res);
-    //   });
-    this.fetchResult();
-    this.setState({
-      resultContainer: true
+    let url = "http://127.0.0.1:8000/save_file";
+    axios.post(url, data, { // receive two parameter endpoint url ,form data 
     })
+      .then(res => { // then print response status
+        console.warn(res);
+      });
+    this.setState({
+      resultContainer: false,
+      progressBar: "block"
+    })
+    setTimeout(() => {
+      setInterval(() => {
+        this.fetchResult()
+        this.state.recogResult == null ? this.setState({
+          resultContainer: false,
+          progressBar: "block"
+        }) : this.setState({
+          resultContainer: true,
+          progressBar: "none"
+        })
+      }, 4000)
+      clearInterval(setInterval());
+    }, 15000)
+
+  }
+
+  clearJson() {
+    let url = "http://127.0.0.1:8000/cleanJson";
+    axios.post(url, "", { // receive two parameter endpoint url ,form data 
+    })
+      .then(res => { // then print response status
+        console.warn(res);
+      });
   }
 
   fetchResult() {
-    fetch("/api/result")
+    fetch("/api/fetcher")
       .then((response) => {
         return response.json();
       })
       .then((dataRes) => {
         this.setState({
-          recogResult: dataRes,
+          recogResult: [{
+            id: dataRes.id,
+            carName: dataRes.carName,
+            brand: dataRes.brand,
+            segment: dataRes.segment,
+            origin: dataRes.origin,
+            yearEdition: dataRes.yearEdition,
+            engine: dataRes.engine,
+            hoursePower: dataRes.hoursePower,
+            torque: dataRes.torque,
+            fuelType: dataRes.fuelType,
+            driveType: dataRes.driveType,
+            highLight: dataRes.highLight,
+            detail: dataRes.detail,
+          }]
         });
       });
   }
@@ -355,7 +397,7 @@ class SearchEngine extends Component {
             <Typography style={{ pointerEvents: "none", userSelect: "none" }} id="title-text" xs={12} variant="h3" component="h3" gutterBottom>
               Car Recognition System
             </Typography>
-            <Button disabled={this.state.uploadBtn} id="drawerBtn" style={{ color: "#fff", userSelect: "none" }} onClick={() =>this.searchDrawer()}>
+            <Button disabled={this.state.uploadBtn} id="drawerBtn" style={{ color: "#fff", userSelect: "none" }} onClick={() => this.searchDrawer()}>
               Press to search
             </Button>
             <Grid id="inputBox" xs={12} className={clsx(classes.buttonMore, { [classes.buttonLess]: this.state.searchDraw })} >
@@ -373,13 +415,23 @@ class SearchEngine extends Component {
               </Button>
             </Grid>
             <br />
+            <CircularProgress id="progressBar" color="secondary" style={{ display: this.state.progressBar, top: "25%", position: "absolute", marginTop: screen.height - (4 / 5 * (screen.height)) }} />
             {this.state.recogResult &&
               this.state.recogResult.map((recogResult) => (
-                <Grid id="resultContainer" containter className={clsx(classes.viewBtnOff, { [classes.viewBtnOn]: this.state.resultContainer })}>
-                  <h3><strong>Car name:</strong> {recogResult.carName}</h3>
-                  <Button xs={4} variant="outlined" color="primary" onClick={() => this.openDetailBoard()} >
-                    Details of {recogResult.carName}
-                  </Button>
+                <Grid id="resultContainer" containter justify="center" className={clsx(classes.viewBtnOff, { [classes.viewBtnOn]: this.state.resultContainer })} style={{ top: "25%", position: "absolute", marginTop: screen.height - (4 / 5 * (screen.height)) }}>
+                  <Grid xs={12} style={{ display: "flex" }}>
+                    <Grid xs={3} spacing={2}>
+                      <h3>Result:</h3>
+                    </Grid>
+                    <Grid xs={8} spacing={2}>
+                      <h3>{recogResult.carName}</h3>
+                    </Grid>
+                    <Grid xs={1} spacing={2}>
+                      <Button variant="outlined" color="primary" onClick={() => this.openDetailBoard()} >
+                        Details
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </Grid>
               ))}
             {this.state.recogResult &&

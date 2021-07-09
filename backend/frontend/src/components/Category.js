@@ -124,31 +124,18 @@ class Category extends React.Component {
           margin: 0,
           position: "relative",
           marginTop: screen.height - (1 / 2) * screen.height,
+        }}>
+        <Grid container spacing={3} alignItems="center" justify="center" xs={12} style={{
+          zIndex: "5",
+          position: "absolute",
+          width: "100%",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
         }}
-      >
-        <Grid
-          container
-          spacing={3}
-          alignItems="center"
-          justify="center"
-          xs={12}
-          style={{
-            zIndex: "5",
-            position: "absolute",
-            width: "100%",
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
         >
           <div
-            id="searchBar"
-            onClick={() => {
-              document.getElementById("searchInput").focus();
-            }}
-            className={classes.search}
-            style={{ marginBottom: screen.height - (3 / 4) * screen.height }}
-          >
+            id="searchBar" onClick={() => { document.getElementById("searchInput").focus(); }} className={classes.search} style={{ marginBottom: screen.height - (3 / 4) * screen.height }}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
@@ -180,23 +167,18 @@ class Category extends React.Component {
                       <CardMedia
                         // dataCar Image not build data model yet
                         // className={classes.media}
-                        title="Contemplative Reptile"
-                      />
+                        title="Contemplative Reptile"/>
                       <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
+                        <Typography gutterBottom variant="h6" component="h2">
                           {dataCar.carName}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          color="textSecondary"
-                          component="p"
-                        >
+                        <Typography variant="body2" color="textSecondary" component="p">
                           {dataCar.brand.name}
                         </Typography>
                       </CardContent>
                     </CardActionArea>
                     <CardActions>
-                      <Button variant="outlined" color="#333">
+                      <Button variant="outlined" color="#fff">
                         Details
                       </Button>
                     </CardActions>
