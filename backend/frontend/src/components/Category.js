@@ -22,10 +22,19 @@ import SearchIcon from "@material-ui/icons/Search";
 import "../../static/css/Category.css";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Tooltip from '@material-ui/core/Tooltip';
+import Popover from '@material-ui/core/Popover';
+import Zoom from '@material-ui/core/Zoom';
 
 const useStyles = (theme) => ({
   root: {
-    maxWidth: 345,
+    maxWidth: screen.width / 2,
   },
   media: {
     height: 0,
@@ -33,9 +42,8 @@ const useStyles = (theme) => ({
   },
   expand: {
     transform: "rotate(0deg)",
-    marginLeft: "auto",
     transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
+      duration: theme.transitions.duration.longest,
     }),
   },
   expandOpen: {
@@ -81,6 +89,45 @@ const useStyles = (theme) => ({
       width: "20ch",
     },
   },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+  expand: {
+    transform: 'rotateX(180deg)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.longest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotateX(0deg)',
+  },
+  avatar: {
+    backgroundColor: red[500],
+  },
+  ListItem: {
+    textDecoration: "none",
+    color: "#000"
+  },
+  ListItemText: {
+    textAlign: "center",
+    lineHeight: "2",
+    width: "70%",
+  },
+  textArea: {
+    width: "100%",
+  },
+  listItemAvatar: {
+    width: "20%",
+  },
+  Button: {
+    width: "10%",
+  },
+  absolute: {
+    position: 'absolute',
+    bottom: theme.spacing(2),
+    right: theme.spacing(3),
+  },
 });
 
 class Category extends React.Component {
@@ -89,6 +136,8 @@ class Category extends React.Component {
     this.state = {
       dataCar: null,
       searchRq: "",
+      cardExpand: -1,
+      ToolTip: false
     };
     this.onSearch = this.onSearch.bind(this);
   }
@@ -110,8 +159,24 @@ class Category extends React.Component {
         this.setState({
           dataCar: dataRes,
         });
-        console.log(dataRes);
+        console.log(this.state.dataCar);
       });
+  }
+
+  CardWrapper = () => ({
+
+  })
+
+  handleCardExpand(id) {
+    this.setState({
+      cardExpand: this.state.cardExpand === id ? -1 : id,
+    });
+  }
+
+  closeToolTip() {
+    this.setState({
+      ToolTip: false,
+    });
   }
 
   render() {
@@ -139,49 +204,141 @@ class Category extends React.Component {
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase
-              onChange={this.onSearch}
-              id="searchInput"
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              xs={12}
-              inputProps={{ "aria-label": "search" }}
-            />
+            <InputBase onChange={this.onSearch} id="searchInput" placeholder="Search…" classes={{ root: classes.inputRoot, input: classes.inputInput, }} xs={12} inputProps={{ "aria-label": "search" }} />
           </div>
-          <Grid
-            container
-            className="search-container"
-            xs={12}
-            spacing={3}
-            alignItems="center"
-            justify="center"
-          >
+          <Grid container className="search-container" xs={12} spacing={3} alignItems="center" justify="center" style={{ position: "relative" }}>
             {this.state.dataCar &&
-              this.state.dataCar.map((dataCar) => (
+              this.state.dataCar.map((dataCar, id) => (
                 <Grid item xs={3}>
-                  <Card>
-                    <CardActionArea>
-                      <CardMedia
-                        // dataCar Image not build data model yet
-                        // className={classes.media}
-                        title="Contemplative Reptile"/>
-                      <CardContent>
-                        <Typography gutterBottom variant="h6" component="h2">
-                          {dataCar.carName}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                          {dataCar.brand.name}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Button variant="outlined" color="#fff">
-                        Details
-                      </Button>
+                  <Card className={classes.root} key={this.state.dataCar.id}>
+                    <CardHeader
+                      avatar={
+                        <Avatar aria-label="recipe" className={classes.avatar}>
+                          R
+                        </Avatar>
+                      }
+                      title={dataCar.carName}
+                      subheader={dataCar.brand.name}
+                    />
+                    <CardMedia className={classes.media} title="Paella dish">
+                      <image width="100%" src="" />
+                    </CardMedia>
+                    <CardContent>
+                      <Typography variant="body2" color="textSecondary" component="p">
+                        {dataCar.hightline == null ? "None highline technologies" : dataCar.hightline}
+                      </Typography>
+                    </CardContent>
+                    <CardActions disableSpacing onClick={() => this.handleCardExpand(id)} aria-expanded={this.state.cardExpand === id} aria-label="show more" style={{ backgroundColor: "#333", justifyContent: "center" }}>
+                      <IconButton >
+                        <ExpandMoreIcon className={clsx(classes.expand, { [classes.expandOpen]: this.state.cardExpand, })} style={{ color: "#fff" }} />
+                      </IconButton>
                     </CardActions>
+                    <Collapse in={this.state.cardExpand === id} timeout="auto" unmountOnExit >
+                      <CardContent>
+                        <Typography variant="h6">Details:</Typography>
+                        <br></br>
+                        <List>
+                          <ListItem className={classes.ListItem} component={dataCar.brand.detail != null ? "a" : ""} href={dataCar.brand.detail} target="_blank">
+                            <ListItemAvatar className={classes.listItemAvatar}>
+                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Brand</strong></h6>
+                            </ListItemAvatar>
+                            <ListItemText primary={dataCar.brand.name == null ? "--" : dataCar.brand.name} className={classes.ListItemText} />
+                            {dataCar.brand.detail != null ? <ArrowRightIcon /> : ""}
+                          </ListItem>
+                          <hr style={{ margin: 0 }}></hr>
+                          <ListItem className={classes.ListItem} component={dataCar.driveType.detail != null ? "a" : ""} href={dataCar.driveType.detail} target="_blank">
+                            <ListItemAvatar className={classes.listItemAvatar}>
+                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>driveType</strong></h6>
+                            </ListItemAvatar>
+                            <ListItemText primary={dataCar.driveType.name == null ? "--" : dataCar.driveType.name} className={classes.ListItemText} />
+                            {dataCar.driveType.detail != null ? <ArrowRightIcon /> : ""}
+                          </ListItem>
+                          <hr style={{ margin: 0 }}></hr>
+                          <ListItem className={classes.ListItem} onClick={() => {
+                            this.setState({
+                              ToolTip: !this.state.ToolTip,
+                            });
+                          }}>
+                            <ListItemAvatar className={classes.listItemAvatar}>
+                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Segment</strong></h6>
+                            </ListItemAvatar>
+                            <ListItemText primary={dataCar.segment.name == null ? "--" : dataCar.segment.name} className={classes.ListItemText} />
+                            {dataCar.segment.detail != null ?
+                              <ClickAwayListener onClickAway={() => this.closeToolTip()}>
+                                <Tooltip placement="left" TransitionComponent={Zoom}
+                                  PopperProps={{
+                                    disablePortal: true,
+                                  }}
+                                  onClose={() => this.closeToolTip()}
+                                  open={this.state.ToolTip}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
+                                  title={<h6>{dataCar.segment.detail}</h6>}
+                                >
+                                  <ArrowRightIcon />
+                                </Tooltip>
+                              </ClickAwayListener>
+                              : ""}
+                          </ListItem>
+                          <hr style={{ margin: 0 }}></hr>
+                          <ListItem>
+                            <ListItemAvatar className={classes.listItemAvatar}>
+                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Edition</strong></h6>
+                            </ListItemAvatar>
+                            <ListItemText primary={dataCar.yearEdition == null ? "--" : dataCar.yearEdition} className={classes.ListItemText} />
+                            <ArrowRightIcon style={{ visibility: "hidden" }} />
+                          </ListItem>
+                          <hr style={{ margin: 0 }}></hr>
+                          <ListItem>
+                            <ListItemAvatar className={classes.listItemAvatar}>
+                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Power</strong></h6>
+                            </ListItemAvatar>
+                            <ListItemText primary={dataCar.hoursePower == null ? "--" : dataCar.hoursePower} className={classes.ListItemText} />
+                            <ArrowRightIcon style={{ visibility: "hidden" }} />
+                          </ListItem>
+                          <hr style={{ margin: 0 }}></hr>
+                          <ListItem>
+                            <ListItemAvatar className={classes.listItemAvatar}>
+                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Torque</strong></h6>
+                            </ListItemAvatar>
+                            <ListItemText primary={dataCar.torque == null ? "--" : dataCar.torque} className={classes.ListItemText} />
+                            <ArrowRightIcon style={{ visibility: "hidden" }} />
+                          </ListItem>
+                          <hr style={{ margin: 0 }}></hr>
+                          <ListItem className={classes.ListItem} component={dataCar.origin.detail != null ? "a" : ""} href={dataCar.origin.detail} target="_blank">
+                            <ListItemAvatar className={classes.listItemAvatar}>
+                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>origin</strong></h6>
+                            </ListItemAvatar>
+                            <ListItemText primary={dataCar.origin.name == null ? "--" : dataCar.origin.name} className={classes.ListItemText} />
+                            {dataCar.origin.detail != null ? <ArrowRightIcon /> : ""}
+                          </ListItem>
+                          <hr style={{ margin: 0 }}></hr>
+                          <ListItem className={classes.ListItem} component={dataCar.fuelType.detail != null ? "a" : ""} href={dataCar.fuelType.detail} target="_blank">
+                            <ListItemAvatar className={classes.listItemAvatar}>
+                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>fuelType</strong></h6>
+                            </ListItemAvatar>
+                            <ListItemText primary={dataCar.fuelType.name == null ? "--" : dataCar.fuelType.name} className={classes.ListItemText} />
+                            {dataCar.fuelType.detail != null ? <ArrowRightIcon /> : ""}
+                          </ListItem>
+                          <hr style={{ margin: 0 }}></hr>
+                          <ListItem>
+                            <ListItemAvatar className={classes.listItemAvatar}>
+                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>High Tech</strong></h6>
+                            </ListItemAvatar>
+                            <ListItemText primary={dataCar.highLight == null ? "None Special or Advanced technology found" : dataCar.highLight} className={classes.ListItemText} />
+                          </ListItem>
+                          <hr style={{ margin: 0 }}></hr>
+                          <ListItem>
+                            <ListItemAvatar xs={12}>
+                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Detail Info</strong></h6>
+                            </ListItemAvatar>
+                          </ListItem>
+                          <br></br>
+                          <div className={classes.textArea} >{dataCar.detail == null ? "Not updated yet" : dataCar.detail}</div>
+                        </List>
+                      </CardContent>
+                    </Collapse>
                   </Card>
                 </Grid>
               ))}

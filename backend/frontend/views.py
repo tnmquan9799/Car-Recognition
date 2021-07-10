@@ -31,7 +31,7 @@ def save_file(request):
 def cleanJson(data):
     data = [
         {
-            "label": "N/A",
+            "label": "",
             "prob": ""
         }
     ]
