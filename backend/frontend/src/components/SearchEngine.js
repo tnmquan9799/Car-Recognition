@@ -1,4 +1,6 @@
-import React, { Component } from "react";
+import React, {
+  Component
+} from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Button from '@material-ui/core/Button';
@@ -9,7 +11,9 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Fade from '@material-ui/core/Fade';
 import M8 from '../../assets/video/m8.mp4';
-import { withStyles } from "@material-ui/core/styles";
+import {
+  withStyles
+} from "@material-ui/core/styles";
 import drawerWidth from './Home'
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -53,194 +57,213 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 // import CSRFToken from './csrftoken';
 const useStyles = (theme) => ({
   mainRoot: {
-    transitionDuration: 2000,
-    opacity: 0,
-    transition: theme.transitions.create(['opacity'],
-      { duration: theme.transitions.duration.standard, }),
-    '&:hover': { opacity: 1 }, ':before': { content: "Reply!" }
-  },
-  animatedItem: {
-    opacity: 0,
-    animationDelay: 3000,
-    zIndex: 5,
-    animation: `$myEffect 3000ms ${theme.transitions.easing.easeIn}`
-  },
-  animatedItemExiting: {
+    transitionDuration: 2000
+    , opacity: 0
+    , transition: theme.transitions.create(['opacity']
+      , {
+        duration: theme.transitions.duration.standard
+        ,
+      })
+    , '&:hover': {
+      opacity: 1
+    }
+    , ':before': {
+      content: "Reply!"
+    }
+  }
+  , animatedItem: {
+    opacity: 0
+    , animationDelay: 3000
+    , zIndex: 5
+    , animation: `$myEffect 3000ms ${theme.transitions.easing.easeIn}`
+  }
+  , animatedItemExiting: {
     // animation: `$myEffectExit 3000ms ${theme.transitions.easing.easeOut}`,
-    opacity: 1,
-  },
-  "@keyframes myEffect": {
+    opacity: 1
+    ,
+  }
+  , "@keyframes myEffect": {
     "0%": {
-      opacity: 0,
-    },
-    "100%": {
-      opacity: 1,
+      opacity: 0
+      ,
     }
-  },
-  buttonMore: {
-    disabled: true,
-    opacity: 0,
-    animation: `$btnMore 500ms ${theme.transitions.easing.easeIn}`
-  },
-  "@keyframes btnMore": {
-    "0%": {
-      disabled: true,
-      opacity: 1,
-      transform: "translateY(0)"
-    },
-    "100%": {
-      disabled: true,
-      opacity: 0,
-      transform: "translateY(-50%)"
+    , "100%": {
+      opacity: 1
+      ,
     }
-  },
-  buttonLess: {
-    pointeEvents: "context-menu",
-    disabled: true,
-    opacity: 1,
-    animation: `$btnLess 1500ms ${theme.transitions.easing.easeOut}`
-  },
-  "@keyframes btnLess": {
+  }
+  , buttonMore: {
+    disabled: true
+    , opacity: 0
+    , animation: `$btnMore 500ms ${theme.transitions.easing.easeIn}`
+  }
+  , "@keyframes btnMore": {
     "0%": {
-      disabled: true,
-      opacity: 0,
-      transform: "translateY(-50%)"
-    },
-
-    "100%": {
-      disabled: true,
-      opacity: 1,
-      transform: "translateY(0)"
+      disabled: true
+      , opacity: 1
+      , transform: "translateY(0)"
     }
-  },
-  viewBtnOff: {
-    pointeEvents: "context-menu",
-    disabled: true,
-    display: "none",
-    opacity: 0,
-    animation: `$viewbtnOff 1000ms ${theme.transitions.easing.easeOut}`
-  },
-  viewBtnOn: {
-    pointeEvents: "pointer",
-    disabled: false,
-    display: "block",
-    opacity: 1,
-    animation: `$viewbtnOn 1000ms ${theme.transitions.easing.easeOut}`
-  },
-  "@keyframes viewbtnOn": {
-    "0%": {
-      pointeEvents: "context-menu",
-      disabled: true,
-      display: "none",
-      opacity: 0,
-      transform: "translateY(50%)"
-    },
-    "100%": {
-      pointeEvents: "pointer",
-      disabled: false,
-      display: "block",
-      opacity: 1,
-      transform: "translateY(0)"
+    , "100%": {
+      disabled: true
+      , opacity: 0
+      , transform: "translateY(-50%)"
     }
-  },
-  "@keyframes viewbtnOff": {
+  }
+  , buttonLess: {
+    pointeEvents: "context-menu"
+    , disabled: true
+    , opacity: 1
+    , animation: `$btnLess 1500ms ${theme.transitions.easing.easeOut}`
+  }
+  , "@keyframes btnLess": {
     "0%": {
-      pointeEvents: "pointer",
-      disabled: false,
-      display: "block",
-      opacity: 1,
-      transform: "translateY(0)"
+      disabled: true
+      , opacity: 0
+      , transform: "translateY(-50%)"
     },
 
     "100%": {
-      pointeEvents: "context-menu",
-      disabled: true,
-      display: "none",
-      opacity: 0,
-      transform: "translateY(50%)"
+      disabled: true
+      , opacity: 1
+      , transform: "translateY(0)"
     }
-  },
-  viewImgOff: {
-    display: "none",
-    width: "0%",
-    opacity: 0,
-    animation: `$viewImgOff 1000ms ${theme.transitions.easing.easeOut}`
-  },
-  viewImgOn: {
-    display: "block",
-    width: "100%",
-    opacity: 1,
-    animation: `$viewImgOn 1000ms ${theme.transitions.easing.easeIn}`
-  },
-  "@keyframes viewImgOn": {
+  }
+  , viewBtnOff: {
+    pointeEvents: "context-menu"
+    , disabled: true
+    , display: "none"
+    , opacity: 0
+    , animation: `$viewbtnOff 1000ms ${theme.transitions.easing.easeOut}`
+  }
+  , viewBtnOn: {
+    pointeEvents: "pointer"
+    , disabled: false
+    , display: "block"
+    , opacity: 1
+    , animation: `$viewbtnOn 1000ms ${theme.transitions.easing.easeOut}`
+  }
+  , "@keyframes viewbtnOn": {
     "0%": {
-      pointeEvents: "context-menu",
-      disabled: true,
-      display: "none",
-      opacity: 0,
-      // transform: "translateY(200%)"
-    },
-    "100%": {
-      display: "block",
-      width: "100%",
-      opacity: 1,
-      // transform: "translateY(0)"
+      pointeEvents: "context-menu"
+      , disabled: true
+      , display: "none"
+      , opacity: 0
+      , transform: "translateY(50%)"
     }
-  },
-  "@keyframes viewImgOff": {
+    , "100%": {
+      pointeEvents: "pointer"
+      , disabled: false
+      , display: "block"
+      , opacity: 1
+      , transform: "translateY(0)"
+    }
+  }
+  , "@keyframes viewbtnOff": {
     "0%": {
-      display: "block",
-      width: "100%",
-      opacity: 1,
-      // transform: "translateY(0)"
+      pointeEvents: "pointer"
+      , disabled: false
+      , display: "block"
+      , opacity: 1
+      , transform: "translateY(0)"
     },
 
     "100%": {
-      display: "none",
-      width: "0%",
-      opacity: 0,
-      // transform: "translateY(200%)"
+      pointeEvents: "context-menu"
+      , disabled: true
+      , display: "none"
+      , opacity: 0
+      , transform: "translateY(50%)"
     }
-  },
-  ListItemText: {
-    textAlign: "center",
-    lineHeight: "2",
-    width: "70%",
-  },
-  textArea: {
-    width: "100%",
-  },
-  listItemAvatar: {
-    width: "20%",
-  },
-  Button: {
-    width: "10%",
-  },
-  absolute: {
-    position: 'absolute',
-    bottom: theme.spacing(2),
-    right: theme.spacing(3),
-  },
+  }
+  , viewImgOff: {
+    display: "none"
+    , width: "0%"
+    , opacity: 0
+    , animation: `$viewImgOff 1000ms ${theme.transitions.easing.easeOut}`
+  }
+  , viewImgOn: {
+    display: "block"
+    , width: "100%"
+    , opacity: 1
+    , animation: `$viewImgOn 1000ms ${theme.transitions.easing.easeIn}`
+  }
+  , "@keyframes viewImgOn": {
+    "0%": {
+      pointeEvents: "context-menu"
+      , disabled: true
+      , display: "none"
+      , opacity: 0
+      , // transform: "translateY(200%)"
+    }
+    , "100%": {
+      display: "block"
+      , width: "100%"
+      , opacity: 1
+      , // transform: "translateY(0)"
+    }
+  }
+  , "@keyframes viewImgOff": {
+    "0%": {
+      display: "block"
+      , width: "100%"
+      , opacity: 1
+      , // transform: "translateY(0)"
+    },
+
+    "100%": {
+      display: "none"
+      , width: "0%"
+      , opacity: 0
+      , // transform: "translateY(200%)"
+    }
+  }
+  , ListItemText: {
+    textAlign: "center"
+    , lineHeight: "2"
+    , width: "70%"
+    ,
+  }
+  , textArea: {
+    width: "100%"
+    ,
+  }
+  , listItemAvatar: {
+    width: "20%"
+    ,
+  }
+  , Button: {
+    width: "10%"
+    ,
+  }
+  , absolute: {
+    position: 'absolute'
+    , bottom: theme.spacing(2)
+    , right: theme.spacing(3)
+    ,
+  }
+  ,
 });
 
 class SearchEngine extends Component {
   constructor() {
     super();
     this.state = {
-      selectedFile: null,
-      tempImg: null,
-      animationDraw: false,
-      searchDraw: false,
-      uploadImage: true,
-      uploadBtn: true,
-      recogResult: null,
-      imgScreenHeight: null,
-      detailBoard: false,
-      viewBtn: false,
-      viewImg: false,
-      resultContainer: false,
-      ToolTip: false,
-      progressBar: "none"
+      selectedFile: null
+      , tempImg: null
+      , animationDraw: false
+      , searchDraw: false
+      , uploadImage: true
+      , uploadBtn: true
+      , recogResult: null
+      , imgScreenHeight: null
+      , detailBoard: false
+      , viewBtn: false
+      , viewImg: false
+      , resultContainer: false
+      , ToolTip: false
+      , progressBar: "none"
+      , resultFail: "none"
+      , interval: null
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.searchDrawer = this.searchDrawer.bind(this);
@@ -251,12 +274,18 @@ class SearchEngine extends Component {
 
   handleInputChange(event) {
     this.setState({
-      selectedFile: event.target.files[0],
-      tempImg: URL.createObjectURL(event.target.files[0]),
-      imgScreenHeight: screen.height,
-      viewBtn: true,
+      selectedFile: event.target.files[0]
+      , tempImg: URL.createObjectURL(event.target.files[0])
+      , imgScreenHeight: screen.height
+      , viewBtn: true
+      ,
     });
     this.clearJson()
+    this.resethResult()
+    this.setState({
+      resultContainer: false
+      , recogResult: null
+    })
   }
 
   submit() {
@@ -269,22 +298,38 @@ class SearchEngine extends Component {
         console.warn(res);
       });
     this.setState({
-      resultContainer: false,
-      progressBar: "block"
+      resultFail: "none"
+      , resultContainer: false
+      , progressBar: "block"
     })
     setTimeout(() => {
-      setInterval(() => {
-        this.fetchResult()
-        this.state.recogResult == null ? this.setState({
-          resultContainer: false,
-          progressBar: "block"
-        }) : this.setState({
-          resultContainer: true,
-          progressBar: "none"
-        })
-      }, 4000)
-      clearInterval(setInterval());
-    }, 15000)
+      this.setState({
+        interval: setInterval(() => {
+          this.fetchResult()
+          this.state.recogResult == null ? this.setState({
+            resultContainer: false
+            ,
+          }) : this.setState({
+            resultContainer: true
+            , progressBar: "none"
+          })
+        }, 5000)
+      })
+    }, 20000)
+    // clearInterval(interval);
+
+    setTimeout(() => {
+      clearInterval(this.state.interval)
+      this.state.recogResult != null ? this.setState({
+        resultContainer: false
+        , progressBar: "none",
+        interval: this.state.interval.stop()
+      }) : this.setState({
+        progressBar: "none",
+        resultFail: "block",
+      });
+      componentWillUnmount()
+    }, 50000)
 
   }
 
@@ -305,19 +350,47 @@ class SearchEngine extends Component {
       .then((dataRes) => {
         this.setState({
           recogResult: [{
-            id: dataRes.id,
-            carName: dataRes.carName,
-            brand: dataRes.brand,
-            segment: dataRes.segment,
-            origin: dataRes.origin,
-            yearEdition: dataRes.yearEdition,
-            engine: dataRes.engine,
-            hoursePower: dataRes.hoursePower,
-            torque: dataRes.torque,
-            fuelType: dataRes.fuelType,
-            driveType: dataRes.driveType,
-            highLight: dataRes.highLight,
-            detail: dataRes.detail,
+            id: dataRes.id
+            , carName: dataRes.carName
+            , brand: dataRes.brand
+            , segment: dataRes.segment
+            , origin: dataRes.origin
+            , yearEdition: dataRes.yearEdition
+            , engine: dataRes.engine
+            , hoursePower: dataRes.hoursePower
+            , torque: dataRes.torque
+            , fuelType: dataRes.fuelType
+            , driveType: dataRes.driveType
+            , highLight: dataRes.highLight
+            , detail: dataRes.detail
+            ,
+          }]
+        });
+      });
+  }
+
+  resethResult() {
+    axios.get("/api/result")
+      .then((response) => {
+        return response.json();
+      })
+      .then((dataRes) => {
+        this.setState({
+          recogResult: [{
+            id: dataRes.id
+            , carName: dataRes.carName
+            , brand: dataRes.brand
+            , segment: dataRes.segment
+            , origin: dataRes.origin
+            , yearEdition: dataRes.yearEdition
+            , engine: dataRes.engine
+            , hoursePower: dataRes.hoursePower
+            , torque: dataRes.torque
+            , fuelType: dataRes.fuelType
+            , driveType: dataRes.driveType
+            , highLight: dataRes.highLight
+            , detail: dataRes.detail
+            ,
           }]
         });
       });
@@ -326,37 +399,38 @@ class SearchEngine extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.setState({
-        animationDraw: true,
+        animationDraw: true
+        ,
       })
     }, 6000)
     setTimeout(() => {
       this.setState({
-        uploadBtn: !this.state.uploadBtn,
+        uploadBtn: !this.state.uploadBtn
+        ,
       })
     }, 4000)
   }
   componentWillUnmount() {
-    this.setState({
-      animationDraw: false,
-      uploadBtn: !this.state.uploadBtn,
-    })
+    clearInterval(this.state.interval);
   }
 
   searchDrawer() {
     this.setState({
-      searchDraw: !this.state.searchDraw,
-      uploadImage: !this.state.uploadImage,
+      searchDraw: !this.state.searchDraw
+      , uploadImage: !this.state.uploadImage
+      ,
     });
-    document.getElementById("bannerImg").value = ""
+    document.getElementById("bannerImg")
+      .value = ""
     if (this.state.viewBtn == true && this.state.searchDraw == false) {
       this.setState({
-        viewBtn: false,
-        resultContainer: false
+        viewBtn: false
+        , resultContainer: false
       });
     } else {
       this.setState({
-        viewBtn: false,
-        resultContainer: false
+        viewBtn: false
+        , resultContainer: false
       });
     }
   }
@@ -381,13 +455,16 @@ class SearchEngine extends Component {
 
   closeToolTip() {
     this.setState({
-      ToolTip: false,
+      ToolTip: false
+      ,
     });
   }
 
 
   render() {
-    const { classes } = this.props;
+    const {
+      classes
+    } = this.props;
     return (
       <Grid
         xs={12}
@@ -417,6 +494,9 @@ class SearchEngine extends Component {
             </Grid>
             <br />
             <CircularProgress id="progressBar" color="secondary" style={{ display: this.state.progressBar, top: "25%", position: "absolute", marginTop: screen.height - (4 / 5 * (screen.height)) }} />
+            <Grid id="resultFail" containter justify="center" style={{ display: this.state.resultFail, top: "25%", position: "absolute", marginTop: screen.height - (4 / 5 * (screen.height)) }}>
+              <h3>Recognition Failed </h3>
+            </Grid>
             {this.state.recogResult &&
               this.state.recogResult.map((recogResult) => (
                 <Grid id="resultContainer" containter justify="center" className={clsx(classes.viewBtnOff, { [classes.viewBtnOn]: this.state.resultContainer })} style={{ top: "25%", position: "absolute", marginTop: screen.height - (4 / 5 * (screen.height)) }}>

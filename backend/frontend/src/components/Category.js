@@ -324,13 +324,13 @@ class Category extends React.Component {
                           <hr style={{ margin: 0 }}></hr>
                           <ListItem>
                             <ListItemAvatar className={classes.listItemAvatar}>
-                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>High Light Tech</strong></h6>
+                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>High Tech</strong></h6>
                             </ListItemAvatar>
                             <ListItemText primary={dataCar.highLight == null ? "None Special or Advanced technology found" : dataCar.highLight} className={classes.ListItemText} />
                           </ListItem>
                           <hr style={{ margin: 0 }}></hr>
                           <ListItem>
-                            <ListItemAvatar className={classes.listItemAvatar}>
+                            <ListItemAvatar xs={12}>
                               <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Detail Info</strong></h6>
                             </ListItemAvatar>
                           </ListItem>
