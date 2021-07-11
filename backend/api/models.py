@@ -39,6 +39,7 @@ class Engine(models.Model):
 
 class VTypeEngine(models.Model):
     name = models.CharField(max_length=200, unique=True, null=True, blank=True)
+
     def choice():
         return {'name': 'V Engine'}
     VType = models.ForeignKey(
@@ -64,8 +65,10 @@ class DriveType(models.Model):
     def __str__(self):
         return self.name
 
+
 class Car(models.Model):
     carName = models.CharField(max_length=200, unique=True)
+    image = models.ImageField(blank=True)
     brand = models.ForeignKey(
         Brand, on_delete=models.CASCADE, null=True, blank=True)
     segment = models.ForeignKey(
@@ -86,3 +89,12 @@ class Car(models.Model):
 
     def __str__(self):
         return self.carName
+
+
+class ImageAlbum(models.Model):
+    post = models.ForeignKey(
+        Car, default=None, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/',null=True, blank=True)
+
+    def __str__(self):
+        return self.post.carName

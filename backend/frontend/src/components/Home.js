@@ -134,7 +134,6 @@ export default function Home(props) {
 	const handleClick = () => {
 		setListOpen(!listOpen);
 	};
-	const [overLayHeight, setOverLayHeight] = useState(0);
 	//animation drawer
 	const [aniDrawer, setAniDrawer] = React.useState(false);
 	setTimeout(
@@ -146,15 +145,9 @@ export default function Home(props) {
 	);
 
 	const [overLayOpacity, setOverLayOpacity] = useState(0.7)
-	var scrollTop = window.scrollY;
-	var height = screen.height;
 	useEffect(() => {
 		window.addEventListener('scroll', handlerScroll);
-		getHeight();
 	});
-	const getHeight = async () => {
-		setOverLayHeight(document.getElementById("video").height)
-	}
 
 	const handlerScroll = () => {
 		if (window.scrollY > 100) {
@@ -291,13 +284,13 @@ export default function Home(props) {
 							<Grid id="video-container" >
 								<video autoPlay width="100%" height={screen.height} id="video" src={M8} style={{ position: "absolute", zIndex: "-1", left: "50%", top: "50%", objectFit: "cover", transform: "translate(-50%, -50%)" }} >
 								</video>
-								<div id="overlay" className={clsx(classes.animatedItem, { [classes.animatedItemExiting]: { aniDrawer } })} style={{ position: "fixed", minWidth: screen.width, minHeight: overLayHeight, backgroundColor: "#000", zIndex: 2, opacity: overLayOpacity, zIndex: "2", marginTop: 70 }}>
+								<div id="overlay" className={clsx(classes.animatedItem, { [classes.animatedItemExiting]: { aniDrawer } })} style={{ position: "fixed", minWidth: screen.width, minHeight: screen.height, backgroundColor: "#000", zIndex: 2, opacity: overLayOpacity, zIndex: "2", marginTop: 70 }}>
 								</div>
 								<SearchEngine />
 							</Grid>
 						</Route>
 						<Route path="/Category" component={Category} >
-							<Category />
+							<Category style={{ backgroundColor: "#333" }} />
 						</Route>
 						<Route path="/Info" component="">
 							Tuan
