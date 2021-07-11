@@ -177,7 +177,7 @@ class Category extends React.Component {
       searchRq: document.getElementById("searchInput").value
     });
     console.log(this.state.searchRq);
-    fetch("/api/car?search=" + this.state.searchRq)
+    fetch("/api/carsearch")
       .then((response) => {
         return response.json();
       })
@@ -252,7 +252,7 @@ class Category extends React.Component {
                       subheader={dataCar.brand.name}
                     />
                     <CardMedia className={classes.media}>
-                      {dataCar.image != null ? <img src={'http://127.0.0.1:8000' + dataCar.image} width="100%" /> : <img src={placeImg} width="100%" height={231.09} />}
+                      {dataCar.image != null ? <img src={dataCar.image} width="100%" /> : <img src={placeImg} width="100%" height={231.09} />}
                     </CardMedia>
                     <CardContent>
                       <Typography color="textSecondary" component="div">

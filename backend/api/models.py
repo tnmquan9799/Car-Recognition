@@ -94,7 +94,7 @@ class Car(models.Model):
 class ImageAlbum(models.Model):
     post = models.ForeignKey(
         Car, default=None, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='images',null=True, blank=True)
+    image = models.ImageField(upload_to='images/',null=True, blank=True)
 
     def __str__(self):
         return self.post.carName

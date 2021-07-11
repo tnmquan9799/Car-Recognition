@@ -1,3 +1,4 @@
+from os import read
 from rest_framework import serializers
 from .models import Car, Brand, Engine, VTypeEngine, Segment, FuelType, DriveType, Origin, ImageAlbum
 
@@ -57,6 +58,8 @@ class CarSerializer(serializers.ModelSerializer):
     fuelType = FuelTypeSerializer()
     driveType = DriveTypeSerializer()
     # image = ImageAlbumSerializer()
+    # image = serializers.HyperlinkedIdentityField(many=True, view_name='image',read_only=True) 
+
     # engine = serializers.ReadOnlyField(source='engine.name')
 
     class Meta:

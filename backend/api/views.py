@@ -13,10 +13,6 @@ from django.template import RequestContext
 
 
 class CarView(generics.ListAPIView):
-    queryset = Car.objects.all().select_related()
-    serializer_class = CarSerializer
-    filter_backends = (SearchFilter, OrderingFilter)
-    search_fields = ('$carName', 'brand__name', 'origin__name')
 
     def get_queryset(self):
         cars = Car.objects.all()
@@ -24,15 +20,23 @@ class CarView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            search = request.query_params["search"]
-            if search != None:
-                car = Car.objects.get(id=search)
+            id = request.query_params["id"]
+            if id != None:
+                car = Car.objects.get(id=id)
                 serializer = CarSerializer(car)
         except:
             cars = self.get_queryset()
             serializer = CarSerializer(cars, many=True)
 
         return Response(serializer.data)
+
+
+class CarSearchView(generics.ListAPIView):
+    queryset = Car.objects.all().select_related()
+    serializer_class = CarSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('$carName', 'brand__name', 'origin__name')
+
 
 
 class BrandView(generics.ListAPIView):
@@ -97,9 +101,17 @@ class Fetcher(generics.ListAPIView):
         return Response(serializer.data)
 
 
+# def detail_view(request, id):
+
+#     post = get_object_or_404(Car, id=id)
+#     photos = ImageAlbum.objects.filter(post=post)
+#     return Response(photos.data)
+
+
 class detail_view(generics.ListAPIView):
+
     def get_queryset(self):
-        cars = Car.objects.all()
+        cars = ImageAlbum.objects.all()
         return cars
 
     def get(self, request, *args, **kwargs):
@@ -107,9 +119,8 @@ class detail_view(generics.ListAPIView):
             id = request.query_params["id"]
             if id != None:
                 post = get_object_or_404(Car, id=id)
-                print(post)
                 photos = ImageAlbum.objects.filter(post=post)
-                serializer = ImageAlbumSerializer(photos)
+                serializer = ImageAlbumSerializer(photos, many=True)
         except:
             cars = self.get_queryset()
             serializer = ImageAlbumSerializer(cars, many=True)
