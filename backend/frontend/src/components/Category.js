@@ -12,7 +12,6 @@ import { withStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Collapse from "@material-ui/core/Collapse";
 import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
@@ -31,7 +30,21 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Tooltip from '@material-ui/core/Tooltip';
 import Popover from '@material-ui/core/Popover';
 import Zoom from '@material-ui/core/Zoom';
+import placeImg from '../../assets/placeImg.png';
+import Dialog from '@material-ui/core/Dialog';
+import Divider from '@material-ui/core/Divider';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Slide from '@material-ui/core/Slide';
+import AppBar from '@material-ui/core/AppBar';
+import ImageList from '@material-ui/core/ImageList';
+import ImageListItem from '@material-ui/core/ImageListItem';
 
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} timeout={1000} />;
+});
 const useStyles = (theme) => ({
   root: {
     maxWidth: screen.width / 2,
@@ -90,8 +103,7 @@ const useStyles = (theme) => ({
     },
   },
   media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
+    width: "100%",
   },
   expand: {
     transform: 'rotateX(180deg)',
@@ -128,6 +140,14 @@ const useStyles = (theme) => ({
     bottom: theme.spacing(2),
     right: theme.spacing(3),
   },
+  appBarDialog: {
+    position: 'relative',
+    backgroundColor: "#333"
+  },
+  title: {
+    marginLeft: theme.spacing(2),
+    flex: 1,
+  },
 });
 
 class Category extends React.Component {
@@ -137,13 +157,19 @@ class Category extends React.Component {
       dataCar: null,
       searchRq: "",
       cardExpand: -1,
-      ToolTip: false
+      ToolTip: false,
+      dialog: false,
+      listImg: null,
     };
     this.onSearch = this.onSearch.bind(this);
   }
   // Fetching Cars
   componentDidMount() {
     this.onSearch();
+  }
+
+  componentDidUpdate() {
+ 
   }
 
   onSearch() {
@@ -163,9 +189,6 @@ class Category extends React.Component {
       });
   }
 
-  CardWrapper = () => ({
-
-  })
 
   handleCardExpand(id) {
     this.setState({
@@ -177,6 +200,19 @@ class Category extends React.Component {
     this.setState({
       ToolTip: false,
     });
+  }
+
+  fetchListCard(id) {
+    fetch("/api/detail_view?id=" + id)
+      .then((response) => {
+        return response.json();
+      })
+      .then((dataRes) => {
+        this.setState({
+          listImg: dataRes,
+        });
+        console.log(this.state.listImg);
+      });
   }
 
   render() {
@@ -210,30 +246,20 @@ class Category extends React.Component {
             {this.state.dataCar &&
               this.state.dataCar.map((dataCar, id) => (
                 <Grid item xs={3}>
-                  <Card className={classes.root} key={this.state.dataCar.id}>
+                  <Card className={classes.root} key={this.state.dataCar.id} style={{}}>
                     <CardHeader
-                      avatar={
-                        <Avatar aria-label="recipe" className={classes.avatar}>
-                          R
-                        </Avatar>
-                      }
                       title={dataCar.carName}
                       subheader={dataCar.brand.name}
                     />
-                    <CardMedia className={classes.media} title="Paella dish">
-                      <image width="100%" src="" />
+                    <CardMedia className={classes.media}>
+                      {dataCar.image != null ? <img src={'http://127.0.0.1:8000' + dataCar.image} width="100%" /> : <img src={placeImg} width="100%" height={231.09} />}
                     </CardMedia>
                     <CardContent>
-                      <Typography variant="body2" color="textSecondary" component="p">
+                      <Typography color="textSecondary" component="div">
                         {dataCar.hightline == null ? "None highline technologies" : dataCar.hightline}
                       </Typography>
                     </CardContent>
-                    <CardActions disableSpacing onClick={() => this.handleCardExpand(id)} aria-expanded={this.state.cardExpand === id} aria-label="show more" style={{ backgroundColor: "#333", justifyContent: "center" }}>
-                      <IconButton >
-                        <ExpandMoreIcon className={clsx(classes.expand, { [classes.expandOpen]: this.state.cardExpand, })} style={{ color: "#fff" }} />
-                      </IconButton>
-                    </CardActions>
-                    <Collapse in={this.state.cardExpand === id} timeout="auto" unmountOnExit >
+                    <Collapse in={this.state.cardExpand === id} timeout={1500} unmountOnExit >
                       <CardContent>
                         <Typography variant="h6">Details:</Typography>
                         <br></br>
@@ -335,16 +361,58 @@ class Category extends React.Component {
                             </ListItemAvatar>
                           </ListItem>
                           <br></br>
-                          <div className={classes.textArea} >{dataCar.detail == null ? "Not updated yet" : dataCar.detail}</div>
+                          <ListItem>
+                            <div className={classes.textArea} >{dataCar.detail == null ? "Not updated yet" : dataCar.detail}</div>
+                          </ListItem>
+                          <br></br>
+                          <ListItem>
+                            <Button fullWidth variant="outlined" color="secondary" onClick={() => {
+                              this.setState({
+                                dialog: true
+                              })
+                              this.fetchListCard(dataCar.id)
+                            }}>
+                              Explore Media
+                            </Button>
+                          </ListItem>
                         </List>
                       </CardContent>
                     </Collapse>
+                    <CardActions disableSpacing onClick={() => this.handleCardExpand(id)} aria-expanded={this.state.cardExpand === id} aria-label="show more" style={{ backgroundColor: "#333", justifyContent: "center" }}>
+                      <IconButton >
+                        <ExpandMoreIcon className={clsx(classes.expand, { [classes.expandOpen]: this.state.cardExpand, })} style={{ color: "#fff" }} />
+                      </IconButton>
+                    </CardActions>
                   </Card>
+                  <Dialog fullScreen open={this.state.dialog} TransitionComponent={Transition}>
+                    <AppBar className={classes.appBarDialog}>
+                      <Toolbar>
+                        <Typography variant="h6" className={classes.title}>
+                          Sound
+                        </Typography>
+                        <Button autoFocus color="inherit" onClick={() => {
+                          this.setState({
+                            dialog: false
+                          })
+                        }}>
+                          <CloseIcon />
+                        </Button>
+                      </Toolbar>
+                    </AppBar>
+                    <ImageList rowHeight={160} width="100%" cols={3}>
+                      {/* {this.state.dataCar &&
+                        this.state.dataCar.map((dataCar, id) => (
+                          <ImageListItem key={dataCar.post} cols={item.cols || 1}>
+                            <img src={dataCar.image} alt={dataCar.post} />
+                          </ImageListItem>
+                        ))} */}
+                    </ImageList>
+                  </Dialog>
                 </Grid>
               ))}
           </Grid>
         </Grid>
-      </Grid>
+      </Grid >
     );
   }
 }

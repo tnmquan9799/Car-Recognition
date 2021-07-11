@@ -16,7 +16,6 @@ import {
 } from "@material-ui/core/styles";
 import drawerWidth from './Home'
 import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 import clsx from 'clsx';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -49,6 +48,9 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Zoom from '@material-ui/core/Zoom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import CloseIcon from '@material-ui/icons/Close';
+import Slide from '@material-ui/core/Slide';
+import AppBar from '@material-ui/core/AppBar';
 
 
 
@@ -329,7 +331,7 @@ class SearchEngine extends Component {
         resultFail: "block",
       });
       componentWillUnmount()
-    }, 50000)
+    }, 100000)
 
   }
 
@@ -351,6 +353,7 @@ class SearchEngine extends Component {
         this.setState({
           recogResult: [{
             id: dataRes.id
+            , image: dataRes.image
             , carName: dataRes.carName
             , brand: dataRes.brand
             , segment: dataRes.segment
@@ -366,6 +369,7 @@ class SearchEngine extends Component {
             ,
           }]
         });
+        console.log(this.state.recogResult);
       });
   }
 
@@ -378,6 +382,7 @@ class SearchEngine extends Component {
         this.setState({
           recogResult: [{
             id: dataRes.id
+            , image: dataRes.image
             , carName: dataRes.carName
             , brand: dataRes.brand
             , segment: dataRes.segment
@@ -523,10 +528,13 @@ class SearchEngine extends Component {
                   onClose={() => this.closeDetailBoard()}
                   aria-labelledby="simple-dialog-title"
                   open={this.state.detailBoard}>
-                  <DialogTitle id="simple-dialog-title">{recogResult.carName}</DialogTitle>
+                  <DialogTitle id="simple-dialog-title" >{recogResult.carName}</DialogTitle>
                   <br></br>
                   <DialogContent>
                     <List>
+                      <ListItem>
+                        {recogResult.image != null ? <img src={'http://127.0.0.1:8000' + recogResult.image} width="100%" /> : <img src={placeImg} width="100%" height={231.09} />}
+                      </ListItem>
                       <ListItem>
                         <ListItemAvatar className={classes.listItemAvatar}>
                           <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Brand</strong></h6>

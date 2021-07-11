@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Car, Brand, Engine, VTypeEngine, Segment, FuelType, DriveType, Origin
+from .models import Car, Brand, Engine, VTypeEngine, Segment, FuelType, DriveType, Origin, ImageAlbum
 
 
 class BrandSerializer(serializers.ModelSerializer):
@@ -44,15 +44,22 @@ class OriginSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'detail')
 
 
+class ImageAlbumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImageAlbum
+        fields = ('id', 'post', 'image')
+
+
 class CarSerializer(serializers.ModelSerializer):
     brand = BrandSerializer()
     segment = SegmentSerializer()
     origin = OriginSerializer()
     fuelType = FuelTypeSerializer()
     driveType = DriveTypeSerializer()
+    # image = ImageAlbumSerializer()
     # engine = serializers.ReadOnlyField(source='engine.name')
 
     class Meta:
         model = Car
-        fields = ('id', 'carName', 'brand', 'segment',
+        fields = ('id', 'image', 'carName', 'brand', 'segment',
                   'origin', 'yearEdition', 'engine', 'hoursePower', 'torque', 'fuelType', 'driveType', 'highLight', 'detail')

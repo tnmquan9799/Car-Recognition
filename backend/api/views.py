@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, status
-from .serializers import CarSerializer, BrandSerializer, EngineSerializer, VTypeEngineSerializer, SegmentSerializer, FuelTypeSerializer, DriveTypeSerializer
-from .models import Car, Brand, Engine, VTypeEngine, Segment, FuelType, DriveType
+from .serializers import CarSerializer, BrandSerializer, EngineSerializer, VTypeEngineSerializer, SegmentSerializer, FuelTypeSerializer, DriveTypeSerializer, ImageAlbumSerializer
+from .models import Car, Brand, Engine, VTypeEngine, Segment, FuelType, DriveType, ImageAlbum
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -24,9 +24,9 @@ class CarView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            id = request.query_params["id"]
-            if id != None:
-                car = Car.objects.get(id=id)
+            search = request.query_params["search"]
+            if search != None:
+                car = Car.objects.get(id=search)
                 serializer = CarSerializer(car)
         except:
             cars = self.get_queryset()
@@ -65,6 +65,18 @@ class DriveTypeView(generics.ListAPIView):
     serializer_class = DriveTypeSerializer
 
 
+class ImageAlbumView(generics.ListAPIView):
+    queryset = ImageAlbum.objects.all()
+    serializer_class = ImageAlbumSerializer
+
+    def get(request, id):
+        post = get_object_or_404(Car, id=id)
+        photos = ImageAlbum.objects.filter(post=post)
+        serializer = ImageAlbumSerializer(photos)
+
+        return Response(serializer.data)
+
+
 class ResultView(generics.ListAPIView):
     with open('../results.json') as json_file:
         data = json.load(json_file)
@@ -81,5 +93,25 @@ class Fetcher(generics.ListAPIView):
             carName = data[0]['label']
         car = Car.objects.get(carName=carName)
         serializer = CarSerializer(car)
+
+        return Response(serializer.data)
+
+
+class detail_view(generics.ListAPIView):
+    def get_queryset(self):
+        cars = Car.objects.all()
+        return cars
+
+    def get(self, request, *args, **kwargs):
+        try:
+            id = request.query_params["id"]
+            if id != None:
+                post = get_object_or_404(Car, id=id)
+                print(post)
+                photos = ImageAlbum.objects.filter(post=post)
+                serializer = ImageAlbumSerializer(photos)
+        except:
+            cars = self.get_queryset()
+            serializer = ImageAlbumSerializer(cars, many=True)
 
         return Response(serializer.data)
