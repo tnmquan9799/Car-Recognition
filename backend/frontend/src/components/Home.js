@@ -31,6 +31,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import M8 from '../../assets/video/m8.mp4';
 import axios from 'axios';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import {
 	BrowserRouter as Router,
 	Switch,
@@ -224,6 +225,13 @@ export default function Home(props) {
 								<InfoIcon to="/Info" />
 							</ListItemIcon>
 							<ListItemText primary="Info" />
+						</ListItem>
+						<Divider />
+						<ListItem button component="a" href="http://127.0.0.1:8000/admin/">
+							<ListItemIcon>
+								<SupervisorAccountIcon />
+							</ListItemIcon>
+							<ListItemText primary="Admin" />
 						</ListItem>
 					</List>
 				</Drawer>

@@ -535,8 +535,8 @@ class SearchEngine extends Component {
         style={{ color: "#fff", margin: 0 }}
       >
         <Grid id="component-container" className={clsx(classes.animatedItem, { [classes.animatedItemExiting]: this.state.animationDraw })} style={{ position: "relative" }}  >
-          <Grid disabled={this.state.uploadBtn} container justify="center" xs={12} style={{ zIndex: "5", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: screen.height - (1 / 2 * (screen.height)) }} onClick={() => this.searchDrawer()}>
-            <Box border={2} borderRadius={5} >
+          <Grid container justify="center" xs={12} style={{ zIndex: "5", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: screen.height - (1 / 2 * (screen.height)) }} >
+            <Box disabled={this.state.uploadBtn} border={2} borderRadius={3} onClick={() => this.searchDrawer()} >
               <Typography style={{ pointerEvents: "none", userSelect: "none", margin: "10px" }} id="title-text" xs={12} variant="h3" component="h3" gutterBottom >
                 Car Recognition
                 <div id="drawerBtn" style={{ zIndex: 10, color: "#fff", userSelect: "none", position: "absolute", left: "50%", top: "30%", transform: "translate(-50%, -50%)" }} >
