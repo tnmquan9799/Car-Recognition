@@ -1,2 +1,1 @@
-release: python manage.py runserver
-web: gunicorn backend.wsgi --log-file -
+web: gunicorn Car-Recognition.backend.wsgi
