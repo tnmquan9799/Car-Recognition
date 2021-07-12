@@ -51,12 +51,18 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import AppBar from '@material-ui/core/AppBar';
-
+import Toolbar from '@material-ui/core/Toolbar';
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 // import CSRFToken from './csrftoken';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} timeout={1000} />;
+});
+
 const useStyles = (theme) => ({
   mainRoot: {
     transitionDuration: 2000
@@ -181,13 +187,13 @@ const useStyles = (theme) => ({
     display: "none"
     , width: "0%"
     , opacity: 0
-    , animation: `$viewImgOff 1000ms ${theme.transitions.easing.easeOut}`
+    , animation: `$viewImgOff 500ms ${theme.transitions.easing.easeOut}`
   }
   , viewImgOn: {
     display: "block"
     , width: "100%"
     , opacity: 1
-    , animation: `$viewImgOn 1000ms ${theme.transitions.easing.easeIn}`
+    , animation: `$viewImgOn 500ms ${theme.transitions.easing.easeIn}`
   }
   , "@keyframes viewImgOn": {
     "0%": {
@@ -244,34 +250,65 @@ const useStyles = (theme) => ({
     ,
   }
   ,
+  appBarDialog: {
+    position: 'relative',
+    backgroundColor: "#333"
+  },
+  title: {
+    marginLeft: theme.spacing(2),
+    flex: 1,
+  },
+  viewImgGalaryOff: {
+    display: "none",
+    opacity: "0",
+    // animation: `$viewImgOff 500ms ${theme.transitions.easing.easeOut}`
+  },
+  viewImgGalaryOn: {
+    display: "block",
+    opacity: "1",
+    animation: `$viewImgOn 500ms ${theme.transitions.easing.easeOut}`
+  },
+  "@keyframes viewImgGalaryOn": {
+    "0%": {
+      display: "none",
+      opacity: "0",
+    }, "100%": {
+      display: "block",
+      opacity: "1",
+    }
+  }
 });
 
 class SearchEngine extends Component {
   constructor() {
     super();
     this.state = {
-      selectedFile: null
-      , tempImg: null
-      , animationDraw: false
-      , searchDraw: false
-      , uploadImage: true
-      , uploadBtn: true
-      , recogResult: null
-      , imgScreenHeight: null
-      , detailBoard: false
-      , viewBtn: false
-      , viewImg: false
-      , resultContainer: false
-      , ToolTip: false
-      , progressBar: "none"
-      , resultFail: "none"
-      , interval: null
+      selectedFile: null,
+      tempImg: null,
+      animationDraw: false,
+      searchDraw: false,
+      uploadImage: true,
+      uploadBtn: true,
+      recogResult: null,
+      imgScreenHeight: null,
+      detailBoard: false,
+      viewBtn: false,
+      viewImg: false,
+      resultContainer: false,
+      ToolTip: false,
+      progressBar: "none",
+      resultFail: "none",
+      interval: null,
+      dialog: false,
+      listImg: null,
+      imgClass: null,
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.searchDrawer = this.searchDrawer.bind(this);
     this.viewImg = this.viewImg.bind(this);
-    this.openDetailBoard = this.openDetailBoard.bind(this)
-    this.closeDetailBoard = this.closeDetailBoard.bind(this)
+    this.openDetailBoard = this.openDetailBoard.bind(this);
+    this.closeDetailBoard = this.closeDetailBoard.bind(this);
+    this.viewFullImg = this.viewFullImg.bind(this);
   }
 
   handleInputChange(event) {
@@ -286,7 +323,9 @@ class SearchEngine extends Component {
     this.resethResult()
     this.setState({
       resultContainer: false
-      , recogResult: null
+      , recogResult: null,
+      progressBar: "none"
+
     })
   }
 
@@ -401,6 +440,26 @@ class SearchEngine extends Component {
       });
   }
 
+  fetchListCard(id) {
+    fetch("/api/detail_view?id=" + id)
+      .then((response) => {
+        return response.json();
+      })
+      .then((dataRes) => {
+        this.setState({
+          listImg: dataRes,
+        });
+        console.log(this.state.listImg);
+      });
+  }
+
+  viewFullImg(image) {
+    this.setState({
+      imgClass: image
+    })
+    console.log(this.state.imgClass)
+  }
+
   componentDidMount() {
     setTimeout(() => {
       this.setState({
@@ -476,13 +535,15 @@ class SearchEngine extends Component {
         style={{ color: "#fff", margin: 0 }}
       >
         <Grid id="component-container" className={clsx(classes.animatedItem, { [classes.animatedItemExiting]: this.state.animationDraw })} style={{ position: "relative" }}  >
-          <Grid container justify="center" xs={12} style={{ zIndex: "5", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: screen.height - (1 / 2 * (screen.height)) }}>
-            <Typography style={{ pointerEvents: "none", userSelect: "none" }} id="title-text" xs={12} variant="h3" component="h3" gutterBottom>
-              Car Recognition System
-            </Typography>
-            <Button disabled={this.state.uploadBtn} id="drawerBtn" style={{ color: "#fff", userSelect: "none" }} onClick={() => this.searchDrawer()}>
-              Press to search
-            </Button>
+          <Grid disabled={this.state.uploadBtn} container justify="center" xs={12} style={{ zIndex: "5", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: screen.height - (1 / 2 * (screen.height)) }} onClick={() => this.searchDrawer()}>
+            <Box border={2} borderRadius={5} >
+              <Typography style={{ pointerEvents: "none", userSelect: "none", margin: "10px" }} id="title-text" xs={12} variant="h3" component="h3" gutterBottom >
+                Car Recognition
+                <div id="drawerBtn" style={{ zIndex: 10, color: "#fff", userSelect: "none", position: "absolute", left: "50%", top: "30%", transform: "translate(-50%, -50%)" }} >
+                  <ExpandMoreIcon />
+                </div>
+              </Typography>
+            </Box>
             <Grid id="inputBox" xs={12} className={clsx(classes.buttonMore, { [classes.buttonLess]: this.state.searchDraw })} >
               <Grid container justify="center" xs={12} style={{ marginBottom: "50px", marginTop: "50px" }}>
                 <h5 xs={4} style={{ userSelect: "none" }}>Select File : </h5>
@@ -668,7 +729,20 @@ class SearchEngine extends Component {
                         </ListItemAvatar>
                       </ListItem>
                       <br></br>
-                      <div className={classes.textArea} >{recogResult.detail == null ? "Not updated yet" : recogResult.detail}</div>
+                      <ListItem>
+                        <div className={classes.textArea} >{recogResult.detail == null ? "Not updated yet" : recogResult.detail}</div>
+                      </ListItem>
+                      <br></br>
+                      <ListItem>
+                        <Button fullWidth variant="outlined" color="secondary" onClick={() => {
+                          this.setState({
+                            dialog: true
+                          })
+                          this.fetchListCard(recogResult.id)
+                        }}>
+                          Explore Media
+                        </Button>
+                      </ListItem>
                     </List>
                   </DialogContent>
                   <DialogActions>
@@ -679,6 +753,35 @@ class SearchEngine extends Component {
                 </Dialog>
               ))}
           </Grid>
+          <Dialog fullScreen open={this.state.dialog} TransitionComponent={Transition}>
+            <AppBar className={classes.appBarDialog}>
+              <Toolbar>
+                <Typography variant="h6" className={classes.title}>
+                  Galary
+                </Typography>
+                <Button autoFocus color="inherit" onClick={() => {
+                  this.setState({
+                    dialog: false
+                  })
+                }}>
+                  <CloseIcon />
+                </Button>
+              </Toolbar>
+            </AppBar>
+            <Grid container className="search-container" xs={12} spacing={3} alignItems="center" justify="center" style={{}}>
+              {this.state.listImg &&
+                this.state.listImg.map((listImg) => (
+                  <Grid item xs={3}>
+                    <Card raised={true} >
+                      <CardMedia>
+                        <img className="imgClass" onClick={() => this.viewFullImg(listImg.image)} src={listImg.image} alt={listImg.post} width="100%" height={250} />
+                        <img className={clsx(classes.viewImgGalaryOff, { [classes.viewImgGalaryOn]: this.state.imgClass != null ? true : false })} src={this.state.imgClass} style={{ zIndex: 1, position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: "100%", height: this.state.imgClass == null ? "auto" : screen.height }} onClick={() => this.setState({ imgClass: null })} />
+                      </CardMedia>
+                    </Card>
+                  </Grid>
+                ))}
+            </Grid>
+          </Dialog>
           <Grid className={clsx(classes.viewImgOff, { [classes.viewImgOn]: this.state.viewImg })} id="imageContainer" style={{ zIndex: "5", position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -0)", pointeEvents: "pointer", }} onClick={() => {
             this.setState({
               viewImg: false

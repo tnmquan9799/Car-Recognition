@@ -85,7 +85,7 @@ class Car(models.Model):
     driveType = models.ForeignKey(
         DriveType, on_delete=models.CASCADE, null=True, blank=True)
     highLight = models.CharField(max_length=100, null=True, blank=True)
-    detail = models.TextField()
+    detail = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.carName

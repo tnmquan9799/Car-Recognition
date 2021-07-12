@@ -45,6 +45,7 @@ import ImageListItem from '@material-ui/core/ImageListItem';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} timeout={1000} />;
 });
+
 const useStyles = (theme) => ({
   root: {
     maxWidth: screen.width / 2,
@@ -124,16 +125,16 @@ const useStyles = (theme) => ({
   ListItemText: {
     textAlign: "center",
     lineHeight: "2",
-    width: "70%",
+    width: "100%",
   },
   textArea: {
     width: "100%",
   },
   listItemAvatar: {
-    width: "20%",
+    width: "30%",
   },
   Button: {
-    width: "10%",
+    width: "5%",
   },
   absolute: {
     position: 'absolute',
@@ -148,6 +149,26 @@ const useStyles = (theme) => ({
     marginLeft: theme.spacing(2),
     flex: 1,
   },
+  viewImgOff: {
+    display: "none",
+    opacity: "0",
+    // animation: `$viewImgOff 500ms ${theme.transitions.easing.easeOut}`
+  },
+  viewImgOn: {
+    display: "block",
+    opacity: "1",
+    animation: `$viewImgOn 500ms ${theme.transitions.easing.easeOut}`
+  },
+  "@keyframes viewImgOn": {
+    "0%": {
+      display: "none",
+      opacity: "0",
+    }, "100%": {
+      display: "block",
+      opacity: "1",
+    }
+  }
+
 });
 
 class Category extends React.Component {
@@ -160,24 +181,32 @@ class Category extends React.Component {
       ToolTip: false,
       dialog: false,
       listImg: null,
+      imgClass: null
     };
     this.onSearch = this.onSearch.bind(this);
+    this.viewFullImg = this.viewFullImg.bind(this);
   }
   // Fetching Cars
   componentDidMount() {
-    this.onSearch();
+    this.fetcher()
   }
 
-  componentDidUpdate() {
- 
+  componentWillUpdate() {
+    this.onSearch
   }
 
-  onSearch() {
-    this.setState({
-      searchRq: document.getElementById("searchInput").value
-    });
-    console.log(this.state.searchRq);
-    fetch("/api/carsearch")
+
+
+  onSearch(event) {
+    this.setState({ searchRq: event.target.value });
+    this.fetcher()
+    setTimeout(() => {
+      this.fetcher()
+    }, 100)
+  }
+
+  fetcher() {
+    fetch("/api/carsearch?search=" + this.state.searchRq)
       .then((response) => {
         return response.json();
       })
@@ -193,6 +222,7 @@ class Category extends React.Component {
   handleCardExpand(id) {
     this.setState({
       cardExpand: this.state.cardExpand === id ? -1 : id,
+
     });
   }
 
@@ -215,204 +245,202 @@ class Category extends React.Component {
       });
   }
 
+  viewFullImg(image) {
+    this.setState({
+      imgClass: image
+    })
+    console.log(this.state.imgClass)
+  }
+
+
   render() {
     const { classes } = this.props;
     return (
-      <Grid
-        xs={12}
-        style={{
-          color: "#fff",
-          margin: 0,
-          position: "relative",
-          marginTop: screen.height - (1 / 2) * screen.height,
-        }}>
-        <Grid container spacing={3} alignItems="center" justify="center" xs={12} style={{
-          zIndex: "5",
-          position: "absolute",
-          width: "100%",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-        >
+      <Grid xs={12} style={{ color: "#fff", margin: 50, position: "relative", marginTop: screen.height - (4 / 5) * screen.height, }}>
+        <Grid container className="search-container" xs={12} spacing={3} alignItems="center" justify="center" style={{ position: "relative" }}>
           <div
             id="searchBar" onClick={() => { document.getElementById("searchInput").focus(); }} className={classes.search} style={{ marginBottom: screen.height - (3 / 4) * screen.height }}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase onChange={this.onSearch} id="searchInput" placeholder="Search…" classes={{ root: classes.inputRoot, input: classes.inputInput, }} xs={12} inputProps={{ "aria-label": "search" }} />
+            <InputBase onChange={this.onSearch} id="searchInput" value={this.state.onSearch} placeholder="Search…" classes={{ root: classes.inputRoot, input: classes.inputInput, }} xs={12} inputProps={{ "aria-label": "search" }} />
           </div>
-          <Grid container className="search-container" xs={12} spacing={3} alignItems="center" justify="center" style={{ position: "relative" }}>
-            {this.state.dataCar &&
-              this.state.dataCar.map((dataCar, id) => (
-                <Grid item xs={3}>
-                  <Card className={classes.root} key={this.state.dataCar.id} style={{}}>
-                    <CardHeader
-                      title={dataCar.carName}
-                      subheader={dataCar.brand.name}
-                    />
-                    <CardMedia className={classes.media}>
-                      {dataCar.image != null ? <img src={dataCar.image} width="100%" /> : <img src={placeImg} width="100%" height={231.09} />}
-                    </CardMedia>
-                    <CardContent>
-                      <Typography color="textSecondary" component="div">
-                        {dataCar.hightline == null ? "None highline technologies" : dataCar.hightline}
-                      </Typography>
-                    </CardContent>
-                    <Collapse in={this.state.cardExpand === id} timeout={1500} unmountOnExit >
-                      <CardContent>
-                        <Typography variant="h6">Details:</Typography>
-                        <br></br>
-                        <List>
-                          <ListItem className={classes.ListItem} component={dataCar.brand.detail != null ? "a" : ""} href={dataCar.brand.detail} target="_blank">
-                            <ListItemAvatar className={classes.listItemAvatar}>
-                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Brand</strong></h6>
-                            </ListItemAvatar>
-                            <ListItemText primary={dataCar.brand.name == null ? "--" : dataCar.brand.name} className={classes.ListItemText} />
-                            {dataCar.brand.detail != null ? <ArrowRightIcon /> : ""}
-                          </ListItem>
-                          <hr style={{ margin: 0 }}></hr>
-                          <ListItem className={classes.ListItem} component={dataCar.driveType.detail != null ? "a" : ""} href={dataCar.driveType.detail} target="_blank">
-                            <ListItemAvatar className={classes.listItemAvatar}>
-                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>driveType</strong></h6>
-                            </ListItemAvatar>
-                            <ListItemText primary={dataCar.driveType.name == null ? "--" : dataCar.driveType.name} className={classes.ListItemText} />
-                            {dataCar.driveType.detail != null ? <ArrowRightIcon /> : ""}
-                          </ListItem>
-                          <hr style={{ margin: 0 }}></hr>
-                          <ListItem className={classes.ListItem} onClick={() => {
-                            this.setState({
-                              ToolTip: !this.state.ToolTip,
-                            });
-                          }}>
-                            <ListItemAvatar className={classes.listItemAvatar}>
-                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Segment</strong></h6>
-                            </ListItemAvatar>
-                            <ListItemText primary={dataCar.segment.name == null ? "--" : dataCar.segment.name} className={classes.ListItemText} />
-                            {dataCar.segment.detail != null ?
-                              <ClickAwayListener onClickAway={() => this.closeToolTip()}>
-                                <Tooltip placement="left" TransitionComponent={Zoom}
-                                  PopperProps={{
-                                    disablePortal: true,
-                                  }}
-                                  onClose={() => this.closeToolTip()}
-                                  open={this.state.ToolTip}
-                                  disableFocusListener
-                                  disableHoverListener
-                                  disableTouchListener
-                                  title={<h6>{dataCar.segment.detail}</h6>}
-                                >
-                                  <ArrowRightIcon />
-                                </Tooltip>
-                              </ClickAwayListener>
-                              : ""}
-                          </ListItem>
-                          <hr style={{ margin: 0 }}></hr>
-                          <ListItem>
-                            <ListItemAvatar className={classes.listItemAvatar}>
-                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Edition</strong></h6>
-                            </ListItemAvatar>
-                            <ListItemText primary={dataCar.yearEdition == null ? "--" : dataCar.yearEdition} className={classes.ListItemText} />
-                            <ArrowRightIcon style={{ visibility: "hidden" }} />
-                          </ListItem>
-                          <hr style={{ margin: 0 }}></hr>
-                          <ListItem>
-                            <ListItemAvatar className={classes.listItemAvatar}>
-                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Power</strong></h6>
-                            </ListItemAvatar>
-                            <ListItemText primary={dataCar.hoursePower == null ? "--" : dataCar.hoursePower} className={classes.ListItemText} />
-                            <ArrowRightIcon style={{ visibility: "hidden" }} />
-                          </ListItem>
-                          <hr style={{ margin: 0 }}></hr>
-                          <ListItem>
-                            <ListItemAvatar className={classes.listItemAvatar}>
-                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Torque</strong></h6>
-                            </ListItemAvatar>
-                            <ListItemText primary={dataCar.torque == null ? "--" : dataCar.torque} className={classes.ListItemText} />
-                            <ArrowRightIcon style={{ visibility: "hidden" }} />
-                          </ListItem>
-                          <hr style={{ margin: 0 }}></hr>
-                          <ListItem className={classes.ListItem} component={dataCar.origin.detail != null ? "a" : ""} href={dataCar.origin.detail} target="_blank">
-                            <ListItemAvatar className={classes.listItemAvatar}>
-                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>origin</strong></h6>
-                            </ListItemAvatar>
-                            <ListItemText primary={dataCar.origin.name == null ? "--" : dataCar.origin.name} className={classes.ListItemText} />
-                            {dataCar.origin.detail != null ? <ArrowRightIcon /> : ""}
-                          </ListItem>
-                          <hr style={{ margin: 0 }}></hr>
-                          <ListItem className={classes.ListItem} component={dataCar.fuelType.detail != null ? "a" : ""} href={dataCar.fuelType.detail} target="_blank">
-                            <ListItemAvatar className={classes.listItemAvatar}>
-                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>fuelType</strong></h6>
-                            </ListItemAvatar>
-                            <ListItemText primary={dataCar.fuelType.name == null ? "--" : dataCar.fuelType.name} className={classes.ListItemText} />
-                            {dataCar.fuelType.detail != null ? <ArrowRightIcon /> : ""}
-                          </ListItem>
-                          <hr style={{ margin: 0 }}></hr>
-                          <ListItem>
-                            <ListItemAvatar className={classes.listItemAvatar}>
-                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>High Tech</strong></h6>
-                            </ListItemAvatar>
-                            <ListItemText primary={dataCar.highLight == null ? "None Special or Advanced technology found" : dataCar.highLight} className={classes.ListItemText} />
-                          </ListItem>
-                          <hr style={{ margin: 0 }}></hr>
-                          <ListItem>
-                            <ListItemAvatar xs={12}>
-                              <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Detail Info</strong></h6>
-                            </ListItemAvatar>
-                          </ListItem>
-                          <br></br>
-                          <ListItem>
-                            <div className={classes.textArea} >{dataCar.detail == null ? "Not updated yet" : dataCar.detail}</div>
-                          </ListItem>
-                          <br></br>
-                          <ListItem>
-                            <Button fullWidth variant="outlined" color="secondary" onClick={() => {
-                              this.setState({
-                                dialog: true
-                              })
-                              this.fetchListCard(dataCar.id)
-                            }}>
-                              Explore Media
-                            </Button>
-                          </ListItem>
-                        </List>
-                      </CardContent>
-                    </Collapse>
-                    <CardActions disableSpacing onClick={() => this.handleCardExpand(id)} aria-expanded={this.state.cardExpand === id} aria-label="show more" style={{ backgroundColor: "#333", justifyContent: "center" }}>
-                      <IconButton >
-                        <ExpandMoreIcon className={clsx(classes.expand, { [classes.expandOpen]: this.state.cardExpand, })} style={{ color: "#fff" }} />
-                      </IconButton>
-                    </CardActions>
-                  </Card>
-                  <Dialog fullScreen open={this.state.dialog} TransitionComponent={Transition}>
-                    <AppBar className={classes.appBarDialog}>
-                      <Toolbar>
-                        <Typography variant="h6" className={classes.title}>
-                          Sound
-                        </Typography>
-                        <Button autoFocus color="inherit" onClick={() => {
-                          this.setState({
-                            dialog: false
-                          })
-                        }}>
-                          <CloseIcon />
-                        </Button>
-                      </Toolbar>
-                    </AppBar>
-                    <ImageList rowHeight={160} width="100%" cols={3}>
-                      {/* {this.state.dataCar &&
-                        this.state.dataCar.map((dataCar, id) => (
-                          <ImageListItem key={dataCar.post} cols={item.cols || 1}>
-                            <img src={dataCar.image} alt={dataCar.post} />
-                          </ImageListItem>
-                        ))} */}
-                    </ImageList>
-                  </Dialog>
-                </Grid>
-              ))}
-          </Grid>
         </Grid>
-      </Grid >
+        <Grid container className="search-container" xs={12} spacing={3} alignItems="center" justify="center" style={{}}>
+          {this.state.dataCar &&
+            this.state.dataCar.map((dataCar, id) => (
+              <Grid item xs={3}>
+                <Card className={classes.root} key={this.state.dataCar.id} style={{}} raised={true}>
+                  <CardHeader
+                    title={dataCar.carName}
+                    subheader={dataCar.brand != null ? dataCar.brand.name : "Brand not found"}
+                  />
+                  <CardMedia className={classes.media}>
+                    {dataCar.image != null ? <img src={dataCar.image} width="100%" height={250} /> : <img src={placeImg} width="100%" height={250} />}
+                  </CardMedia>
+                  <CardContent>
+                    <Typography color="textSecondary" component="div">
+                      {dataCar.hightline == null ? "None highline technologies" : dataCar.hightline}
+                    </Typography>
+                  </CardContent>
+                  <Collapse in={this.state.cardExpand === id} timeout={1500} unmountOnExit style={{}}>
+                    <CardContent>
+                      <Typography variant="h6">Details:</Typography>
+                      <br></br>
+                      <List>
+                        <ListItem className={classes.ListItem} href={dataCar.brand != null ? dataCar.brand.detail : ""} target="_blank">
+                          <ListItemAvatar className={classes.listItemAvatar}>
+                            <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Brand</strong></h6>
+                          </ListItemAvatar>
+                          <ListItemText primary={dataCar.brand == null ? "--" : dataCar.brand.name} className={classes.ListItemText} />
+                          {dataCar.brand != null ? <ArrowRightIcon /> : ""}
+                        </ListItem>
+                        <hr style={{ margin: 0 }}></hr>
+                        <ListItem className={classes.ListItem} component={dataCar.origin !== null ? "a" : ""} href={dataCar.origin != null ? dataCar.origin.detail : ""} target="_blank">
+                          <ListItemAvatar className={classes.listItemAvatar}>
+                            <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>origin</strong></h6>
+                          </ListItemAvatar>
+                          <ListItemText primary={dataCar.origin == null ? "--" : dataCar.origin.name} className={classes.ListItemText} />
+                          {dataCar.origin != null ? <ArrowRightIcon /> : ""}
+                        </ListItem>
+                        <hr style={{ margin: 0 }}></hr>
+                        <ListItem className={classes.ListItem} onClick={() => {
+                          this.setState({
+                            ToolTip: !this.state.ToolTip,
+                          });
+                        }}>
+                          <ListItemAvatar className={classes.listItemAvatar}>
+                            <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Segment</strong></h6>
+                          </ListItemAvatar>
+                          <ListItemText primary={dataCar.segment == null ? "--" : dataCar.segment.name} className={classes.ListItemText} />
+                          {dataCar.segment != null ?
+                            <ClickAwayListener onClickAway={() => this.closeToolTip()}>
+                              <Tooltip placement="left" TransitionComponent={Zoom}
+                                PopperProps={{
+                                  disablePortal: true,
+                                }}
+                                onClose={() => this.closeToolTip()}
+                                open={this.state.ToolTip}
+                                disableFocusListener
+                                disableHoverListener
+                                disableTouchListener
+                                title={<h6>{dataCar.segment.detail}</h6>}
+                              >
+                                <ArrowRightIcon />
+                              </Tooltip>
+                            </ClickAwayListener>
+                            : ""}
+                        </ListItem>
+                        <hr style={{ margin: 0 }}></hr>
+                        <ListItem>
+                          <ListItemAvatar className={classes.listItemAvatar}>
+                            <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Edition</strong></h6>
+                          </ListItemAvatar>
+                          <ListItemText primary={dataCar.yearEdition == null ? "--" : dataCar.yearEdition} className={classes.ListItemText} />
+                          <ArrowRightIcon style={{ visibility: "hidden" }} />
+                        </ListItem>
+                        <hr style={{ margin: 0 }}></hr>
+                        <ListItem>
+                          <ListItemAvatar className={classes.listItemAvatar}>
+                            <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Power</strong></h6>
+                          </ListItemAvatar>
+                          <ListItemText primary={dataCar.hoursePower == null ? "--" : dataCar.hoursePower} className={classes.ListItemText} />
+                          <ArrowRightIcon style={{ visibility: "hidden" }} />
+                        </ListItem>
+                        <hr style={{ margin: 0 }}></hr>
+                        <ListItem>
+                          <ListItemAvatar className={classes.listItemAvatar}>
+                            <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Torque</strong></h6>
+                          </ListItemAvatar>
+                          <ListItemText primary={dataCar.torque == null ? "--" : dataCar.torque} className={classes.ListItemText} />
+                          <ArrowRightIcon style={{ visibility: "hidden" }} />
+                        </ListItem>
+                        <hr style={{ margin: 0 }}></hr>
+                        <ListItem className={classes.ListItem} component={dataCar.driveType != null ? "a" : ""} href={dataCar.driveType != null ? dataCar.driveType.detail : ""} target="_blank">
+                          <ListItemAvatar className={classes.listItemAvatar}>
+                            <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Drive Type</strong></h6>
+                          </ListItemAvatar>
+                          <ListItemText primary={dataCar.driveType == null ? "--" : dataCar.driveType.name} className={classes.ListItemText} />
+                          {dataCar.driveType != null ? <ArrowRightIcon /> : ""}
+                        </ListItem>
+                        <hr style={{ margin: 0 }}></hr>
+                        <ListItem className={classes.ListItem} component={dataCar.fuelType != null ? "a" : ""} href={dataCar.fuelType != null ? dataCar.fuelType.detail : ""} target="_blank">
+                          <ListItemAvatar className={classes.listItemAvatar}>
+                            <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>fuelType</strong></h6>
+                          </ListItemAvatar>
+                          <ListItemText primary={dataCar.fuelType == null ? "--" : dataCar.fuelType.name} className={classes.ListItemText} />
+                          {dataCar.fuelType != null ? <ArrowRightIcon /> : ""}
+                        </ListItem>
+                        <hr style={{ margin: 0 }}></hr>
+                        <ListItem>
+                          <ListItemAvatar className={classes.listItemAvatar}>
+                            <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>High Tech</strong></h6>
+                          </ListItemAvatar>
+                          <ListItemText primary={dataCar.highLight == null ? "None Special or Advanced technology found" : dataCar.highLight} className={classes.ListItemText} />
+                        </ListItem>
+                        <hr style={{ margin: 0 }}></hr>
+                        <ListItem>
+                          <ListItemAvatar xs={12}>
+                            <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Detail Info</strong></h6>
+                          </ListItemAvatar>
+                        </ListItem>
+                        <br></br>
+                        <ListItem>
+                          <div className={classes.textArea} >{dataCar.detail == null ? "Not updated yet" : dataCar.detail}</div>
+                        </ListItem>
+                        <br></br>
+                        <ListItem>
+                          <Button fullWidth variant="outlined" color="secondary" onClick={() => {
+                            this.setState({
+                              dialog: true
+                            })
+                            this.fetchListCard(dataCar.id)
+                          }}>
+                            Explore Media
+                          </Button>
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Collapse>
+                  <CardActions disableSpacing onClick={() => this.handleCardExpand(id)} aria-expanded={this.state.cardExpand === id} aria-label="show more" style={{ backgroundColor: "#333", justifyContent: "center" }}>
+                    <IconButton >
+                      <ExpandMoreIcon className={clsx(classes.expand, { [classes.expandOpen]: this.state.cardExpand !== id, })} style={{ color: "#fff" }} />
+                    </IconButton>
+                  </CardActions>
+                </Card>
+                <Dialog fullScreen open={this.state.dialog} TransitionComponent={Transition}>
+                  <AppBar className={classes.appBarDialog}>
+                    <Toolbar>
+                      <Typography variant="h6" className={classes.title}>
+                        Galary
+                      </Typography>
+                      <Button autoFocus color="inherit" onClick={() => {
+                        this.setState({
+                          dialog: false
+                        })
+                      }}>
+                        <CloseIcon />
+                      </Button>
+                    </Toolbar>
+                  </AppBar>
+                  <Grid container className="search-container" xs={12} spacing={3} alignItems="center" justify="center" style={{}}>
+                    {this.state.listImg &&
+                      this.state.listImg.map((listImg) => (
+                        <Grid item xs={3}>
+                          <Card raised={true} >
+                            <CardMedia>
+                              <img className="imgClass" onClick={() => this.viewFullImg(listImg.image)} src={listImg.image} alt={listImg.post} width="100%" height={250} />
+                              <img className={clsx(classes.viewImgOff, { [classes.viewImgOn]: this.state.imgClass != null ? true : false })} src={this.state.imgClass} style={{ zIndex: 1, position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: "100%", height: this.state.imgClass == null ? "auto" : screen.height }} onClick={() => this.setState({ imgClass: null })} />
+                            </CardMedia>
+                          </Card>
+                        </Grid>
+                      ))}
+                  </Grid>
+                </Dialog>
+              </Grid>
+            ))}
+        </Grid>
+      </Grid>
     );
   }
 }
