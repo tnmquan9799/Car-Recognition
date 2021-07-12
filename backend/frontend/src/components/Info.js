@@ -55,17 +55,19 @@ class Category extends React.Component {
     };
   }
 
-
   render() {
     const { classes } = this.props;
     return (
       <Grid id="component-container" style={{ position: "relative" }}  >
-        <Grid container justify="center" xs={12} style={{ zIndex: "5", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: screen.height - (1 / 2 * (screen.height)) }}>
-        Tuan Nguyen
+        <Grid xs={12} justify="center" style={{ zIndex: "5", position: "absolute", width: "100%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", marginTop: screen.height - (1 / 2 * (screen.height)) }}>
+          <Typography align="center" variant="h5" style={{ margin: 0, display: 'block' }}>Authors: Tuan Nguyen & Quan Tran</Typography>
+          <br></br>
+          <Typography align="center" variant="h5" style={{ margin: 0 }}>GitHub: <Button variant="outlined" color="secondary" component="a" href="https://github.com/tnmquan9799/Car-Recognition" target="_blank">►</Button></Typography>
+          {/* <h3 variant="outlined" color="secondary" style={{ margin: 0 }}><strong style={{ margin: 0 }}>Author: </strong></h3> */}
         </Grid>
       </Grid>
     );
   }
 }
 
-          export default withStyles(useStyles)(Category);
+export default withStyles(useStyles)(Category);
