@@ -1,1 +1,1 @@
-web: gunicorn Car-Recognition.backend.wsgi
+web: gunicorn backend.wsgi
