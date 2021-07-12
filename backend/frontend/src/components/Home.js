@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import SearchEngine from './SearchEngine';
+import Category from './Category';
+import Info from './Info'
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -20,8 +23,6 @@ import MailIcon from '@material-ui/icons/Mail';
 import HomeIcon from '@material-ui/icons/Home';
 import ListIcon from '@material-ui/icons/List';
 import InfoIcon from '@material-ui/icons/Info';
-import SearchEngine from './SearchEngine';
-import Category from './Category';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -156,27 +157,6 @@ export default function Home(props) {
 			setOverLayOpacity(0.7)
 		}
 	}
-	// Fetching Segment
-	// const [dataSegment, setDataSegment] = React.useState(null);
-	// async function fetchSegment() {
-	// 	const response = await fetch("api/segment");
-	// 	setDataSegment(await response.json());
-	// }
-	// useEffect(() => {
-	// 	fetchSegment(props.id);
-	// }, [props.id]);
-	// if (!dataSegment) {
-	// 	return (
-	// 		<Grid container
-	// 			spacing={0}
-	// 			direction="column"
-	// 			alignItems="center"
-	// 			justify="center"
-	// 			style={{ minHeight: '100vh' }}>
-	// 			<CircularProgress />
-	// 		</Grid>
-	// 	);
-	// }
 
 	return (
 		<Router>
@@ -202,7 +182,7 @@ export default function Home(props) {
 							<MenuIcon />
 						</IconButton>
 						<Typography variant="h6" noWrap>
-							Car Recognition System
+							Car Recognition
 						</Typography>
 					</Toolbar>
 				</AppBar>
@@ -239,42 +219,12 @@ export default function Home(props) {
 							</ListItemIcon>
 							<ListItemText primary="Category" />
 						</ListItem>
-						{/* <ListItem button onClick={handleClick}>
-							<ListItemIcon>
-								<InboxIcon />
-							</ListItemIcon>
-							<ListItemText primary="Category" />
-							{listOpen ? <ExpandLess /> : <ExpandMore />}
-						</ListItem>
-						<Collapse in={listOpen} timeout="auto" unmountOnExit>
-							<List component="div" disablePadding>
-								{dataSegment.map(person => (
-									
-									<ListItem button className={classes.nested}>
-										<ListItemIcon>
-											{person.name.substring(0,1)}
-										</ListItemIcon>
-										<ListItemText primary={person.name.substring(0,9)} />
-
-									</ListItem>
-								))}
-							</List>
-						</Collapse> */}
-						<ListItem button>
+						<ListItem button component={Link} to="/Info">
 							<ListItemIcon>
 								<InfoIcon to="/Info" />
 							</ListItemIcon>
 							<ListItemText primary="Info" />
 						</ListItem>
-					</List>
-					<Divider />
-					<List>
-						{['All mail', 'Trash', 'Spam'].map((text, index) => (
-							<ListItem button key={text}>
-								<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-								<ListItemText primary={text} />
-							</ListItem>
-						))}
 					</List>
 				</Drawer>
 				<main style={{ padding: "0", margin: "0", }} className={classes.content}>
@@ -290,10 +240,10 @@ export default function Home(props) {
 							</Grid>
 						</Route>
 						<Route path="/Category" component={Category} >
-							<Category style={{ backgroundColor: "#333" }} />
+							<Category />
 						</Route>
-						<Route path="/Info" component="">
-							Tuan
+						<Route path="/Info" component={Info}>
+							<Info />
 						</Route>
 					</Switch>
 				</main>
