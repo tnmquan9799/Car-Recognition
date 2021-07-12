@@ -82,7 +82,7 @@ class ImageAlbumView(generics.ListAPIView):
 
 
 class ResultView(generics.ListAPIView):
-    with open('../results.json') as json_file:
+    with open('./results.json') as json_file:
         data = json.load(json_file)
         carName = data[0]['label']
         print("CHAY ROI")
@@ -92,7 +92,7 @@ class ResultView(generics.ListAPIView):
 
 class Fetcher(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
-        with open('../results.json') as json_file:
+        with open('./results.json') as json_file:
             data = json.load(json_file)
             carName = data[0]['label']
         car = Car.objects.get(carName=carName)

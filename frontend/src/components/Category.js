@@ -288,7 +288,7 @@ class Category extends React.Component {
                       <Typography variant="h6">Details:</Typography>
                       <br></br>
                       <List>
-                        <ListItem className={classes.ListItem} href={dataCar.brand != null ? dataCar.brand.detail : ""} target="_blank">
+                        <ListItem className={classes.ListItem} component={dataCar.brand !== null ? "a" : ""} href={dataCar.brand != null ? dataCar.brand.detail : ""} target="_blank">
                           <ListItemAvatar className={classes.listItemAvatar}>
                             <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Brand</strong></h6>
                           </ListItemAvatar>

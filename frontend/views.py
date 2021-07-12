@@ -16,15 +16,15 @@ def index(request):
 
 
 def save_file(request):
-    SAVED_PATH = "../test-folder/"
+    SAVED_PATH = "./test-folder/"
     fileitem = request.FILES['file']
     filename = request.FILES['file'].name
     file_extension = filename.split('.')[1]
     filename = "001." + file_extension
-    folderpath = "../test-folder/001." + file_extension
+    folderpath = "./test-folder/001." + file_extension
     fn = os.path.basename(filename)
     open(SAVED_PATH + fn, 'wb').write(fileitem.file.read())
-    subprocess.call(["python", "../demo.py", folderpath])
+    subprocess.call(["python", "./demo.py", folderpath])
     return HttpResponse('The file "' + fn + '" was uploaded successfully')
 
 
@@ -35,6 +35,6 @@ def cleanJson(data):
             "prob": ""
         }
     ]
-    with open('../results.json', 'w') as file:
+    with open('./results.json', 'w') as file:
         json.dump(data, file, indent=4)
     return HttpResponse ("endline")
