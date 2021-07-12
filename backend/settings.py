@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import dj_database_url
 from pathlib import Path
 import os
 import django_heroku
@@ -28,7 +29,7 @@ SECRET_KEY = 'django-insecure-@7_a7@p8!cijn)s3$uh1+$a3lvs6=hbael$hi@g3c)fll79d04
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','car-recognition-projectapp.herokuapp.com']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,12 +140,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_WHITELIST = (
     'https://localhost:8000',
-    'http://127.0.0.1:8000'
+    'http://127.0.0.1:8000',
+    'https://car-recognition-projectapp.herokuapp.com'
 )
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
-    "http://127.0.0.1:8000"
+    "http://127.0.0.1:8000",
+    "https://car-recognition-projectapp.herokuapp.com"
 ]
 
 django_heroku.settings(locals())
+prod_db = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(prod_db)
