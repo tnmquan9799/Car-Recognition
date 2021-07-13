@@ -1,2 +1,2 @@
-release: python -m pip install djangorestframework
-web: gunicorn backend.wsgi --log-file -
+release: python manage.py runserver
+web: gunicorn backend.wsgi --log-file - 
