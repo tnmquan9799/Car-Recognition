@@ -27,9 +27,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-@7_a7@p8!cijn)s3$uh1+$a3lvs6=hbael$hi@g3c)fll79d04'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["car-recognition-projectapp.herokuapp.com"]
+ALLOWED_HOSTS = ["car-recognition-projectapp.herokuapp.com","127.0.0.1:8000"]
 
 
 # Application definition
@@ -84,7 +84,7 @@ TEMPLATES = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3'
+        'NAME':  os.path.join(BASE_DIR, 'db.sqlite3')
     }
 }
 
