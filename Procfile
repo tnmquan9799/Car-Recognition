@@ -1,2 +1,2 @@
-release: python manage.py runserver
+release: python -m pip install django
 web: gunicorn backend.wsgi --log-file -
