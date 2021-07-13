@@ -9,7 +9,7 @@ module.exports = {
     }),
   ],
   mode: 'development',
-  entry: "./src/index.js",
+  entry: "./frontend/src/index.js",
   output: {
     path: path.resolve(__dirname, ".frontend/static/frontend"),
     filename: "main.js",
