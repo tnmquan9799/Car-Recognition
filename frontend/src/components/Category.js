@@ -19,7 +19,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SearchIcon from "@material-ui/icons/Search";
 import "../../static/css/Category.css";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import { alpha, makeStyles } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -40,6 +40,7 @@ import Slide from '@material-ui/core/Slide';
 import AppBar from '@material-ui/core/AppBar';
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
+import Paper from '@material-ui/core/Paper';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -69,9 +70,9 @@ const useStyles = (theme) => ({
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
     "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
@@ -191,7 +192,7 @@ class Category extends React.Component {
     this.fetcher()
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     this.onSearch
   }
 
@@ -256,17 +257,17 @@ class Category extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <Grid xs={12} style={{ color: "#fff", margin: 50, position: "relative", marginTop: screen.height - (4 / 5) * screen.height, }}>
-        <Grid container className="search-container" xs={12} spacing={3} alignItems="center" justify="center" style={{ position: "relative" }}>
+      <Grid style={{ color: "#fff", margin: 50, position: "relative", marginTop: screen.height - (4 / 5) * screen.height, }}>
+        <Grid container className="search-container" spacing={3} alignItems="center" justifyContent="center" style={{ position: "relative" }}>
           <div
             id="searchBar" onClick={() => { document.getElementById("searchInput").focus(); }} className={classes.search} style={{ marginBottom: screen.height - (3 / 4) * screen.height }}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase onChange={this.onSearch} id="searchInput" value={this.state.onSearch} placeholder="Search…" classes={{ root: classes.inputRoot, input: classes.inputInput, }} xs={12} inputProps={{ "aria-label": "search" }} />
+            <InputBase item onChange={this.onSearch} id="searchInput" value={this.state.onSearch} placeholder="Search…" classes={{ root: classes.inputRoot, input: classes.inputInput, }} xs={12} inputProps={{ "aria-label": "search" }} />
           </div>
         </Grid>
-        <Grid container className="search-container" xs={12} spacing={3} alignItems="center" justify="center" style={{}}>
+        <Grid container className="search-container" spacing={3} alignItems="center" justifyContent="center" style={{}}>
           {this.state.dataCar &&
             this.state.dataCar.map((dataCar, id) => (
               <Grid item xs={3}>
@@ -380,7 +381,7 @@ class Category extends React.Component {
                         </ListItem>
                         <hr style={{ margin: 0 }}></hr>
                         <ListItem>
-                          <ListItemAvatar xs={12}>
+                          <ListItemAvatar item xs={12}>
                             <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Detail Info</strong></h6>
                           </ListItemAvatar>
                         </ListItem>
@@ -423,16 +424,14 @@ class Category extends React.Component {
                       </Button>
                     </Toolbar>
                   </AppBar>
-                  <Grid container className="search-container" xs={12} spacing={3} alignItems="center" justify="center" style={{}}>
+                  <Grid container className="search-container" item xs={12} spacing={3} alignItems="center" justifyContent="center" style={{}}>
                     {this.state.listImg &&
                       this.state.listImg.map((listImg) => (
                         <Grid item xs={3}>
-                          <Card raised={true} >
-                            <CardMedia>
-                              <img className="imgClass" onClick={() => this.viewFullImg(listImg.image)} src={listImg.image} alt={listImg.post} width="100%" height={250} />
-                              <img className={clsx(classes.viewImgOff, { [classes.viewImgOn]: this.state.imgClass != null ? true : false })} src={this.state.imgClass} style={{ zIndex: 1, position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: "100%", height: this.state.imgClass == null ? "auto" : screen.height }} onClick={() => this.setState({ imgClass: null })} />
-                            </CardMedia>
-                          </Card>
+                          <Paper >
+                            <img className="imgClass" onClick={() => this.viewFullImg(listImg.image)} src={listImg.image} alt={listImg.post} width="100%" height={250} style={{ border: '1px solid #555', borderRadius: 5, boxShadow: "0 3px 10px rgb(0 0 0 / 0.5)" }} />
+                            <img className={clsx(classes.viewImgOff, { [classes.viewImgOn]: this.state.imgClass != null ? true : false })} src={this.state.imgClass} style={{ zIndex: 1, position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: "100%", height: this.state.imgClass == null ? "auto" : screen.height }} onClick={() => this.setState({ imgClass: null })} />
+                          </Paper>
                         </Grid>
                       ))}
                   </Grid>

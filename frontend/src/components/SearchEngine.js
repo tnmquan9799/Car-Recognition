@@ -53,6 +53,7 @@ import Slide from '@material-ui/core/Slide';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Paper from '@material-ui/core/Paper';
 
 
 axios.defaults.xsrfCookieName = 'csrftoken'
@@ -772,12 +773,10 @@ class SearchEngine extends Component {
               {this.state.listImg &&
                 this.state.listImg.map((listImg) => (
                   <Grid item xs={3}>
-                    <Card raised={true} >
-                      <CardMedia>
-                        <img className="imgClass" onClick={() => this.viewFullImg(listImg.image)} src={listImg.image} alt={listImg.post} width="100%" height={250} />
-                        <img className={clsx(classes.viewImgGalaryOff, { [classes.viewImgGalaryOn]: this.state.imgClass != null ? true : false })} src={this.state.imgClass} style={{ zIndex: 1, position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: "100%", height: this.state.imgClass == null ? "auto" : screen.height }} onClick={() => this.setState({ imgClass: null })} />
-                      </CardMedia>
-                    </Card>
+                    <Paper >
+                      <img className="imgClass" onClick={() => this.viewFullImg(listImg.image)} src={listImg.image} alt={listImg.post} width="100%" height={250} style={{ border: '1px solid #555', borderRadius: 5, boxShadow: "0 3px 10px rgb(0 0 0 / 0.5)" }} />
+                      <img className={clsx(classes.viewImgGalaryOff, { [classes.viewImgGalaryOn]: this.state.imgClass != null ? true : false })} src={this.state.imgClass} style={{ zIndex: 1, position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: "100%", height: this.state.imgClass == null ? "auto" : screen.height }} onClick={() => this.setState({ imgClass: null })} />
+                    </Paper>
                   </Grid>
                 ))}
             </Grid>

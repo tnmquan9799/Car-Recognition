@@ -11,7 +11,7 @@ module.exports = {
   mode: 'development',
   entry: "./frontend/src/index.js",
   output: {
-    path: path.resolve(__dirname, ".frontend/static/frontend"),
+    path: path.resolve(__dirname, "./static/frontend"),
     filename: "main.js",
     assetModuleFilename: 'images/',
     clean: true
