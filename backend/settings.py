@@ -9,11 +9,9 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
-import dj_database_url
 from pathlib import Path
 import os
-import django_heroku
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,7 +27,7 @@ SECRET_KEY = 'django-insecure-@7_a7@p8!cijn)s3$uh1+$a3lvs6=hbael$hi@g3c)fll79d04
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["car-recognition-projectapp.herokuapp.com","127.0.0.1:8000"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -153,7 +151,3 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "https://car-recognition-projectapp.herokuapp.com"
 ]
-
-django_heroku.settings(locals())
-prod_db = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(prod_db)
