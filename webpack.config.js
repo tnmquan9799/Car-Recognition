@@ -66,10 +66,6 @@ module.exports = {
     ],
   },
   optimization: {
-    minimize: true,
-    moduleIds:'size',
-    chunkIds: 'size',
-    mangleWasmImports: true,
     removeEmptyChunks: true,
     mergeDuplicateChunks: true,
     flagIncludedChunks: true,
