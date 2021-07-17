@@ -44,7 +44,7 @@ import Paper from '@material-ui/core/Paper';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} timeout={1000} />;
+  return <Slide direction="up" ref={ref} {...props} timeout={300} />;
 });
 
 const useStyles = (theme) => ({
@@ -150,26 +150,6 @@ const useStyles = (theme) => ({
     marginLeft: theme.spacing(2),
     flex: 1,
   },
-  viewImgOff: {
-    display: "none",
-    opacity: "0",
-    // animation: `$viewImgOff 500ms ${theme.transitions.easing.easeOut}`
-  },
-  viewImgOn: {
-    display: "block",
-    opacity: "1",
-    animation: `$viewImgOn 500ms ${theme.transitions.easing.easeOut}`
-  },
-  "@keyframes viewImgOn": {
-    "0%": {
-      display: "none",
-      opacity: "0",
-    }, "100%": {
-      display: "block",
-      opacity: "1",
-    }
-  }
-
 });
 
 class Category extends React.Component {
@@ -182,7 +162,8 @@ class Category extends React.Component {
       ToolTip: false,
       dialog: false,
       listImg: null,
-      imgClass: null
+      imgClass: null,
+      coverImg: false
     };
     this.onSearch = this.onSearch.bind(this);
     this.viewFullImg = this.viewFullImg.bind(this);
@@ -250,8 +231,8 @@ class Category extends React.Component {
     this.setState({
       imgClass: image
     })
-    console.log(this.state.imgClass)
   }
+
 
 
   render() {
@@ -277,7 +258,7 @@ class Category extends React.Component {
                     subheader={dataCar.brand != null ? dataCar.brand.name : "Brand not found"}
                   />
                   <CardMedia className={classes.media}>
-                    {dataCar.image != null ? <img src={dataCar.image} width="100%" height={250} /> : <img src={placeImg} width="100%" height={250} />}
+                    {dataCar.image != null ? <img src={dataCar.image} width="100%" height={250} style={{ objectFit: "cover" }} /> : <img src={placeImg} width="100%" height={250} style={{ objectFit: "cover" }} />}
                   </CardMedia>
                   <CardContent>
                     <Typography color="textSecondary" component="div">
@@ -396,7 +377,7 @@ class Category extends React.Component {
                               dialog: true
                             })
                             this.fetchListCard(dataCar.id)
-                          }}>
+                          }} >
                             Explore Media
                           </Button>
                         </ListItem>
@@ -417,23 +398,35 @@ class Category extends React.Component {
                       </Typography>
                       <Button autoFocus color="inherit" onClick={() => {
                         this.setState({
-                          dialog: false
+                          dialog: false,
+                          imgClass: null
                         })
                       }}>
                         <CloseIcon />
                       </Button>
                     </Toolbar>
                   </AppBar>
-                  <Grid container className="search-container" item xs={12} spacing={3} alignItems="center" justifyContent="center" style={{}}>
-                    {this.state.listImg &&
-                      this.state.listImg.map((listImg) => (
-                        <Grid item xs={3}>
-                          <Paper >
-                            <img className="imgClass" onClick={() => this.viewFullImg(listImg.image)} src={listImg.image} alt={listImg.post} width="100%" height={250} style={{ border: '1px solid #555', borderRadius: 5, boxShadow: "0 3px 10px rgb(0 0 0 / 0.5)" }} />
-                            <img className={clsx(classes.viewImgOff, { [classes.viewImgOn]: this.state.imgClass != null ? true : false })} src={this.state.imgClass} style={{ zIndex: 1, position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: "100%", height: this.state.imgClass == null ? "auto" : screen.height }} onClick={() => this.setState({ imgClass: null })} />
-                          </Paper>
-                        </Grid>
-                      ))}
+                  <Grid container className="search-container" item xs={12} alignItems="center" justifyContent="center">
+                    <Grid spacing={3} container alignItems="center" justifyContent="center">
+                      {this.state.listImg &&
+                        this.state.listImg.map((listImg) => (
+                          <Grid item xs={4}>
+                            <Paper >
+                              <img className="imgClass" onClick={() => this.viewFullImg(listImg.image)} src={listImg.image} alt={listImg.post} width="100%" height={350} style={{ border: '1px solid #555', borderRadius: 5, boxShadow: "0 3px 10px rgb(0 0 0 / 0.5)", objectFit: "cover" }} />
+                              <img src={this.state.imgClass} style={{ zIndex: 1, position: "fixed", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: "100%", height: this.state.imgClass == null ? "auto" : screen.height, objectFit: "fill" }} onClick={() => this.setState({ imgClass: null })} />
+                              <Typography variant="h5" color="white" style={{zIndex:99, display: this.state.imgClass != null ? "block" : "none", padding: 20, backgroundColor: "#333", color: "#fff", position: "fixed", left: "50%", top: "90%", transform: "translate(-50%, -50%)", opacity: 0.8, borderRadius: 5}}>
+                                Click on image to exit fullcreen
+                              </Typography>
+                            </Paper>
+                          </Grid>
+                        ))}
+                    </Grid>
+                    <Typography variant="h5" color="white" id="hint" style={{ display: this.state.imgClass != null ? "none" : "block", padding: 20, color: "#fff", position: "fixed", left: "50%", top: "90%", transform: "translate(-50%, -50%)", }}>
+                      Click on image to view fullcreen
+                    </Typography >
+                    <Typography variant="h5" color="white" id="hintbackground" style={{ display: this.state.imgClass != null ? "none" : "block", padding: 20, backgroundColor: "#333", color: "#fff", position: "fixed", left: "50%", top: "90%", transform: "translate(-50%, -50%)", opacity: 0.8, borderRadius: 5 }}>
+                      Click on image to view fullcreen
+                    </Typography>
                   </Grid>
                 </Dialog>
               </Grid>
