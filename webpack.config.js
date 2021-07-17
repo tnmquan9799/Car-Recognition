@@ -1,13 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
-const CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = {
-  plugins: [
-    new CompressionPlugin({
-      // filename: "./static/frontend/main.js",
-    }),
-  ],
   mode: 'development',
   entry: "./frontend/src/index.js",
   output: {
@@ -67,9 +61,5 @@ module.exports = {
   },
   optimization: {
     removeEmptyChunks: true,
-    mergeDuplicateChunks: true,
-    flagIncludedChunks: true,
-    providedExports: true,
-    emitOnErrors: true,
   },
 };
