@@ -41,7 +41,12 @@ import AppBar from '@material-ui/core/AppBar';
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
 import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} timeout={300} />;
@@ -163,7 +168,8 @@ class Category extends React.Component {
       dialog: false,
       listImg: null,
       imgClass: null,
-      coverImg: false
+      infoAlertOpen: false,
+      infoAlertClose: false,
     };
     this.onSearch = this.onSearch.bind(this);
     this.viewFullImg = this.viewFullImg.bind(this);
@@ -223,16 +229,28 @@ class Category extends React.Component {
         this.setState({
           listImg: dataRes,
         });
-        console.log(this.state.listImg);
       });
   }
 
   viewFullImg(image) {
     this.setState({
-      imgClass: image
+      imgClass: image,
+      infoAlertClose: true,
+      infoAlertOpen:false
     })
   }
 
+  onInfoAlrtOpenOff() {
+    this.setState({
+      infoAlertOpen: false,
+    });
+  }
+
+  onInfoAlrtCloseOff() {
+    this.setState({
+      infoAlertClose: false,
+    });
+  }
 
 
   render() {
@@ -374,7 +392,8 @@ class Category extends React.Component {
                         <ListItem>
                           <Button fullWidth variant="outlined" color="secondary" onClick={() => {
                             this.setState({
-                              dialog: true
+                              dialog: true,
+                              infoAlertOpen: true
                             })
                             this.fetchListCard(dataCar.id)
                           }} >
@@ -399,7 +418,8 @@ class Category extends React.Component {
                       <Button autoFocus color="inherit" onClick={() => {
                         this.setState({
                           dialog: false,
-                          imgClass: null
+                          imgClass: null,
+                          buttonHint: "block"
                         })
                       }}>
                         <CloseIcon />
@@ -413,20 +433,21 @@ class Category extends React.Component {
                           <Grid item xs={4}>
                             <Paper >
                               <img className="imgClass" onClick={() => this.viewFullImg(listImg.image)} src={listImg.image} alt={listImg.post} width="100%" height={350} style={{ border: '1px solid #555', borderRadius: 5, boxShadow: "0 3px 10px rgb(0 0 0 / 0.5)", objectFit: "cover" }} />
-                              <img src={this.state.imgClass} style={{ zIndex: 1, position: "fixed", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: "100%", height: this.state.imgClass == null ? "auto" : screen.height, objectFit: "fill" }} onClick={() => this.setState({ imgClass: null })} />
-                              <Typography variant="h5" color="white" style={{zIndex:99, display: this.state.imgClass != null ? "block" : "none", padding: 20, backgroundColor: "#333", color: "#fff", position: "fixed", left: "50%", top: "90%", transform: "translate(-50%, -50%)", opacity: 0.8, borderRadius: 5}}>
-                                Click on image to exit fullcreen
-                              </Typography>
+                              <img src={this.state.imgClass} style={{ zIndex: 1, position: "fixed", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: "100%", height: this.state.imgClass == null ? "auto" : screen.height, objectFit: "cover" }} onClick={() => this.setState({ imgClass: null, buttonExitView: "none" })} />
+                              <Snackbar open={this.state.infoAlertClose} autoHideDuration={6000} onClose={() => this.onInfoAlrtCloseOff()}>
+                                <Alert onClose={() => this.onInfoAlrtCloseOff()} severity="info">
+                                  Click on image to exit fullcreen
+                                </Alert>
+                              </Snackbar>
                             </Paper>
                           </Grid>
                         ))}
                     </Grid>
-                    <Typography variant="h5" color="white" id="hint" style={{ display: this.state.imgClass != null ? "none" : "block", padding: 20, color: "#fff", position: "fixed", left: "50%", top: "90%", transform: "translate(-50%, -50%)", }}>
-                      Click on image to view fullcreen
-                    </Typography >
-                    <Typography variant="h5" color="white" id="hintbackground" style={{ display: this.state.imgClass != null ? "none" : "block", padding: 20, backgroundColor: "#333", color: "#fff", position: "fixed", left: "50%", top: "90%", transform: "translate(-50%, -50%)", opacity: 0.8, borderRadius: 5 }}>
-                      Click on image to view fullcreen
-                    </Typography>
+                    <Snackbar open={this.state.infoAlertOpen} autoHideDuration={6000} onClose={() => this.onInfoAlrtOpenOff()}>
+                      <Alert onClose={() => this.onInfoAlrtOpenOff()} severity="info">
+                        Click on image to view fullcreen
+                      </Alert>
+                    </Snackbar>
                   </Grid>
                 </Dialog>
               </Grid>
