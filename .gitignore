@@ -11,3 +11,4 @@ cars_test/
 cars_train/
 bmw10_releases.tgz
 *.tgz
+node_models/
