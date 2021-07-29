@@ -85,7 +85,6 @@ class ResultView(generics.ListAPIView):
     with open('./results.json') as json_file:
         data = json.load(json_file)
         carName = data[0]['label']
-        print("CHAY ROI")
     queryset = Car.objects.filter(carName="")
     serializer_class = CarSerializer
 
