@@ -146,19 +146,6 @@ export default function Home(props) {
 		6000
 	);
 
-	const [overLayOpacity, setOverLayOpacity] = useState(0.7)
-	useEffect(() => {
-		window.addEventListener('scroll', handlerScroll);
-	});
-
-	const handlerScroll = () => {
-		if (window.scrollY > 100) {
-			setOverLayOpacity(Math.min(0.7, 1 - (window.scrollY / 1000)))
-		} else {
-			setOverLayOpacity(0.7)
-		}
-	}
-
 	return (
 		<Router>
 			<div className={classes.root}>
