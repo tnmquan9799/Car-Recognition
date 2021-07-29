@@ -19,18 +19,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import HomeIcon from '@material-ui/icons/Home';
-import ListIcon from '@material-ui/icons/List';
 import InfoIcon from '@material-ui/icons/Info';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import M8 from '../../assets/video/m8.mp4';
-import axios from 'axios';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import {
 	BrowserRouter as Router,
@@ -39,8 +31,6 @@ import {
 	Link
 } from "react-router-dom";
 
-// axios.defaults.xsrfCookieName = 'csrftoken'
-// axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -110,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
 		animation: `$myEffect 3000ms ${theme.transitions.easing.easeIn}`
 	},
 	animatedItemExiting: {
-		// animation: `$myEffectExit 3000ms ${theme.transitions.easing.easeOut}`,
 		opacity: 1,
 	},
 	"@keyframes myEffect": {
