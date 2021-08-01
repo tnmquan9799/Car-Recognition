@@ -1,14 +1,3 @@
-.idea/
-__pycache__/
-car_devkit.tgz
-cars_test.tgz
-cars_train.tgz
-custom_layers/__pycache__/
-data/
 models/
-logs/
-cars_test/
-cars_train/
-bmw10_releases.tgz
 *.tgz
 node_models/
