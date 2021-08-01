@@ -2,5 +2,6 @@ models/
 *.tgz
 node_models/
 frontend/node_models
-*__pycached__
-__pycached__
+api/__pycached__
+backend/__pycached__
+frontend/__pycached__
