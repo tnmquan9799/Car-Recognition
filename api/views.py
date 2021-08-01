@@ -81,30 +81,17 @@ class ImageAlbumView(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class ResultView(generics.ListAPIView):
-    with open('./results.json') as json_file:
-        data = json.load(json_file)
-        carName = data[0]['label']
-    queryset = Car.objects.filter(carName="")
-    serializer_class = CarSerializer
-
-
 class Fetcher(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         with open('./results.json') as json_file:
             data = json.load(json_file)
             carName = data[0]['label']
+            carProb = data[0]['prob']
+            Car.objects.create(accuracy=carProb)
         car = Car.objects.get(carName=carName)
         serializer = CarSerializer(car)
 
         return Response(serializer.data)
-
-
-# def detail_view(request, id):
-
-#     post = get_object_or_404(Car, id=id)
-#     photos = ImageAlbum.objects.filter(post=post)
-#     return Response(photos.data)
 
 
 class detail_view(generics.ListAPIView):

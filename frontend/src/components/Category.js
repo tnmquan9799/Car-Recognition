@@ -33,6 +33,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Paper from '@material-ui/core/Paper';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import '../../static/css/Category.css';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -263,14 +264,15 @@ class Category extends React.Component {
                 <Card className={classes.root} key={this.state.dataCar.id} style={{}} raised={true}>
                   <CardHeader
                     title={dataCar.carName}
+                    titleTypographyProps={{variant:'h6' }}
                     subheader={dataCar.brand != null ? dataCar.brand.name : "Brand not found"}
                   />
                   <CardMedia className={classes.media}>
                     {dataCar.image != null ? <img src={dataCar.image} width="100%" height={250} style={{ objectFit: "cover" }} /> : <img src={placeImg} width="100%" height={250} style={{ objectFit: "cover" }} />}
                   </CardMedia>
                   <CardContent>
-                    <Typography color="textSecondary" component="div">
-                      {dataCar.hightline == null ? "None highline technologies" : dataCar.hightline}
+                    <Typography color="textSecondary" component="div" style ={{ overflow: "hidden", textOverflow: "ellipsis", height: "25px"}}>
+                      {dataCar.highLight == null ? "None highline technologies" : dataCar.highLight}
                     </Typography>
                   </CardContent>
                   <Collapse in={this.state.cardExpand === id} timeout={1500} unmountOnExit style={{}}>
@@ -334,7 +336,7 @@ class Category extends React.Component {
                           <ListItemAvatar className={classes.listItemAvatar}>
                             <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Power</strong></h6>
                           </ListItemAvatar>
-                          <ListItemText primary={dataCar.hoursePower == null ? "--" : dataCar.hoursePower} className={classes.ListItemText} />
+                          <ListItemText primary={dataCar.hoursePower == null ? "--" : dataCar.hoursePower+" HP"} className={classes.ListItemText} />
                           <ArrowRightIcon style={{ visibility: "hidden" }} />
                         </ListItem>
                         <hr style={{ margin: 0 }}></hr>
@@ -342,7 +344,7 @@ class Category extends React.Component {
                           <ListItemAvatar className={classes.listItemAvatar}>
                             <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Torque</strong></h6>
                           </ListItemAvatar>
-                          <ListItemText primary={dataCar.torque == null ? "--" : dataCar.torque} className={classes.ListItemText} />
+                          <ListItemText primary={dataCar.torque == null ? "--" : dataCar.torque+" N/M"} className={classes.ListItemText} />
                           <ArrowRightIcon style={{ visibility: "hidden" }} />
                         </ListItem>
                         <hr style={{ margin: 0 }}></hr>

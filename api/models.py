@@ -68,6 +68,7 @@ class DriveType(models.Model):
 
 class Car(models.Model):
     carName = models.CharField(max_length=200, unique=True)
+    accuracy = models.CharField(max_length=10,null=True, blank=True)
     image = models.ImageField(blank=True)
     brand = models.ForeignKey(
         Brand, on_delete=models.CASCADE, null=True, blank=True)
