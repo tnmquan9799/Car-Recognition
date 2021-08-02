@@ -176,16 +176,13 @@ class Category extends React.Component {
 
 
 
-  onSearch(event) {
-    this.setState({ searchRq: event.target.value });
-    this.fetcher()
-    setTimeout(() => {
-      this.fetcher()
-    }, 100)
+  async onSearch(event) {
+    await this.setState({ searchRq: event.target.value });
+    await this.fetcher()
   }
 
-  fetcher() {
-    fetch("/api/carsearch?search=" + this.state.searchRq)
+  async fetcher() {
+    await fetch("/api/carsearch?search=" + this.state.searchRq)
       .then((response) => {
         return response.json();
       })
@@ -193,16 +190,15 @@ class Category extends React.Component {
         this.setState({
           dataCar: dataRes,
         });
-        console.log(this.state.dataCar);
       });
   }
 
 
-  handleCardExpand(id) {
-    this.setState({
+  async handleCardExpand(id) {
+    await this.setState({
       cardExpand: this.state.cardExpand === id ? -1 : id,
-
     });
+    await fetchListCard(id)
   }
 
   closeToolTip() {
@@ -211,8 +207,8 @@ class Category extends React.Component {
     });
   }
 
-  fetchListCard(id) {
-    fetch("/api/detail_view?id=" + id)
+  async fetchListCard(id) {
+    await fetch("/api/detail_view?id=" + id)
       .then((response) => {
         return response.json();
       })
@@ -227,7 +223,7 @@ class Category extends React.Component {
     this.setState({
       imgClass: image,
       infoAlertClose: true,
-      infoAlertOpen:false
+      infoAlertOpen: false
     })
   }
 
@@ -242,7 +238,6 @@ class Category extends React.Component {
       infoAlertClose: false,
     });
   }
-
 
   render() {
     const { classes } = this.props;
@@ -264,14 +259,14 @@ class Category extends React.Component {
                 <Card className={classes.root} key={this.state.dataCar.id} style={{}} raised={true}>
                   <CardHeader
                     title={dataCar.carName}
-                    titleTypographyProps={{variant:'h6' }}
+                    titleTypographyProps={{ variant: 'h6' }}
                     subheader={dataCar.brand != null ? dataCar.brand.name : "Brand not found"}
                   />
                   <CardMedia className={classes.media}>
                     {dataCar.image != null ? <img src={dataCar.image} width="100%" height={250} style={{ objectFit: "cover" }} /> : <img src={placeImg} width="100%" height={250} style={{ objectFit: "cover" }} />}
                   </CardMedia>
                   <CardContent>
-                    <Typography color="textSecondary" component="div" style ={{ overflow: "hidden", textOverflow: "ellipsis", height: "25px"}}>
+                    <Typography color="textSecondary" component="div" style={{ overflow: "hidden", textOverflow: "ellipsis", height: "25px" }}>
                       {dataCar.highLight == null ? "None highline technologies" : dataCar.highLight}
                     </Typography>
                   </CardContent>
@@ -336,7 +331,7 @@ class Category extends React.Component {
                           <ListItemAvatar className={classes.listItemAvatar}>
                             <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Power</strong></h6>
                           </ListItemAvatar>
-                          <ListItemText primary={dataCar.hoursePower == null ? "--" : dataCar.hoursePower+" HP"} className={classes.ListItemText} />
+                          <ListItemText primary={dataCar.hoursePower == null ? "--" : dataCar.hoursePower + " HP"} className={classes.ListItemText} />
                           <ArrowRightIcon style={{ visibility: "hidden" }} />
                         </ListItem>
                         <hr style={{ margin: 0 }}></hr>
@@ -344,7 +339,7 @@ class Category extends React.Component {
                           <ListItemAvatar className={classes.listItemAvatar}>
                             <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Torque</strong></h6>
                           </ListItemAvatar>
-                          <ListItemText primary={dataCar.torque == null ? "--" : dataCar.torque+" N/M"} className={classes.ListItemText} />
+                          <ListItemText primary={dataCar.torque == null ? "--" : dataCar.torque + " N/M"} className={classes.ListItemText} />
                           <ArrowRightIcon style={{ visibility: "hidden" }} />
                         </ListItem>
                         <hr style={{ margin: 0 }}></hr>
@@ -387,7 +382,7 @@ class Category extends React.Component {
                               dialog: true,
                               infoAlertOpen: true
                             })
-                            this.fetchListCard(dataCar.id)
+                            // this.fetchListCard(dataCar.id)
                           }} >
                             Explore Media
                           </Button>
@@ -405,7 +400,7 @@ class Category extends React.Component {
                   <AppBar className={classes.appBarDialog}>
                     <Toolbar>
                       <Typography variant="h6" className={classes.title}>
-                      Gallery
+                        Gallery
                       </Typography>
                       <Button autoFocus color="inherit" onClick={() => {
                         this.setState({
