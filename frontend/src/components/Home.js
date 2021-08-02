@@ -216,7 +216,7 @@ export default function Home(props) {
 					<Switch>
 						<Route exact path="/">
 							<Grid id="video-container" >
-								<video autoPlay width="100%" height={screen.height} id="video" src={M8} style={{ position: "absolute", zIndex: "-1", left: "50%", top: "50%", objectFit: "cover", transform: "translate(-50%, -50%)" }} >
+								<video async autoPlay width="100%" height={screen.height} id="video" src={M8} style={{ position: "absolute", zIndex: "-1", left: "50%", top: "50%", objectFit: "cover", transform: "translate(-50%, -50%)" }} >
 								</video>
 								<div id="overlay" className={clsx(classes.animatedItem, { [classes.animatedItemExiting]: { aniDrawer } })} style={{ position: "fixed", minWidth: screen.width, minHeight: screen.height, backgroundColor: "#000", zIndex: 2, opacity: 0.7, zIndex: "2", marginTop: 70 }}>
 								</div>

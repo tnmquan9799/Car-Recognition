@@ -74,6 +74,6 @@ module.exports = {
     mergeDuplicateChunks: true,
     flagIncludedChunks: true,
     providedExports: true,
-    emitOnErrors: true,
+    emitOnErrors: false,
   },
 };

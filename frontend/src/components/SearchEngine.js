@@ -27,7 +27,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Paper from '@material-ui/core/Paper';
-
+import CloseIcon from '@material-ui/icons/Close';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -272,7 +273,6 @@ class SearchEngine extends Component {
       ToolTip: false,
       progressBar: "none",
       resultFail: "none",
-      interval: null,
       dialog: false,
       listImg: null,
       imgClass: null,
@@ -283,6 +283,7 @@ class SearchEngine extends Component {
     this.openDetailBoard = this.openDetailBoard.bind(this);
     this.closeDetailBoard = this.closeDetailBoard.bind(this);
     this.viewFullImg = this.viewFullImg.bind(this);
+    this.fetchResult = this.fetchResult.bind(this);
   }
 
   handleInputChange(event) {
@@ -304,6 +305,11 @@ class SearchEngine extends Component {
   }
 
   submit() {
+    this.setState({
+      resultFail: "none"
+      , resultContainer: false
+      , progressBar: "block"
+    })
     const data = new FormData()
     data.append('file', this.state.selectedFile, this.state.selectedFile.name)
     let url = "http://127.0.0.1:8000/save_file";
@@ -311,41 +317,24 @@ class SearchEngine extends Component {
     })
       .then(res => { // then print response status
         console.warn(res);
+        setTimeout(() => {
+          var intervalCheckData = setInterval(() => {
+            this.fetchResult()
+          }, 1000)
+          setTimeout(() => {
+            clearInterval(intervalCheckData);
+            this.state.recogResult !== null && this.state.recogResult.accuracy > 0.7  ? this.setState({
+              resultContainer: true,
+              progressBar: "none",
+              resultFail: "none"
+            }) : this.setState({
+              resultContainer: false,
+              progressBar: "none",
+              resultFail: "block",
+            });
+          }, 2000)
+        }, 1000)
       });
-    this.setState({
-      resultFail: "none"
-      , resultContainer: false
-      , progressBar: "block"
-    })
-    setTimeout(() => {
-      this.setState({
-        interval: setInterval(() => {
-          this.fetchResult()
-          this.state.recogResult == null ? this.setState({
-            resultContainer: false
-            ,
-          }) : this.setState({
-            resultContainer: true
-            , progressBar: "none"
-          })
-        }, 5000)
-      })
-    }, 20000)
-    // clearInterval(interval);
-
-    setTimeout(() => {
-      clearInterval(this.state.interval)
-      this.state.recogResult != null ? this.setState({
-        resultContainer: false
-        , progressBar: "none",
-        interval: this.state.interval.stop()
-      }) : this.setState({
-        progressBar: "none",
-        resultFail: "block",
-      });
-      componentWillUnmount()
-    }, 100000)
-
   }
 
   clearJson() {
@@ -357,7 +346,7 @@ class SearchEngine extends Component {
       });
   }
 
-  fetchResult() {
+  async fetchResult() {
     fetch("/api/fetcher")
       .then((response) => {
         return response.json();
@@ -365,24 +354,23 @@ class SearchEngine extends Component {
       .then((dataRes) => {
         this.setState({
           recogResult: [{
-            id: dataRes.id
-            , image: dataRes.image
-            , carName: dataRes.carName
-            , brand: dataRes.brand
-            , segment: dataRes.segment
-            , origin: dataRes.origin
-            , yearEdition: dataRes.yearEdition
-            , engine: dataRes.engine
-            , hoursePower: dataRes.hoursePower
-            , torque: dataRes.torque
-            , fuelType: dataRes.fuelType
-            , driveType: dataRes.driveType
-            , highLight: dataRes.highLight
-            , detail: dataRes.detail
-            ,
+            id: dataRes.id,
+            image: dataRes.image,
+            carName: dataRes.carName,
+            accuracy: dataRes.accuracy,
+            brand: dataRes.brand,
+            segment: dataRes.segment,
+            origin: dataRes.origin,
+            yearEdition: dataRes.yearEdition,
+            engine: dataRes.engine,
+            hoursePower: dataRes.hoursePower,
+            torque: dataRes.torque,
+            fuelType: dataRes.fuelType,
+            driveType: dataRes.driveType,
+            highLight: dataRes.highLight,
+            detail: dataRes.detail,
           }]
         });
-        console.log(this.state.recogResult);
       });
   }
 
@@ -447,9 +435,6 @@ class SearchEngine extends Component {
         ,
       })
     }, 4000)
-  }
-  componentWillUnmount() {
-    clearInterval(this.state.interval);
   }
 
   searchDrawer() {
@@ -535,7 +520,8 @@ class SearchEngine extends Component {
             <br />
             <CircularProgress id="progressBar" color="secondary" style={{ display: this.state.progressBar, top: "25%", position: "absolute", marginTop: screen.height - (4 / 5 * (screen.height)) }} />
             <Grid id="resultFail" containter justify="center" style={{ display: this.state.resultFail, top: "25%", position: "absolute", marginTop: screen.height - (4 / 5 * (screen.height)) }}>
-              <h3>Recognition Failed </h3>
+              <h3>Recognition Failed.</h3>
+              <p>this car might not exist in our database or too hard to recognize</p>
             </Grid>
             {this.state.recogResult &&
               this.state.recogResult.map((recogResult) => (
@@ -645,7 +631,7 @@ class SearchEngine extends Component {
                         <ListItemAvatar className={classes.listItemAvatar}>
                           <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Power</strong></h6>
                         </ListItemAvatar>
-                        <ListItemText primary={recogResult.hoursePower == null ? "--" : recogResult.hoursePower} className={classes.ListItemText} />
+                        <ListItemText primary={recogResult.hoursePower == null ? "--" : recogResult.hoursePower+" HP"} className={classes.ListItemText} />
                         <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content", visibility: "hidden" }} href={recogResult.origin.detail} target="_blank">
                           <ArrowRightIcon />
                         </Button>
@@ -655,7 +641,7 @@ class SearchEngine extends Component {
                         <ListItemAvatar className={classes.listItemAvatar}>
                           <h6 style={{ margin: 0 }}><strong style={{ margin: 0 }}>Torque</strong></h6>
                         </ListItemAvatar>
-                        <ListItemText primary={recogResult.torque == null ? "--" : recogResult.torque} className={classes.ListItemText} />
+                        <ListItemText primary={recogResult.torque == null ? "--" : recogResult.torque+" N/M"} className={classes.ListItemText} />
                         <Button className={classes.button} variant="outlined" color="secondary" style={{ margin: 0, padding: 0, width: "fit-content", visibility: "hidden" }} href={recogResult.origin.detail} target="_blank">
                           <ArrowRightIcon />
                         </Button>
