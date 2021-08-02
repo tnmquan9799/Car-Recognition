@@ -86,14 +86,13 @@ class Fetcher(generics.ListAPIView):
             data = json.load(json_file)
             carName = data[0]['label']
             carProb = data[0]['prob']
-            if float(carProb) > 0.7:
+            s = float(carProb)
+            if s > 0.7:
                 car = Car.objects.get(carName=carName)
             else:
-                car = Car.objects.get(carName="")
-
-        serializer = CarSerializer(car)
-        print(carProb)
-
+                car = Car.objects.get(carName="carName")
+            
+        serializer = CarSerializer(car) 
         return Response(serializer.data)
 
 
