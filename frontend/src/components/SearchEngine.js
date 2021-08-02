@@ -323,7 +323,7 @@ class SearchEngine extends Component {
           }, 1000)
           setTimeout(() => {
             clearInterval(intervalCheckData);
-            this.state.recogResult !== null && this.state.recogResult.accuracy > 0.7  ? this.setState({
+            this.state.recogResult !== null ? this.setState({
               resultContainer: true,
               progressBar: "none",
               resultFail: "none"

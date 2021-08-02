@@ -38,7 +38,6 @@ class CarSearchView(generics.ListAPIView):
     search_fields = ('$carName', 'brand__name', 'origin__name')
 
 
-
 class BrandView(generics.ListAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
@@ -87,9 +86,13 @@ class Fetcher(generics.ListAPIView):
             data = json.load(json_file)
             carName = data[0]['label']
             carProb = data[0]['prob']
-            Car.objects.create(accuracy=carProb)
-        car = Car.objects.get(carName=carName)
+            if float(carProb) > 0.7:
+                car = Car.objects.get(carName=carName)
+            else:
+                car = Car.objects.get(carName="")
+
         serializer = CarSerializer(car)
+        print(carProb)
 
         return Response(serializer.data)
 
