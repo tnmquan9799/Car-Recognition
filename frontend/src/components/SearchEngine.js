@@ -29,6 +29,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Paper from '@material-ui/core/Paper';
 import CloseIcon from '@material-ui/icons/Close';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import placeImg from '../../assets/placeImg.png';
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -357,7 +358,6 @@ class SearchEngine extends Component {
             id: dataRes.id,
             image: dataRes.image,
             carName: dataRes.carName,
-            accuracy: dataRes.accuracy,
             brand: dataRes.brand,
             segment: dataRes.segment,
             origin: dataRes.origin,
