@@ -717,7 +717,7 @@ class SearchEngine extends Component {
             <AppBar className={classes.appBarDialog}>
               <Toolbar>
                 <Typography variant="h6" className={classes.title}>
-                  Galary
+                Gallery
                 </Typography>
                 <Button autoFocus color="inherit" onClick={() => {
                   this.setState({
